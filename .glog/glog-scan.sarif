@@ -12,12 +12,12 @@
           "informationUri": "https://www.glog.ai",
           "rules": [
             {
-              "id": "6874cf9b-e97b-39bc-8156-8ff0d1172299",
+              "id": "c715549b-a9b6-3a33-b131-6d91bbc2d851",
               "name": "XSS Vulnerability from User-Controlled Data in HTML String",
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided JavaScript code, the vulnerability arises from the use of template literals to construct a string that includes user-controlled data (`paramsValues.get(paramName)`). If an attacker can control the `paramName` value, they could potentially inject malicious scripts.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, you should:\n\n- Use frameworks that automatically escape XSS by design, such as Ruby on Rails, React JS, etc.\n- Escape untrusted HTTP request data based on the context in the HTML output (body, attribute, JavaScript, CSS, or URL).\n- Apply context-sensitive encoding when modifying the browser document on the client side.\n- Validate, filter, or sanitize user-generated inputs.\n\n## Source Code Fix Recommendation\n\nIn this specific case, you can mitigate the vulnerability by properly encoding the user-controlled data before including it in the HTML string. Here's a simple fix using the `encodeURI` function:\n\n```javascript\nreturn `${hawkConf[\"app\"][\"host\"]}${encodeURI(paramsValues.get(paramName))}`\n```\n\n## Library Dependencies\n\nThe provided code does not seem to require any specific library dependencies.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided code snippet, the application is vulnerable to XSS because it's directly using user-controlled data in an HTML string without proper sanitization or encoding.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, it's recommended to:\n\n- Use frameworks that automatically escape XSS by design, such as Ruby on Rails, React JS, etc.\n- Escape untrusted HTTP request data based on the context in the HTML output (body, attribute, JavaScript, CSS, or URL).\n- Apply context-sensitive encoding when modifying the browser document on the client side.\n- Validate, filter, or sanitize user-generated input to prevent malicious data from being executed as code in the browser.\n\n## Source Code Fix Recommendation\n\nIn the provided code snippet, you can use the `encodeURIComponent` function to encode user-controlled data:\n\n```javascript\nstr += `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`;\n```\n\nThis function encodes special characters. In addition, it encodes the following characters: `, / ? : @ & = + $ #`.\n\n## Library Dependencies\n\nThe provided code snippet does not require any additional library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
               },
               "properties": {
                 "cwe": [
@@ -34,12 +34,34 @@
               }
             },
             {
-              "id": "c715549b-a9b6-3a33-b131-6d91bbc2d851",
+              "id": "78f0c135-fcd8-31c1-ab65-3ddd0ad600bd",
+              "name": "\"Exposed Asymmetric Private Key in Resource Files\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe vulnerability \"Exposed Asymmetric Private Key in Resource Files\" in Docker programming language refers to the situation where a private key is hard-coded or embedded within the Docker image or resource files. This private key can be used for various purposes such as SSH access, API access, decryption of sensitive data, etc. \n\n## Security Concern\n\nThis is a major security concern because if an attacker gains access to the Docker image or resource files, they can extract the private key. With the private key, they can impersonate the application, gain unauthorized access to systems, decrypt sensitive data, or perform other malicious activities. \n\n## Mitigation Advice\n\n- Never embed or hard-code private keys in Docker images or resource files. \n- Use environment variables or secure vault services to handle private keys.\n- Regularly rotate and change keys.\n- Use Docker secrets if you are using Docker Swarm.\n- Limit the exposure of sensitive information in Docker images.\n\n## Source Code Fix Recommendation\n\nThe private key in the given code should be removed. Instead, use Docker secrets or environment variables to handle the private key. \n\nFor example, you can use Docker secrets like this:\n\n```bash\necho \"MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ...\" | docker secret create my_secret_key -\n```\n\nThen use it in your Docker service:\n\n```bash\ndocker service  create --name=my_service --secret=my_secret_key my_image\n```\n\nIn your application, you can access this secret in the `/run/secrets/my_secret_key` file.\n\n## Library Dependencies\n\nThe code example does not provide any information about library dependencies.\n\n## References\n\n- [OWASP - Insecure Configuration](https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration)\n- [CWE-798: Use of Hard-coded Credentials](https://cwe.mitre.org/data/definitions/798.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-798",
+                    "url": "https://cwe.mitre.org/data/definitions/798.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-798"
+                ]
+              }
+            },
+            {
+              "id": "6874cf9b-e97b-39bc-8156-8ff0d1172299",
               "name": "XSS Vulnerability from User-Controlled Data in HTML String",
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided code snippet, the application is vulnerable to XSS because it's directly using user-controlled data in an HTML string without proper sanitization or encoding.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, it's recommended to:\n\n- Use frameworks that automatically escape XSS by design, such as Ruby on Rails, React JS, etc.\n- Escape untrusted HTTP request data based on the context in the HTML output (body, attribute, JavaScript, CSS, or URL).\n- Apply context-sensitive encoding when modifying the browser document on the client side.\n- Validate, filter, or sanitize user-generated input to prevent malicious data from being executed as code in the browser.\n\n## Source Code Fix Recommendation\n\nIn the provided code snippet, you can use the `encodeURIComponent` function to encode user-controlled data:\n\n```javascript\nstr += `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`;\n```\n\nThis function encodes special characters. In addition, it encodes the following characters: `, / ? : @ & = + $ #`.\n\n## Library Dependencies\n\nThe provided code snippet does not require any additional library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided JavaScript code, the vulnerability arises from the use of template literals to construct a string that includes user-controlled data (`paramsValues.get(paramName)`). If an attacker can control the `paramName` value, they could potentially inject malicious scripts.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, you should:\n\n- Use frameworks that automatically escape XSS by design, such as Ruby on Rails, React JS, etc.\n- Escape untrusted HTTP request data based on the context in the HTML output (body, attribute, JavaScript, CSS, or URL).\n- Apply context-sensitive encoding when modifying the browser document on the client side.\n- Validate, filter, or sanitize user-generated inputs.\n\n## Source Code Fix Recommendation\n\nIn this specific case, you can mitigate the vulnerability by properly encoding the user-controlled data before including it in the HTML string. Here's a simple fix using the `encodeURI` function:\n\n```javascript\nreturn `${hawkConf[\"app\"][\"host\"]}${encodeURI(paramsValues.get(paramName))}`\n```\n\n## Library Dependencies\n\nThe provided code does not seem to require any specific library dependencies.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
               },
               "properties": {
                 "cwe": [
@@ -76,6 +98,28 @@
                   "CWE-79"
                 ]
               }
+            },
+            {
+              "id": "bc8d1490-d25a-3495-ac6a-96690d855517",
+              "name": "High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe \"High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification\" is a common security vulnerability in Docker where the Dockerfile does not specify a non-root user for running the container. By default, Docker containers run as root, which means that if an attacker manages to break out of the container, they would have root access to the host system. This could lead to a variety of security issues, including unauthorized access to data, execution of arbitrary code, and denial of service.\n\n## Security Concern\n\nRunning Docker containers as root is a significant security concern because it provides the container with potentially dangerous permissions. If an attacker manages to exploit a vulnerability in the container or the application it's running, they could gain root access to the host system. This could allow them to execute arbitrary code, access sensitive data, or cause a denial of service.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it's recommended to always specify a non-root user in your Dockerfile. This can be done by adding a `USER` directive in the Dockerfile that specifies a non-root user. If the application needs to perform operations that require root permissions, consider using a least privilege model where only the necessary operations are performed as root.\n\n## Source Code Fix Recommendation\n\nHere's how you can modify the Dockerfile to specify a non-root user:\n\n```Dockerfile\nFROM eclipse-temurin:17-jdk-jammy\n\n# Create a group and user\nRUN groupadd -r nonroot && useradd -r -g nonroot nonroot\n\n# Tell docker that all future commands should run as the nonroot user\nUSER nonroot\n```\n\nIn this example, a new group and user named `nonroot` are created, and the `USER` directive is used to specify that all future commands should be run as this user.\n\n## Library Dependencies\n\nThe code example does not specify any library dependencies.\n\n## References\n\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-250",
+                    "url": "https://cwe.mitre.org/data/definitions/250.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-250"
+                ]
+              }
             }
           ],
           "language": "en-US",
@@ -88,41 +132,6 @@
       },
       "language": "en-US",
       "results": [
-        {
-          "ruleId": "c715549b-a9b6-3a33-b131-6d91bbc2d851",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "XSS Vulnerability from User-Controlled Data in HTML String"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "hawkscripts/authentication/form-auth-multi.js",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 59,
-                  "startColumn": 5,
-                  "endLine": 59,
-                  "endColumn": 55,
-                  "snippet": {
-                    "text": "    str += `${urlEncode(key)}=${urlEncode(obj[key])}`;"
-                  }
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "46c0708921fb21867f6bbef56108d8e6c6a26dc949dc4573f62220936a16cb5e",
-            "glog-pfp-ruleFileCode/v1": "12cb9afa6ea742d7638207bfb0c811e06d4935b4fad2d4500ca741629c8c236e"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "12cb9afa6ea742d7638207bfb0c811e06d4935b4fad2d4500ca741629c8c236e"
-          },
-          "properties": {}
-        },
         {
           "ruleId": "6874cf9b-e97b-39bc-8156-8ff0d1172299",
           "kind": "fail",
@@ -155,6 +164,41 @@
           },
           "fingerprints": {
             "glog-fp-ruleFileCode/v1": "1bef8c42bf9fd248ff79a488b54430f444ac9667fa3984f53981e6afe7adc56b"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "c715549b-a9b6-3a33-b131-6d91bbc2d851",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "XSS Vulnerability from User-Controlled Data in HTML String"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "hawkscripts/authentication/form-auth-multi.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 59,
+                  "startColumn": 5,
+                  "endLine": 59,
+                  "endColumn": 55,
+                  "snippet": {
+                    "text": "    str += `${urlEncode(key)}=${urlEncode(obj[key])}`;"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "46c0708921fb21867f6bbef56108d8e6c6a26dc949dc4573f62220936a16cb5e",
+            "glog-pfp-ruleFileCode/v1": "12cb9afa6ea742d7638207bfb0c811e06d4935b4fad2d4500ca741629c8c236e"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "12cb9afa6ea742d7638207bfb0c811e06d4935b4fad2d4500ca741629c8c236e"
           },
           "properties": {}
         },
@@ -192,6 +236,80 @@
             "glog-fp-ruleFileCode/v1": "fd48250c61bc770267710a06698f6a8f9ef1518f1ada4c28adc506d0ffd9cb42"
           },
           "properties": {}
+        },
+        {
+          "ruleId": "78f0c135-fcd8-31c1-ab65-3ddd0ad600bd",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"Exposed Asymmetric Private Key in Resource Files\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/resources/keyStore.pem",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 6,
+                  "startColumn": 1,
+                  "endLine": 31,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ\n+JKBb4tcwJ1m5lTYccZbvsvCkCdQF0Ge0PhqYK8I9XyFTMPDv88h1Q+qDVlkqV5v\nVKFeR6v/REOH0AFJ4qC/mmhb9h3LnvyU6KtsZ4KWUfNfGhbpYxVTLU98CzqO9VTN\nxVCreXkTWCpbFTHGyb31sNG3xobL5PLgtNPECaDTJeiY0Z2ID/6fARWv4zn0luQS\ngDRLE2K73i2YjgD05OwdNRHklfnQKZLdkXX/TMVqzNT0Hg9a/thBQAIuozwK1SVs\nOfry/xFGWii19nDR4PaYjT0Xt/BQIt6tk4rg2Xt1XrTRxzrdzSIpHPQoO9g1nl9F\n/yoaq87VAgMBAAECggEBAK47UMfDmrxvu9E+lUJWdhWhQ6L47WPcmL22YaAFtIIA\n8EkpW9Ay4e56A06EgINdh7S4SqmqpxYRY3v90Vfli8MGB9yqPnXtJEKRo7ONHMHh\nHheP8cAWfiFSjDfC5HXDGpFNqpUjeMQCyzmixXaHQMFLkmAwI81hQ6JO6FvKrEz5\n2WCja/OyBwlAybpZgzKTkKGXSBY8NrcWfm8QEZHaJkDDw0aBhgANB2+He6dJCfyM\n1NqauTvbTjeYb5XXQffMhCbYmZM0+f/R4vF3N39lGkcaHMCh9r7c1+lsUKT4oT6p\nYRwvUP3uzBfKIUJJCqw4PD30JDcT+CxMnXn27KLu0cECgYEA3zKxAfOAySz7vVmV\nnIc8p7q09QGOYkx1m3+gAyCJqUAUX1ypPw+C3rk9zAThnZYsJL//5daxw8FMXCSm\nJkcMB2Sj0FKhiqIi+LEgu0tni4COVaTTCG27IXs9sgZTyPGQIwjoT3NhB1Bt3Ksi\nh7hnv8fHDPXzv7ptYpwfyRWDZpkCgYEAzed8S37GeZGbW5qqDyuKnWjG/UPPeTrw\n5DjCSyBVEF3kZrMSc+O2bgf87VFOHBTORzr5r0zNWy12r9w3Ky02z4cxeujulihz\n9ObY6aim6iRHwYpB0D5Eqs4R6mK189bKb9OD/F7USGy//tPP7hqfQC1JHJed4fwR\n0esIOFJ5250CgYAKwVCSPX+ZMhe3WhfBgSrFElQh8j9AMVsBcTbur6SyiSnyJm7p\nYP/3Z4m4yQtuIoxiAPZ9xsiuHCRn1ERFV+sWeB0Ertal7YYt4asoG0wUBs/VBKo+\nn7sCtAOXDoL/DdTaO1WmbnLgfVmt5nk1fQdS0HehAkEKnhsjQ06sy+KXEQKBgBuU\n9b57NgUU7zW/KyarE39wiK9mhQVdUuWPgN9lbl+p5C2psUAa8dYdddEoggka9GLw\nUIAeDqg3F94I5s7+2IfGOWeYilVNB/N3dPkf4XQd9grEBXrqzHIA9r9qB6upSybd\ns6F75n3pK3LsVr8zi7+iEVgmKz0Zch2nmUtKKQ61AoGAPHVizunifBjtKaQHFBdr\np5llidfBU6S0DsdRBG2PYxHB4TMc16gYpZicCIOsTavjS++ZBdtcL1VFiutavKop\nJhZbwH6PR76GJbdwUS3pl8s5+w21KtMxOwR8Oqoc/Sr+Bno37Yek/5CaVwnysEd0\nGWwVDi+xxRJnUIsVzdUBP+8="
+                  }
+                }
+              },
+              "message": {
+                "text": "src/main/resources/keyStore.pem"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "763419e3ed38141479848303552de3ddc33fa1609b3e8e08b8224690218d0e2b",
+            "glog-pfp-ruleFileCode/v1": "a84fe89386abd576deb23381498aee92486568e5436bedb386938e8b5e000a45"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "a84fe89386abd576deb23381498aee92486568e5436bedb386938e8b5e000a45"
+          }
+        },
+        {
+          "ruleId": "bc8d1490-d25a-3495-ac6a-96690d855517",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Dockerfile",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "FROM eclipse-temurin:17-jdk-jammy"
+                  }
+                }
+              },
+              "message": {
+                "text": "Dockerfile"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "cc01dfd2946e50dff6861d3988ed694f1210186d23722393917794fcdaf7983f",
+            "glog-pfp-ruleFileCode/v1": "a2db13e2cbbdd619dccaa0fa3203030ef1c36f7243e3535676d08791f9bbd155"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "a2db13e2cbbdd619dccaa0fa3203030ef1c36f7243e3535676d08791f9bbd155"
+          }
         }
       ],
       "newlineSequences": [
