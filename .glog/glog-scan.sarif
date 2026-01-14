@@ -12,28 +12,6 @@
           "informationUri": "https://www.glog.ai",
           "rules": [
             {
-              "id": "c715549b-a9b6-3a33-b131-6d91bbc2d851",
-              "name": "XSS Vulnerability from User-Controlled Data in HTML String",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided code snippet, the application is vulnerable to XSS because it's directly using user-controlled data in an HTML string without proper sanitization or encoding.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, it's recommended to:\n\n- Use frameworks that automatically escape XSS by design, such as Ruby on Rails, React JS, etc.\n- Escape untrusted HTTP request data based on the context in the HTML output (body, attribute, JavaScript, CSS, or URL).\n- Apply context-sensitive encoding when modifying the browser document on the client side.\n- Validate, filter, or sanitize user-generated input to prevent malicious data from being executed as code in the browser.\n\n## Source Code Fix Recommendation\n\nIn the provided code snippet, you can use the `encodeURIComponent` function to encode user-controlled data:\n\n```javascript\nstr += `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`;\n```\n\nThis function encodes special characters. In addition, it encodes the following characters: `, / ? : @ & = + $ #`.\n\n## Library Dependencies\n\nThe provided code snippet does not require any additional library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
-              },
-              "properties": {
-                "cwe": [
-                  {
-                    "id": "CWE-79",
-                    "url": "https://cwe.mitre.org/data/definitions/79.html"
-                  }
-                ],
-                "severity": "MEDIUM",
-                "kind": "FAIL",
-                "tags": [
-                  "CWE-79"
-                ]
-              }
-            },
-            {
               "id": "78f0c135-fcd8-31c1-ab65-3ddd0ad600bd",
               "name": "\"Exposed Asymmetric Private Key in Resource Files\"",
               "helpUri": "https://www.glog.ai/",
@@ -52,6 +30,50 @@
                 "kind": "FAIL",
                 "tags": [
                   "CWE-798"
+                ]
+              }
+            },
+            {
+              "id": "bc8d1490-d25a-3495-ac6a-96690d855517",
+              "name": "High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe \"High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification\" is a common security vulnerability in Docker where the Dockerfile does not specify a non-root user for running the container. By default, Docker containers run as root, which means that if an attacker manages to break out of the container, they would have root access to the host system. This could lead to a variety of security issues, including unauthorized access to data, execution of arbitrary code, and denial of service.\n\n## Security Concern\n\nRunning Docker containers as root is a significant security concern because it provides the container with potentially dangerous permissions. If an attacker manages to exploit a vulnerability in the container or the application it's running, they could gain root access to the host system. This could allow them to execute arbitrary code, access sensitive data, or cause a denial of service.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it's recommended to always specify a non-root user in your Dockerfile. This can be done by adding a `USER` directive in the Dockerfile that specifies a non-root user. If the application needs to perform operations that require root permissions, consider using a least privilege model where only the necessary operations are performed as root.\n\n## Source Code Fix Recommendation\n\nHere's how you can modify the Dockerfile to specify a non-root user:\n\n```Dockerfile\nFROM eclipse-temurin:17-jdk-jammy\n\n# Create a group and user\nRUN groupadd -r nonroot && useradd -r -g nonroot nonroot\n\n# Tell docker that all future commands should run as the nonroot user\nUSER nonroot\n```\n\nIn this example, a new group and user named `nonroot` are created, and the `USER` directive is used to specify that all future commands should be run as this user.\n\n## Library Dependencies\n\nThe code example does not specify any library dependencies.\n\n## References\n\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-250",
+                    "url": "https://cwe.mitre.org/data/definitions/250.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-250"
+                ]
+              }
+            },
+            {
+              "id": "c715549b-a9b6-3a33-b131-6d91bbc2d851",
+              "name": "XSS Vulnerability from User-Controlled Data in HTML String",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided code snippet, the application is vulnerable to XSS because it's directly using user-controlled data in an HTML string without proper sanitization or encoding.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, it's recommended to:\n\n- Use frameworks that automatically escape XSS by design, such as Ruby on Rails, React JS, etc.\n- Escape untrusted HTTP request data based on the context in the HTML output (body, attribute, JavaScript, CSS, or URL).\n- Apply context-sensitive encoding when modifying the browser document on the client side.\n- Validate, filter, or sanitize user-generated input to prevent malicious data from being executed as code in the browser.\n\n## Source Code Fix Recommendation\n\nIn the provided code snippet, you can use the `encodeURIComponent` function to encode user-controlled data:\n\n```javascript\nstr += `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`;\n```\n\nThis function encodes special characters. In addition, it encodes the following characters: `, / ? : @ & = + $ #`.\n\n## Library Dependencies\n\nThe provided code snippet does not require any additional library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-79",
+                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-79"
                 ]
               }
             },
@@ -100,24 +122,90 @@
               }
             },
             {
-              "id": "bc8d1490-d25a-3495-ac6a-96690d855517",
-              "name": "High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification",
+              "id": "38da4bb4-1209-36d5-ad93-f94728333fa7",
+              "name": "Disabled CSRF Protection Vulnerability",
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nThe \"High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification\" is a common security vulnerability in Docker where the Dockerfile does not specify a non-root user for running the container. By default, Docker containers run as root, which means that if an attacker manages to break out of the container, they would have root access to the host system. This could lead to a variety of security issues, including unauthorized access to data, execution of arbitrary code, and denial of service.\n\n## Security Concern\n\nRunning Docker containers as root is a significant security concern because it provides the container with potentially dangerous permissions. If an attacker manages to exploit a vulnerability in the container or the application it's running, they could gain root access to the host system. This could allow them to execute arbitrary code, access sensitive data, or cause a denial of service.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it's recommended to always specify a non-root user in your Dockerfile. This can be done by adding a `USER` directive in the Dockerfile that specifies a non-root user. If the application needs to perform operations that require root permissions, consider using a least privilege model where only the necessary operations are performed as root.\n\n## Source Code Fix Recommendation\n\nHere's how you can modify the Dockerfile to specify a non-root user:\n\n```Dockerfile\nFROM eclipse-temurin:17-jdk-jammy\n\n# Create a group and user\nRUN groupadd -r nonroot && useradd -r -g nonroot nonroot\n\n# Tell docker that all future commands should run as the nonroot user\nUSER nonroot\n```\n\nIn this example, a new group and user named `nonroot` are created, and the `USER` directive is used to specify that all future commands should be run as this user.\n\n## Library Dependencies\n\nThe code example does not specify any library dependencies.\n\n## References\n\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)"
+                "markdown": "## Description\n\nCross-Site Request Forgery (CSRF) is an attack that tricks the victim into submitting a malicious request. It uses the identity and privileges of the victim to perform an undesired function on their behalf. In Java, if CSRF protection is disabled, it leaves the application vulnerable to this type of attack.\n\nIn the provided code snippet, CSRF protection is disabled for all URLs matching the pattern \"/api/basic/**\". This means that any POST, PUT, DELETE, or PATCH requests to these URLs will not require a CSRF token, making them vulnerable to CSRF attacks.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should enable CSRF protection. In Spring Security, this can be done by removing the `.csrf().disable()` line from your configuration. By default, Spring Security enables CSRF protection.\n\n## Source Code Fix Recommendation\n\nHere is the fixed code:\n\n```java\nhttp\n    .antMatcher(\"/api/basic/**\");\n```\n\nIn this fixed code, CSRF protection is enabled by default because the `.csrf().disable()` line has been removed.\n\n## Library Dependencies\n\nThe code example provided is a part of Spring Security configuration, so the following dependencies are required:\n\n- Spring Boot Starter Security\n- Spring Boot Starter Web\n\n## References\n\n- [OWASP CSRF Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)\n- [CWE-352: Cross-Site Request Forgery (CSRF)](https://cwe.mitre.org/data/definitions/352.html)"
               },
               "properties": {
                 "cwe": [
                   {
-                    "id": "CWE-250",
-                    "url": "https://cwe.mitre.org/data/definitions/250.html"
+                    "id": "CWE-352",
+                    "url": "https://cwe.mitre.org/data/definitions/352.html"
                   }
                 ],
-                "severity": "HIGH",
+                "severity": "MEDIUM",
                 "kind": "FAIL",
                 "tags": [
-                  "CWE-250"
+                  "CWE-352"
+                ]
+              }
+            },
+            {
+              "id": "c86a9303-b202-3616-9cd6-ac10f2778df2",
+              "name": "Disabled CSRF Protection Vulnerability",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nCross-Site Request Forgery (CSRF) is a type of attack that occurs when a malicious web site, email, blog, instant message, or program causes a user's web browser to perform an unwanted action on a trusted site for which the user is authenticated. A CSRF attack works because browser requests automatically include all cookies including session cookies. Therefore, if the user is authenticated to the site, the site cannot distinguish between legitimate requests and forged requests.\n\nThe code snippet provided has disabled CSRF protection for the \"/api/token/**\" URL pattern. This means that any POST, PUT, DELETE, and PATCH requests to these URLs will not be checked for a CSRF token, making them vulnerable to CSRF attacks.\n\n## Mitigation Advice\n\nTo mitigate CSRF vulnerabilities, you should:\n\n1. Enable CSRF protection: CSRF protection should be enabled for all sensitive URLs. This can be done by removing the `.csrf().disable()` line from the code.\n\n2. Use Anti-CSRF Tokens: Include a unique, unpredictable CSRF token in each HTTP request and validate this token on the server-side.\n\n3. Use SameSite Cookies: SameSite cookies are a more modern and effective way to prevent CSRF attacks. They work by ensuring that cookies are only sent with requests initiated from the same registrable domain.\n\n## Source Code Fix Recommendation\n\nHere is a recommended fix for the provided code snippet:\n\n```java\nhttp\n    .antMatcher(\"/api/token/**\")\n    .httpBasic().disable()\n    .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());\n```\n\nIn this code, CSRF protection is enabled and a CSRF token repository is set up. The `withHttpOnlyFalse()` method ensures that the CSRF token can be read by JavaScript running on the client side.\n\n## Library Dependencies\n\nThe code example requires the following library dependencies:\n\n- Spring Security\n\n## References\n\n- [OWASP CSRF Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)\n- [CWE-352: Cross-Site Request Forgery (CSRF)](https://cwe.mitre.org/data/definitions/352.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-352",
+                    "url": "https://cwe.mitre.org/data/definitions/352.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-352"
+                ]
+              }
+            },
+            {
+              "id": "9e1cc365-0a1d-3e9f-a10b-b2b63140a9fb",
+              "name": "Disabled CSRF Protection Vulnerability",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nCross-Site Request Forgery (CSRF) is a type of attack that occurs when a malicious web site, email, blog, instant message, or program causes a user's web browser to perform an unwanted action on a trusted site for which the user is currently authenticated. The impact of a successful CSRF attack is limited to the capabilities exposed by the vulnerable application. For instance, this vulnerability could be used by an attacker to force a victim to change their password, make purchases, or perform any other state-changing request.\n\nIn the provided Java code snippet, CSRF protection is disabled for the \"/api/jwt/**\" endpoint. This means that any state-changing request sent to this endpoint is not protected against CSRF attacks.\n\n## Mitigation Advice\n\nTo mitigate CSRF vulnerabilities, it is recommended to use anti-CSRF tokens, also known as synchronizer tokens. These tokens are included in each state-changing request and are checked by the server before the request is processed. The tokens should be unique per user session and should be securely generated.\n\n## Source Code Fix Recommendation\n\nTo fix the vulnerability in the provided code snippet, CSRF protection should be enabled for the \"/api/jwt/**\" endpoint. This can be done by removing the `.csrf().disable()` line:\n\n```java\nhttp\n    .antMatcher(\"/api/jwt/**\")\n    .httpBasic().disable();\n```\n\n## Library Dependencies\n\nThe provided code snippet is part of a Spring Security configuration. The following libraries are required for it to execute properly:\n\n- Spring Boot Starter Security\n- Spring Boot Starter Web\n\n## References\n\n- [OWASP CSRF Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)\n- [CWE-352: Cross-Site Request Forgery (CSRF)](https://cwe.mitre.org/data/definitions/352.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-352",
+                    "url": "https://cwe.mitre.org/data/definitions/352.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-352"
+                ]
+              }
+            },
+            {
+              "id": "10fb63e3-85d0-347e-9e79-c3419a3b0650",
+              "name": "Unsecured Cookie Detected",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\n\"Unsecured Cookie Detected\" is a vulnerability that occurs when a web application does not properly secure its cookies. This can lead to unauthorized access to sensitive information stored in the cookies, such as user session identifiers, which can lead to session hijacking and other serious security issues.\n\nIn the provided Java code, a new cookie named \"XLOGINID\" is being created and added to the HTTP response without any security flags. This means that the cookie can be transmitted over unsecured HTTP connections, making it vulnerable to interception and tampering.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always secure your cookies by setting the `Secure` and `HttpOnly` flags. The `Secure` flag ensures that the cookie is only sent over HTTPS, preventing it from being intercepted during transmission. The `HttpOnly` flag prevents the cookie from being accessed through client-side scripts, reducing the risk of cross-site scripting (XSS) attacks.\n\n## Source Code Fix\n\nHere is how you can modify the provided code to secure the cookie:\n\n```java\nimport javax.servlet.http.Cookie;\n\nCookie cookie = new Cookie(\"XLOGINID\", cookieCode);\ncookie.setSecure(true);\ncookie.setHttpOnly(true);\nresp.addCookie(cookie);\n```\n\n## Library Dependencies\n\nThe provided code requires the following library to execute properly:\n\n- `javax.servlet.http.Cookie`\n\n## References\n\n- [CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute](https://cwe.mitre.org/data/definitions/614.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-614",
+                    "url": "https://cwe.mitre.org/data/definitions/614.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-614"
                 ]
               }
             }
@@ -133,109 +221,41 @@
       "language": "en-US",
       "results": [
         {
-          "ruleId": "6874cf9b-e97b-39bc-8156-8ff0d1172299",
+          "ruleId": "bc8d1490-d25a-3495-ac6a-96690d855517",
           "kind": "fail",
-          "level": "warning",
+          "level": "error",
           "message": {
-            "text": "XSS Vulnerability from User-Controlled Data in HTML String"
+            "text": "High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "hawkscripts/authentication/form-auth-multi.js",
-                  "uriBaseId": "%SRCROOT%"
+                  "uri": "Dockerfile",
+                  "uriBaseId": "ROOTPATH"
                 },
                 "region": {
-                  "startLine": 48,
-                  "startColumn": 3,
-                  "endLine": 48,
-                  "endColumn": 68,
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1,
                   "snippet": {
-                    "text": "  return `${hawkConf[\"app\"][\"host\"]}${paramsValues.get(paramName)}`"
+                    "text": "FROM eclipse-temurin:17-jdk-jammy"
                   }
                 }
+              },
+              "message": {
+                "text": "Dockerfile"
               }
             }
           ],
           "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "fe63742e2f8d92695c776dd52122df33f3250e0f6f43c118cd0a531934d4f9e8",
-            "glog-pfp-ruleFileCode/v1": "1bef8c42bf9fd248ff79a488b54430f444ac9667fa3984f53981e6afe7adc56b"
+            "glog-pfp-ruleFileLineCode/v1": "cc01dfd2946e50dff6861d3988ed694f1210186d23722393917794fcdaf7983f",
+            "glog-pfp-ruleFileCode/v1": "a2db13e2cbbdd619dccaa0fa3203030ef1c36f7243e3535676d08791f9bbd155"
           },
           "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "1bef8c42bf9fd248ff79a488b54430f444ac9667fa3984f53981e6afe7adc56b"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "c715549b-a9b6-3a33-b131-6d91bbc2d851",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "XSS Vulnerability from User-Controlled Data in HTML String"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "hawkscripts/authentication/form-auth-multi.js",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 59,
-                  "startColumn": 5,
-                  "endLine": 59,
-                  "endColumn": 55,
-                  "snippet": {
-                    "text": "    str += `${urlEncode(key)}=${urlEncode(obj[key])}`;"
-                  }
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "46c0708921fb21867f6bbef56108d8e6c6a26dc949dc4573f62220936a16cb5e",
-            "glog-pfp-ruleFileCode/v1": "12cb9afa6ea742d7638207bfb0c811e06d4935b4fad2d4500ca741629c8c236e"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "12cb9afa6ea742d7638207bfb0c811e06d4935b4fad2d4500ca741629c8c236e"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "4923fc7d-94f8-3cc9-89f2-91769612e757",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "\"Potential XSS Vulnerability from User-Controlled Data in HTML String\""
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "hawkscripts/authentication/form-auth-multi.js",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 139,
-                  "startColumn": 3,
-                  "endLine": 139,
-                  "endColumn": 118,
-                  "snippet": {
-                    "text": "  return `${msg.requestHeader}\\r\\n\\r\\n${msg.requestBody}\\r\\n---\\r\\n${msg.responseHeader}\\r\\n\\r\\n${msg.responseBody}`;"
-                  }
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "35c09933adf825c6ae1524f096406251cffab0fb3feea4aba7a7d01427f72809",
-            "glog-pfp-ruleFileCode/v1": "fd48250c61bc770267710a06698f6a8f9ef1518f1ada4c28adc506d0ffd9cb42"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "fd48250c61bc770267710a06698f6a8f9ef1518f1ada4c28adc506d0ffd9cb42"
-          },
-          "properties": {}
+            "glog-fp-ruleFileCode/v1": "a2db13e2cbbdd619dccaa0fa3203030ef1c36f7243e3535676d08791f9bbd155"
+          }
         },
         {
           "ruleId": "78f0c135-fcd8-31c1-ab65-3ddd0ad600bd",
@@ -275,41 +295,249 @@
           }
         },
         {
-          "ruleId": "bc8d1490-d25a-3495-ac6a-96690d855517",
+          "ruleId": "c715549b-a9b6-3a33-b131-6d91bbc2d851",
           "kind": "fail",
-          "level": "error",
+          "level": "warning",
           "message": {
-            "text": "High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification"
+            "text": "XSS Vulnerability from User-Controlled Data in HTML String"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "Dockerfile",
-                  "uriBaseId": "ROOTPATH"
+                  "uri": "hawkscripts/authentication/form-auth-multi.js",
+                  "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 1,
-                  "startColumn": 1,
-                  "endLine": 1,
-                  "endColumn": 1,
+                  "startLine": 59,
+                  "startColumn": 5,
+                  "endLine": 59,
+                  "endColumn": 55,
                   "snippet": {
-                    "text": "FROM eclipse-temurin:17-jdk-jammy"
+                    "text": "    str += `${urlEncode(key)}=${urlEncode(obj[key])}`;"
                   }
                 }
-              },
-              "message": {
-                "text": "Dockerfile"
               }
             }
           ],
           "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "cc01dfd2946e50dff6861d3988ed694f1210186d23722393917794fcdaf7983f",
-            "glog-pfp-ruleFileCode/v1": "a2db13e2cbbdd619dccaa0fa3203030ef1c36f7243e3535676d08791f9bbd155"
+            "glog-pfp-ruleFileLineCode/v1": "46c0708921fb21867f6bbef56108d8e6c6a26dc949dc4573f62220936a16cb5e",
+            "glog-pfp-ruleFileCode/v1": "12cb9afa6ea742d7638207bfb0c811e06d4935b4fad2d4500ca741629c8c236e"
           },
           "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "a2db13e2cbbdd619dccaa0fa3203030ef1c36f7243e3535676d08791f9bbd155"
-          }
+            "glog-fp-ruleFileCode/v1": "12cb9afa6ea742d7638207bfb0c811e06d4935b4fad2d4500ca741629c8c236e"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "6874cf9b-e97b-39bc-8156-8ff0d1172299",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "XSS Vulnerability from User-Controlled Data in HTML String"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "hawkscripts/authentication/form-auth-multi.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 48,
+                  "startColumn": 3,
+                  "endLine": 48,
+                  "endColumn": 68,
+                  "snippet": {
+                    "text": "  return `${hawkConf[\"app\"][\"host\"]}${paramsValues.get(paramName)}`"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "fe63742e2f8d92695c776dd52122df33f3250e0f6f43c118cd0a531934d4f9e8",
+            "glog-pfp-ruleFileCode/v1": "1bef8c42bf9fd248ff79a488b54430f444ac9667fa3984f53981e6afe7adc56b"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "1bef8c42bf9fd248ff79a488b54430f444ac9667fa3984f53981e6afe7adc56b"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "4923fc7d-94f8-3cc9-89f2-91769612e757",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "\"Potential XSS Vulnerability from User-Controlled Data in HTML String\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "hawkscripts/authentication/form-auth-multi.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 139,
+                  "startColumn": 3,
+                  "endLine": 139,
+                  "endColumn": 118,
+                  "snippet": {
+                    "text": "  return `${msg.requestHeader}\\r\\n\\r\\n${msg.requestBody}\\r\\n---\\r\\n${msg.responseHeader}\\r\\n\\r\\n${msg.responseBody}`;"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "35c09933adf825c6ae1524f096406251cffab0fb3feea4aba7a7d01427f72809",
+            "glog-pfp-ruleFileCode/v1": "fd48250c61bc770267710a06698f6a8f9ef1518f1ada4c28adc506d0ffd9cb42"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "fd48250c61bc770267710a06698f6a8f9ef1518f1ada4c28adc506d0ffd9cb42"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "38da4bb4-1209-36d5-ad93-f94728333fa7",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Disabled CSRF Protection Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/MultiHttpSecurityConfig.java",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 110,
+                  "startColumn": 13,
+                  "endLine": 112,
+                  "endColumn": 38,
+                  "snippet": {
+                    "text": "            http\n                    .antMatcher(\"/api/basic/**\")\n                    .csrf().disable()"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "ac602a1ba36735965be7c64dc9ba517e3707508c8168e4e5c4f9c7d67098207e",
+            "glog-pfp-ruleFileCode/v1": "a190aa40ec88a9c5e186bb07230f3c6917b57f0ce25934df1804a932d17a170c"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "a190aa40ec88a9c5e186bb07230f3c6917b57f0ce25934df1804a932d17a170c"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "c86a9303-b202-3616-9cd6-ac10f2778df2",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Disabled CSRF Protection Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/MultiHttpSecurityConfig.java",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 88,
+                  "startColumn": 13,
+                  "endLine": 91,
+                  "endColumn": 38,
+                  "snippet": {
+                    "text": "            http\n                    .antMatcher(\"/api/token/**\")\n                    .httpBasic().disable()\n                    .csrf().disable()"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "8eeebcae0f90c7a710b821c77804bd0a4e4424b9eb86cd1a296999d12d7f8639",
+            "glog-pfp-ruleFileCode/v1": "71a8ffcca981a3594921c82be3278c0f9e21c8f134194710873d253e266904bb"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "71a8ffcca981a3594921c82be3278c0f9e21c8f134194710873d253e266904bb"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "10fb63e3-85d0-347e-9e79-c3419a3b0650",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "'HttpOnly' flag not set for cookie vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/controller/LoginController.java",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 57,
+                  "startColumn": 9,
+                  "endLine": 57,
+                  "endColumn": 60,
+                  "snippet": {
+                    "text": "        resp.addCookie(new Cookie(\"XLOGINID\", cookieCode));"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "54a906d495c6e2c549b989d7c5d037ef82dc013d57d07f029ac98b39121dcec7",
+            "glog-pfp-ruleFileCode/v1": "ebd1393711ab07b860d4a9239ddcae8b69d18a7e418c770dc7ed320f32d038e9"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "ebd1393711ab07b860d4a9239ddcae8b69d18a7e418c770dc7ed320f32d038e9"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "9e1cc365-0a1d-3e9f-a10b-b2b63140a9fb",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Disabled CSRF Protection Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/MultiHttpSecurityConfig.java",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 47,
+                  "startColumn": 13,
+                  "endLine": 50,
+                  "endColumn": 42,
+                  "snippet": {
+                    "text": "            http\n                    .antMatcher(\"/api/jwt/**\")\n                        .httpBasic().disable()\n                        .csrf().disable()"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "8f51e319f4f3ffa8d32ac51fe6d9efaa7c4410fa342b436d81bcf14ee96c6c52",
+            "glog-pfp-ruleFileCode/v1": "12e87d28067748934f54689817feae078e59bbc795b5551d883ca80e62c56f9b"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "12e87d28067748934f54689817feae078e59bbc795b5551d883ca80e62c56f9b"
+          },
+          "properties": {}
         }
       ],
       "newlineSequences": [
