@@ -14,11 +14,11 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '23'
-          cache: 'maven'
+          java-version: '21'
+          cache: 'gradle'
 
       - name: Compile project
-        run: mvn --batch-mode clean install -DskipTests
+        run: ./gradlew clean build
 
       - name: Checkout glog-action repository
         uses: actions/checkout@v4
