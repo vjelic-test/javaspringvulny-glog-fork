@@ -12,116 +12,6 @@
           "informationUri": "https://www.glog.ai",
           "rules": [
             {
-              "id": "78f0c135-fcd8-31c1-ab65-3ddd0ad600bd",
-              "name": "\"Exposed Asymmetric Private Key in Resource Files\"",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nThe vulnerability \"Exposed Asymmetric Private Key in Resource Files\" in Docker programming language refers to the situation where a private key is hard-coded or embedded within the Docker image or resource files. This private key can be used for various purposes such as SSH access, API access, decryption of sensitive data, etc. \n\n## Security Concern\n\nThis is a major security concern because if an attacker gains access to the Docker image or resource files, they can extract the private key. With the private key, they can impersonate the application, gain unauthorized access to systems, decrypt sensitive data, or perform other malicious activities. \n\n## Mitigation Advice\n\n- Never embed or hard-code private keys in Docker images or resource files. \n- Use environment variables or secure vault services to handle private keys.\n- Regularly rotate and change keys.\n- Use Docker secrets if you are using Docker Swarm.\n- Limit the exposure of sensitive information in Docker images.\n\n## Source Code Fix Recommendation\n\nThe private key in the given code should be removed. Instead, use Docker secrets or environment variables to handle the private key. \n\nFor example, you can use Docker secrets like this:\n\n```bash\necho \"MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ...\" | docker secret create my_secret_key -\n```\n\nThen use it in your Docker service:\n\n```bash\ndocker service  create --name=my_service --secret=my_secret_key my_image\n```\n\nIn your application, you can access this secret in the `/run/secrets/my_secret_key` file.\n\n## Library Dependencies\n\nThe code example does not provide any information about library dependencies.\n\n## References\n\n- [OWASP - Insecure Configuration](https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration)\n- [CWE-798: Use of Hard-coded Credentials](https://cwe.mitre.org/data/definitions/798.html)"
-              },
-              "properties": {
-                "cwe": [
-                  {
-                    "id": "CWE-798",
-                    "url": "https://cwe.mitre.org/data/definitions/798.html"
-                  }
-                ],
-                "severity": "HIGH",
-                "kind": "FAIL",
-                "tags": [
-                  "CWE-798"
-                ]
-              }
-            },
-            {
-              "id": "bc8d1490-d25a-3495-ac6a-96690d855517",
-              "name": "High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nThe \"High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification\" is a common security vulnerability in Docker where the Dockerfile does not specify a non-root user for running the container. By default, Docker containers run as root, which means that if an attacker manages to break out of the container, they would have root access to the host system. This could lead to a variety of security issues, including unauthorized access to data, execution of arbitrary code, and denial of service.\n\n## Security Concern\n\nRunning Docker containers as root is a significant security concern because it provides the container with potentially dangerous permissions. If an attacker manages to exploit a vulnerability in the container or the application it's running, they could gain root access to the host system. This could allow them to execute arbitrary code, access sensitive data, or cause a denial of service.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it's recommended to always specify a non-root user in your Dockerfile. This can be done by adding a `USER` directive in the Dockerfile that specifies a non-root user. If the application needs to perform operations that require root permissions, consider using a least privilege model where only the necessary operations are performed as root.\n\n## Source Code Fix Recommendation\n\nHere's how you can modify the Dockerfile to specify a non-root user:\n\n```Dockerfile\nFROM eclipse-temurin:17-jdk-jammy\n\n# Create a group and user\nRUN groupadd -r nonroot && useradd -r -g nonroot nonroot\n\n# Tell docker that all future commands should run as the nonroot user\nUSER nonroot\n```\n\nIn this example, a new group and user named `nonroot` are created, and the `USER` directive is used to specify that all future commands should be run as this user.\n\n## Library Dependencies\n\nThe code example does not specify any library dependencies.\n\n## References\n\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)"
-              },
-              "properties": {
-                "cwe": [
-                  {
-                    "id": "CWE-250",
-                    "url": "https://cwe.mitre.org/data/definitions/250.html"
-                  }
-                ],
-                "severity": "HIGH",
-                "kind": "FAIL",
-                "tags": [
-                  "CWE-250"
-                ]
-              }
-            },
-            {
-              "id": "38da4bb4-1209-36d5-ad93-f94728333fa7",
-              "name": "Disabled CSRF Protection Vulnerability",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nCross-Site Request Forgery (CSRF) is an attack that tricks the victim into submitting a malicious request. It uses the identity and privileges of the victim to perform an undesired function on their behalf. In Java, if CSRF protection is disabled, it leaves the application vulnerable to this type of attack.\n\nIn the provided code snippet, CSRF protection is disabled for all URLs matching the pattern \"/api/basic/**\". This means that any POST, PUT, DELETE, or PATCH requests to these URLs will not require a CSRF token, making them vulnerable to CSRF attacks.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should enable CSRF protection. In Spring Security, this can be done by removing the `.csrf().disable()` line from your configuration. By default, Spring Security enables CSRF protection.\n\n## Source Code Fix Recommendation\n\nHere is the fixed code:\n\n```java\nhttp\n    .antMatcher(\"/api/basic/**\");\n```\n\nIn this fixed code, CSRF protection is enabled by default because the `.csrf().disable()` line has been removed.\n\n## Library Dependencies\n\nThe code example provided is a part of Spring Security configuration, so the following dependencies are required:\n\n- Spring Boot Starter Security\n- Spring Boot Starter Web\n\n## References\n\n- [OWASP CSRF Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)\n- [CWE-352: Cross-Site Request Forgery (CSRF)](https://cwe.mitre.org/data/definitions/352.html)"
-              },
-              "properties": {
-                "cwe": [
-                  {
-                    "id": "CWE-352",
-                    "url": "https://cwe.mitre.org/data/definitions/352.html"
-                  }
-                ],
-                "severity": "MEDIUM",
-                "kind": "FAIL",
-                "tags": [
-                  "CWE-352"
-                ]
-              }
-            },
-            {
-              "id": "9e1cc365-0a1d-3e9f-a10b-b2b63140a9fb",
-              "name": "Disabled CSRF Protection Vulnerability",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nCross-Site Request Forgery (CSRF) is a type of attack that occurs when a malicious web site, email, blog, instant message, or program causes a user's web browser to perform an unwanted action on a trusted site for which the user is currently authenticated. The impact of a successful CSRF attack is limited to the capabilities exposed by the vulnerable application. For instance, this vulnerability could be used by an attacker to force a victim to change their password, make purchases, or perform any other state-changing request.\n\nIn the provided Java code snippet, CSRF protection is disabled for the \"/api/jwt/**\" endpoint. This means that any state-changing request sent to this endpoint is not protected against CSRF attacks.\n\n## Mitigation Advice\n\nTo mitigate CSRF vulnerabilities, it is recommended to use anti-CSRF tokens, also known as synchronizer tokens. These tokens are included in each state-changing request and are checked by the server before the request is processed. The tokens should be unique per user session and should be securely generated.\n\n## Source Code Fix Recommendation\n\nTo fix the vulnerability in the provided code snippet, CSRF protection should be enabled for the \"/api/jwt/**\" endpoint. This can be done by removing the `.csrf().disable()` line:\n\n```java\nhttp\n    .antMatcher(\"/api/jwt/**\")\n    .httpBasic().disable();\n```\n\n## Library Dependencies\n\nThe provided code snippet is part of a Spring Security configuration. The following libraries are required for it to execute properly:\n\n- Spring Boot Starter Security\n- Spring Boot Starter Web\n\n## References\n\n- [OWASP CSRF Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)\n- [CWE-352: Cross-Site Request Forgery (CSRF)](https://cwe.mitre.org/data/definitions/352.html)"
-              },
-              "properties": {
-                "cwe": [
-                  {
-                    "id": "CWE-352",
-                    "url": "https://cwe.mitre.org/data/definitions/352.html"
-                  }
-                ],
-                "severity": "MEDIUM",
-                "kind": "FAIL",
-                "tags": [
-                  "CWE-352"
-                ]
-              }
-            },
-            {
-              "id": "c86a9303-b202-3616-9cd6-ac10f2778df2",
-              "name": "Disabled CSRF Protection Vulnerability",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nCross-Site Request Forgery (CSRF) is a type of attack that occurs when a malicious web site, email, blog, instant message, or program causes a user's web browser to perform an unwanted action on a trusted site for which the user is authenticated. A CSRF attack works because browser requests automatically include all cookies including session cookies. Therefore, if the user is authenticated to the site, the site cannot distinguish between legitimate requests and forged requests.\n\nThe code snippet provided has disabled CSRF protection for the \"/api/token/**\" URL pattern. This means that any POST, PUT, DELETE, and PATCH requests to these URLs will not be checked for a CSRF token, making them vulnerable to CSRF attacks.\n\n## Mitigation Advice\n\nTo mitigate CSRF vulnerabilities, you should:\n\n1. Enable CSRF protection: CSRF protection should be enabled for all sensitive URLs. This can be done by removing the `.csrf().disable()` line from the code.\n\n2. Use Anti-CSRF Tokens: Include a unique, unpredictable CSRF token in each HTTP request and validate this token on the server-side.\n\n3. Use SameSite Cookies: SameSite cookies are a more modern and effective way to prevent CSRF attacks. They work by ensuring that cookies are only sent with requests initiated from the same registrable domain.\n\n## Source Code Fix Recommendation\n\nHere is a recommended fix for the provided code snippet:\n\n```java\nhttp\n    .antMatcher(\"/api/token/**\")\n    .httpBasic().disable()\n    .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());\n```\n\nIn this code, CSRF protection is enabled and a CSRF token repository is set up. The `withHttpOnlyFalse()` method ensures that the CSRF token can be read by JavaScript running on the client side.\n\n## Library Dependencies\n\nThe code example requires the following library dependencies:\n\n- Spring Security\n\n## References\n\n- [OWASP CSRF Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)\n- [CWE-352: Cross-Site Request Forgery (CSRF)](https://cwe.mitre.org/data/definitions/352.html)"
-              },
-              "properties": {
-                "cwe": [
-                  {
-                    "id": "CWE-352",
-                    "url": "https://cwe.mitre.org/data/definitions/352.html"
-                  }
-                ],
-                "severity": "MEDIUM",
-                "kind": "FAIL",
-                "tags": [
-                  "CWE-352"
-                ]
-              }
-            },
-            {
               "id": "6874cf9b-e97b-39bc-8156-8ff0d1172299",
               "name": "XSS Vulnerability from User-Controlled Data in HTML String",
               "helpUri": "https://www.glog.ai/",
@@ -166,28 +56,6 @@
               }
             },
             {
-              "id": "10fb63e3-85d0-347e-9e79-c3419a3b0650",
-              "name": "Unsecured Cookie Detected",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\n\"Unsecured Cookie Detected\" is a vulnerability that occurs when a web application does not properly secure its cookies. This can lead to unauthorized access to sensitive information stored in the cookies, such as user session identifiers, which can lead to session hijacking and other serious security issues.\n\nIn the provided Java code, a new cookie named \"XLOGINID\" is being created and added to the HTTP response without any security flags. This means that the cookie can be transmitted over unsecured HTTP connections, making it vulnerable to interception and tampering.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always secure your cookies by setting the `Secure` and `HttpOnly` flags. The `Secure` flag ensures that the cookie is only sent over HTTPS, preventing it from being intercepted during transmission. The `HttpOnly` flag prevents the cookie from being accessed through client-side scripts, reducing the risk of cross-site scripting (XSS) attacks.\n\n## Source Code Fix\n\nHere is how you can modify the provided code to secure the cookie:\n\n```java\nimport javax.servlet.http.Cookie;\n\nCookie cookie = new Cookie(\"XLOGINID\", cookieCode);\ncookie.setSecure(true);\ncookie.setHttpOnly(true);\nresp.addCookie(cookie);\n```\n\n## Library Dependencies\n\nThe provided code requires the following library to execute properly:\n\n- `javax.servlet.http.Cookie`\n\n## References\n\n- [CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute](https://cwe.mitre.org/data/definitions/614.html)"
-              },
-              "properties": {
-                "cwe": [
-                  {
-                    "id": "CWE-614",
-                    "url": "https://cwe.mitre.org/data/definitions/614.html"
-                  }
-                ],
-                "severity": "MEDIUM",
-                "kind": "FAIL",
-                "tags": [
-                  "CWE-614"
-                ]
-              }
-            },
-            {
               "id": "4923fc7d-94f8-3cc9-89f2-91769612e757",
               "name": "\"Potential XSS Vulnerability from User-Controlled Data in HTML String\"",
               "helpUri": "https://www.glog.ai/",
@@ -206,28 +74,6 @@
                 "kind": "FAIL",
                 "tags": [
                   "CWE-79"
-                ]
-              }
-            },
-            {
-              "id": "4dcfa34f-0a4d-3635-a9fa-7cf9cfcccb3b",
-              "name": "Fixed Password Vulnerability",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nFixed Password Vulnerability in Java refers to the insecure practice of hardcoding passwords directly into the source code. This is a serious security risk because anyone who has access to the source code can easily read the password. This vulnerability can lead to unauthorized access, data breaches, and other security issues.\n\n## Mitigation Advice\n\nAvoid hardcoding passwords in your source code. Instead, use environment variables, configuration files, or secure password management solutions to store passwords. These methods allow you to change passwords without modifying and redeploying your code. \n\nEnsure that the storage method you choose is secure. For example, if you use configuration files, make sure they are not included in the version control system and are properly protected by file system permissions.\n\n## Source Code Fix Recommendation\n\nInstead of hardcoding the password like this:\n\n```java\nString password = \"password\";\n```\n\nYou can use an environment variable:\n\n```java\nString password = System.getenv(\"PASSWORD\");\n```\n\nOr a properties file:\n\n```java\nProperties prop = new Properties();\nInputStream input = new FileInputStream(\"config.properties\");\nprop.load(input);\nString password = prop.getProperty(\"password\");\n```\n\n## Library Dependencies\n\nFor the properties file example, you need the `java.util.Properties` and `java.io` libraries, which are included in the Java standard library.\n\n## References\n\n- [CWE-259: Use of Hard-coded Password](https://cwe.mitre.org/data/definitions/259.html)"
-              },
-              "properties": {
-                "cwe": [
-                  {
-                    "id": "CWE-259",
-                    "url": "https://cwe.mitre.org/data/definitions/259.html"
-                  }
-                ],
-                "severity": "MEDIUM",
-                "kind": "FAIL",
-                "tags": [
-                  "CWE-259"
                 ]
               }
             },
@@ -254,24 +100,90 @@
               }
             },
             {
-              "id": "0a84dd25-d52a-366d-8470-9d54d7141b9f",
-              "name": "Exposed Asymmetric Private Key in Build Resources",
+              "id": "4dcfa34f-0a4d-3635-a9fa-7cf9cfcccb3b",
+              "name": "Fixed Password Vulnerability",
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nThe \"Exposed Asymmetric Private Key in Build Resources\" vulnerability refers to the situation where a private key is hard-coded or embedded within the Docker build resources. This is a serious security concern as it exposes sensitive information that could be exploited by malicious actors to gain unauthorized access to systems or data.\n\n## Security Concern\n\nPrivate keys are meant to be kept secret and used to verify the identity of the sender (in asymmetric encryption) or to decrypt data (in symmetric encryption). If a private key is exposed, it can be used by an attacker to impersonate the legitimate owner, decrypt sensitive data, or even launch further attacks. In the context of Docker, an exposed private key could allow an attacker to gain unauthorized access to the Docker container or the host system.\n\n## Mitigation Advice\n\n- Never hard-code or embed private keys in your Docker build resources or any part of your application. \n- Use environment variables or secure vault services to handle keys and other sensitive information.\n- Regularly use tools to scan your codebase for exposed keys or other sensitive information.\n\n## Source Code Fix Recommendation\n\nThe provided code is an RSA private key. It should not be exposed or hard-coded in the application. Instead, use Docker secrets or environment variables to handle such sensitive data. \n\nFor example, you can use Docker secrets as follows:\n\n```bash\necho \"MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ...\" | docker secret create my_secret_key -\n```\n\nThen use it in your Docker service:\n\n```bash\ndocker service  create --name my_service --secret my_secret_key my_image\n```\n\nIn your application, you can then access the secret from `/run/secrets/my_secret_key`.\n\n## Library Dependencies\n\nThe provided code does not require any library dependencies as it is a private key.\n\n## References\n\n- [OWASP - Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-798: Use of Hard-coded Credentials](https://cwe.mitre.org/data/definitions/798.html)"
+                "markdown": "## Description\n\nFixed Password Vulnerability in Java refers to the insecure practice of hardcoding passwords directly into the source code. This is a serious security risk because anyone who has access to the source code can easily read the password. This vulnerability can lead to unauthorized access, data breaches, and other security issues.\n\n## Mitigation Advice\n\nAvoid hardcoding passwords in your source code. Instead, use environment variables, configuration files, or secure password management solutions to store passwords. These methods allow you to change passwords without modifying and redeploying your code. \n\nEnsure that the storage method you choose is secure. For example, if you use configuration files, make sure they are not included in the version control system and are properly protected by file system permissions.\n\n## Source Code Fix Recommendation\n\nInstead of hardcoding the password like this:\n\n```java\nString password = \"password\";\n```\n\nYou can use an environment variable:\n\n```java\nString password = System.getenv(\"PASSWORD\");\n```\n\nOr a properties file:\n\n```java\nProperties prop = new Properties();\nInputStream input = new FileInputStream(\"config.properties\");\nprop.load(input);\nString password = prop.getProperty(\"password\");\n```\n\n## Library Dependencies\n\nFor the properties file example, you need the `java.util.Properties` and `java.io` libraries, which are included in the Java standard library.\n\n## References\n\n- [CWE-259: Use of Hard-coded Password](https://cwe.mitre.org/data/definitions/259.html)"
               },
               "properties": {
                 "cwe": [
                   {
-                    "id": "CWE-798",
-                    "url": "https://cwe.mitre.org/data/definitions/798.html"
+                    "id": "CWE-259",
+                    "url": "https://cwe.mitre.org/data/definitions/259.html"
                   }
                 ],
-                "severity": "HIGH",
+                "severity": "MEDIUM",
                 "kind": "FAIL",
                 "tags": [
-                  "CWE-798"
+                  "CWE-259"
+                ]
+              }
+            },
+            {
+              "id": "488ecac0-7bce-30ec-9e03-a61591b072e1",
+              "name": "Disabled CSRF Protection in Spring",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nCross-Site Request Forgery (CSRF) is a type of attack that occurs when a malicious web site, email, blog, instant message, or program causes a user's web browser to perform an unwanted action on a trusted site for which the user is authenticated. \n\nIn Spring Security, CSRF protection is enabled by default. If you disable CSRF protection in your Spring application by using `.csrf().disable()`, you are making your application vulnerable to CSRF attacks.\n\n## Mitigation Advice\n\nTo mitigate CSRF vulnerabilities, you should:\n\n1. **Enable CSRF Protection**: In Spring Security, CSRF protection is enabled by default. You should not disable it. If you have disabled it for some reason, you should enable it again by removing `.csrf().disable()` from your configuration.\n\n2. **Use Anti-CSRF Tokens**: Spring Security provides built-in support for generating and validating CSRF tokens. You should use this feature to protect your forms from CSRF attacks.\n\n3. **Validate Origin and Referer Headers**: You can also mitigate CSRF attacks by validating the Origin and Referer headers of HTTP requests.\n\n## Source Code Fix Recommendation\n\nIf you have disabled CSRF protection in your Spring application, you can enable it again by removing `.csrf().disable()` from your configuration. Here is an example:\n\n```java\nhttp\n    .authorizeRequests()\n    .antMatchers(\"/login\").permitAll()\n    .anyRequest().authenticated()\n    .and()\n    .formLogin()\n    .loginPage(\"/login\")\n    .permitAll();\n```\n\n## Library Dependencies\n\nThe following library dependencies are required by the code example:\n\n- `spring-security-web`\n- `spring-security-config`\n\n## References\n\n- [OWASP CSRF Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)\n- [Spring Security CSRF Protection](https://docs.spring.io/spring-security/site/docs/current/reference/html5/#csrf)\n- [CWE-352: Cross-Site Request Forgery (CSRF)](https://cwe.mitre.org/data/definitions/352.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-352",
+                    "url": "https://cwe.mitre.org/data/definitions/352.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-352"
+                ]
+              }
+            },
+            {
+              "id": "a0e0d878-65d8-3e2c-8dc8-e8e3afc33b5c",
+              "name": "Disabled CSRF Protection in Spring",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nCross-Site Request Forgery (CSRF) is a type of attack that occurs when a malicious web site, email, blog, instant message, or program causes a user's web browser to perform an unwanted action on a trusted site for which the user is authenticated. \n\nIn Spring Security, CSRF protection is enabled by default. If you disable CSRF protection in your Spring application by using `.csrf().disable()`, you are making your application vulnerable to CSRF attacks.\n\n## Mitigation Advice\n\nTo mitigate CSRF vulnerabilities, you should:\n\n1. **Enable CSRF Protection**: In Spring Security, CSRF protection is enabled by default. You should not disable it. If you have disabled it for some reason, you should enable it again by removing `.csrf().disable()` from your configuration.\n\n2. **Use Anti-CSRF Tokens**: Spring Security provides built-in support for generating and validating CSRF tokens. You should use this feature to protect your forms from CSRF attacks.\n\n3. **Validate Origin and Referer Headers**: You can also mitigate CSRF attacks by validating the Origin and Referer headers of HTTP requests.\n\n## Source Code Fix Recommendation\n\nIf you have disabled CSRF protection in your Spring application, you can enable it again by removing `.csrf().disable()` from your configuration. Here is an example:\n\n```java\nhttp\n    .authorizeRequests()\n    .antMatchers(\"/login\").permitAll()\n    .anyRequest().authenticated()\n    .and()\n    .formLogin()\n    .loginPage(\"/login\")\n    .permitAll();\n```\n\n## Library Dependencies\n\nThe following library dependencies are required by the code example:\n\n- `spring-security-web`\n- `spring-security-config`\n\n## References\n\n- [OWASP CSRF Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)\n- [Spring Security CSRF Protection](https://docs.spring.io/spring-security/site/docs/current/reference/html5/#csrf)\n- [CWE-352: Cross-Site Request Forgery (CSRF)](https://cwe.mitre.org/data/definitions/352.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-352",
+                    "url": "https://cwe.mitre.org/data/definitions/352.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-352"
+                ]
+              }
+            },
+            {
+              "id": "26802867-953d-3894-a91a-5ce43a52a634",
+              "name": "Disabled CSRF Protection in Spring",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nCross-Site Request Forgery (CSRF) is a type of attack that occurs when a malicious web site, email, blog, instant message, or program causes a user's web browser to perform an unwanted action on a trusted site for which the user is authenticated. \n\nIn Spring Security, CSRF protection is enabled by default. If you disable CSRF protection in your Spring application by using `.csrf().disable()`, you are making your application vulnerable to CSRF attacks.\n\n## Mitigation Advice\n\nTo mitigate CSRF vulnerabilities, you should:\n\n1. **Enable CSRF Protection**: In Spring Security, CSRF protection is enabled by default. You should not disable it. If you have disabled it for some reason, you should enable it again by removing `.csrf().disable()` from your configuration.\n\n2. **Use Anti-CSRF Tokens**: Spring Security provides built-in support for generating and validating CSRF tokens. You should use this feature to protect your forms from CSRF attacks.\n\n3. **Validate Origin and Referer Headers**: You can also mitigate CSRF attacks by validating the Origin and Referer headers of HTTP requests.\n\n## Source Code Fix Recommendation\n\nIf you have disabled CSRF protection in your Spring application, you can enable it again by removing `.csrf().disable()` from your configuration. Here is an example:\n\n```java\nhttp\n    .authorizeRequests()\n    .antMatchers(\"/login\").permitAll()\n    .anyRequest().authenticated()\n    .and()\n    .formLogin()\n    .loginPage(\"/login\")\n    .permitAll();\n```\n\n## Library Dependencies\n\nThe following library dependencies are required by the code example:\n\n- `spring-security-web`\n- `spring-security-config`\n\n## References\n\n- [OWASP CSRF Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html)\n- [Spring Security CSRF Protection](https://docs.spring.io/spring-security/site/docs/current/reference/html5/#csrf)\n- [CWE-352: Cross-Site Request Forgery (CSRF)](https://cwe.mitre.org/data/definitions/352.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-352",
+                    "url": "https://cwe.mitre.org/data/definitions/352.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-352"
                 ]
               }
             },
@@ -281,7 +193,21 @@
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
-                "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n## In Context Remediation\n#### Fields to remediate: text\n### Field: text\n```\nField name: text\nValidation regex: text=\"^[a-zA-Z0-9\\s]*$\"\nMinimum length: 1\nMaximum length: 255\n```\n#### Remediation 1\nHere is a simple example of how you can validate the \"text\" parameter using Java Bean Validation and regex pattern:\n\n```java\nimport javax.validation.constraints.*;\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.validation.annotation.Validated;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RequestMethod;\nimport org.springframework.web.bind.annotation.RestController;\n\n@RestController\n@RequestMapping(\"/hawk/api/jwt\")\n@Validated\npublic class JwtItemController {\n\n    @RequestMapping(value = \"/{text}\", method = RequestMethod.GET)\n    public ResponseEntity search(@PathVariable(\"text\") @Pattern(regexp = \"^[a-zA-Z0-9\\\\s]*$\") @Size(min = 1, max = 255) String text) {\n        // Your search logic here\n        return ResponseEntity.ok().build();\n    }\n}\n```\n\nIn this example, `@Pattern` annotation is used to validate the \"text\" parameter against the provided regex pattern. `@Size` annotation is used to ensure that the length of the \"text\" parameter is between 1 and 255 characters.\n\nDependencies needed to run this application:\n\n```xml\n<dependencies>\n    <dependency>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-web</artifactId>\n    </dependency>\n    <dependency>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-validation</artifactId>\n    </dependency>\n</dependencies>\n```\n\nThis example assumes that you are using Spring Boot and Maven. The `spring-boot-starter-web` dependency is used to create a web application. The `spring-boot-starter-validation` dependency is used to enable Bean Validation.\n\n#### Remediation 2\nHere is a simple Java console application that validates the \"text\" parameter using a regex pattern and checks the length of the parameter value.\n\n```java\nimport java.util.regex.Pattern;\nimport java.util.regex.Matcher;\n\npublic class Main {\n    public static void main(String[] args) {\n        String text = \"test123\"; // This is the text to be validated\n        System.out.println(validateText(text));\n    }\n\n    public static boolean validateText(String text) {\n        String pattern = \"^[a-zA-Z0-9\\\\s]*$\";\n        Pattern compiledPattern = Pattern.compile(pattern);\n        Matcher matcher = compiledPattern.matcher(text);\n\n        if (matcher.matches() && text.length() >= 1 && text.length() <= 255) {\n            return true;\n        } else {\n            return false;\n        }\n    }\n}\n```\n\nThis application does not require any additional dependencies to run, as it uses only the standard Java libraries. The `java.util.regex` package is used for the regex pattern matching.\n\nTo run this application, you can simply compile the `Main.java` file and then run the `Main` class. Here are the commands to do this from the command line:\n\n```bash\njavac Main.java\njava Main\n```\n\nThis will print `true` or `false` to the console, depending on whether the \"text\" parameter is valid or not.\n\nPlease note that this is a simple console application for demonstration purposes. In a real-world application, you would likely want to handle invalid input in a more user-friendly way, such as by displaying an error message or prompting the user to enter the text again.\n\n___\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
+                "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n## In Context Remediation\n#### Fields to remediate: text\n### Field: text\n```\nField name: text\nValidation regex: text=\"^[a-zA-Z0-9\\s]*$\"\nMinimum length: 1\nMaximum length: 255\n```\n#### Remediation 1\nHere is a simple example of how you can validate the \"text\" parameter using Java Bean Validation and regex pattern:\n\n```java\nimport javax.validation.constraints.*;\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.validation.annotation.Validated;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RequestMethod;\nimport org.springframework.web.bind.annotation.RestController;\n\n@RestController\n@RequestMapping(\"/hawk/api/jwt\")\n@Validated\npublic class JwtItemController {\n\n    @RequestMapping(value = \"/{text}\", method = RequestMethod.GET)\n    public ResponseEntity search(@PathVariable(\"text\") @Pattern(regexp = \"^[a-zA-Z0-9\\\\s]*$\") @Size(min = 1, max = 255) String text) {\n        // Your search logic here\n        return ResponseEntity.ok().build();\n    }\n}\n```\n\nIn this example, `@Pattern` annotation is used to validate the \"text\" parameter against the provided regex pattern. `@Size` annotation is used to ensure that the length of the \"text\" parameter is between 1 and 255 characters.\n\nDependencies needed to run this application:\n\n```xml\n<dependencies>\n    <dependency>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-web</artifactId>\n    </dependency>\n    <dependency>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-validation</artifactId>\n    </dependency>\n</dependencies>\n```\n\nThis example assumes that you are using Spring Boot and Maven. The `spring-boot-starter-web` dependency is used to create a web application. The `spring-boot-starter-validation` dependency is used to enable Bean Validation.\n\n#### Remediation 1\nHere is a simple example of how you can validate the \"text\" parameter using Java Bean Validation and regex pattern. \n\n```java\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.validation.annotation.Validated;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RequestMethod;\nimport org.springframework.web.bind.annotation.RestController;\nimport javax.validation.constraints.Pattern;\nimport javax.validation.constraints.Size;\n\n@RestController\n@RequestMapping(\"/hawk/api/jwt\")\n@Validated\npublic class JwtItemController {\n\n    @RequestMapping(value = \"/{text}\", method = RequestMethod.GET)\n    public ResponseEntity search(@PathVariable(\"text\") @Pattern(regexp = \"^[a-zA-Z0-9\\\\s]*$\") @Size(min = 1, max = 255) String text) {\n        // Your search logic here\n        return ResponseEntity.ok().build();\n    }\n}\n```\n\nThis code uses the `@Pattern` annotation to apply the regex pattern and `@Size` annotation to ensure the length of the parameter value is between 1 and 255 characters. The `@Validated` annotation is used at the class level to enable validation of method parameters.\n\nDependencies needed to run this application:\n\n```xml\n<dependencies>\n    <dependency>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-web</artifactId>\n    </dependency>\n    <dependency>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-validation</artifactId>\n    </dependency>\n</dependencies>\n```\n\nThis example assumes you are using Spring Boot and Maven. The `spring-boot-starter-web` dependency is for creating web applications and the `spring-boot-starter-validation` dependency is for validation support.\n\n#### Remediation 2\nHere is a simple Java console application that validates the \"text\" parameter using the provided regex pattern and length constraints. This example uses Java's built-in Pattern and Matcher classes for regex validation.\n\n```java\nimport java.util.regex.Matcher;\nimport java.util.regex.Pattern;\n\npublic class Main {\n    public static void main(String[] args) {\n        String text = \"test\"; // replace with user input\n        if (validateText(text)) {\n            System.out.println(\"Valid input\");\n        } else {\n            System.out.println(\"Invalid input\");\n        }\n    }\n\n    public static boolean validateText(String text) {\n        if (text.length() < 1 || text.length() > 255) {\n            return false;\n        }\n        Pattern pattern = Pattern.compile(\"^[a-zA-Z0-9\\\\s]*$\");\n        Matcher matcher = pattern.matcher(text);\n        return matcher.matches();\n    }\n}\n```\n\nThis application doesn't require any additional dependencies to run, as it only uses built-in Java classes. To run this application, you need to have Java installed on your machine. You can replace the \"test\" string with the user input you want to validate.\n\nPlease note that this is a simple console application and doesn't include the actual method \"hawk.api.jwt.JwtItemController.public ResponseEntity search(@PathVariable(\"text\") String text)\" mentioned in the question. The validation logic can be used in the mentioned method or in a custom validation service as per your application's architecture and requirements.\n\n#### Remediation 2\nHere is a simple Java console application that validates the \"text\" parameter using a regex pattern and checks the length of the parameter value.\n\n```java\nimport java.util.regex.Pattern;\nimport java.util.regex.Matcher;\n\npublic class Main {\n    public static void main(String[] args) {\n        String text = \"test123\"; // This is the text to be validated\n        System.out.println(validateText(text));\n    }\n\n    public static boolean validateText(String text) {\n        String pattern = \"^[a-zA-Z0-9\\\\s]*$\";\n        Pattern compiledPattern = Pattern.compile(pattern);\n        Matcher matcher = compiledPattern.matcher(text);\n\n        if (matcher.matches() && text.length() >= 1 && text.length() <= 255) {\n            return true;\n        } else {\n            return false;\n        }\n    }\n}\n```\n\nThis application does not require any additional dependencies to run, as it uses only the standard Java libraries. The `java.util.regex` package is used for the regex pattern matching.\n\nTo run this application, you can simply compile the `Main.java` file and then run the `Main` class. Here are the commands to do this from the command line:\n\n```bash\njavac Main.java\njava Main\n```\n\nThis will print `true` or `false` to the console, depending on whether the \"text\" parameter is valid or not.\n\nPlease note that this is a simple console application for demonstration purposes. In a real-world application, you would likely want to handle invalid input in a more user-friendly way, such as by displaying an error message or prompting the user to enter the text again.\n\n___\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
+              },
+              "properties": {
+                "cwe": [],
+                "severity": "LOW",
+                "kind": "FAIL"
+              }
+            },
+            {
+              "id": "be960123-c828-3652-8eee-5197c668c55d",
+              "name": "Found Spring endpoint",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n## In Context Remediation\n#### Fields to remediate: text\n### Field: text\n```\nField name: text\nValidation regex: text=\"^[a-zA-Z0-9\\s]*$\"\nMinimum length: 1\nMaximum length: 255\n```\n#### Remediation 1\nHere is a simple example of how you can validate the \"text\" parameter using Java Bean Validation and regex pattern:\n\n```java\nimport javax.validation.constraints.*;\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.validation.annotation.Validated;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RequestMethod;\nimport org.springframework.web.bind.annotation.RestController;\n\n@RestController\n@RequestMapping(\"/hawk/api/jwt\")\n@Validated\npublic class JwtItemController {\n\n    @RequestMapping(value = \"/{text}\", method = RequestMethod.GET)\n    public ResponseEntity search(@PathVariable(\"text\") @Pattern(regexp = \"^[a-zA-Z0-9\\\\s]*$\") @Size(min = 1, max = 255) String text) {\n        // Your search logic here\n        return ResponseEntity.ok().build();\n    }\n}\n```\n\nIn this example, `@Pattern` annotation is used to validate the \"text\" parameter against the provided regex pattern. `@Size` annotation is used to ensure that the length of the \"text\" parameter is between 1 and 255 characters.\n\nDependencies needed to run this application:\n\n```xml\n<dependencies>\n    <dependency>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-web</artifactId>\n    </dependency>\n    <dependency>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-validation</artifactId>\n    </dependency>\n</dependencies>\n```\n\nThis example assumes that you are using Spring Boot and Maven. The `spring-boot-starter-web` dependency is used to create a web application. The `spring-boot-starter-validation` dependency is used to enable Bean Validation.\n\n#### Remediation 1\nHere is a simple example of how you can validate the \"text\" parameter using Java Bean Validation and regex pattern. \n\n```java\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.validation.annotation.Validated;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RequestMethod;\nimport org.springframework.web.bind.annotation.RestController;\nimport javax.validation.constraints.Pattern;\nimport javax.validation.constraints.Size;\n\n@RestController\n@RequestMapping(\"/hawk/api/jwt\")\n@Validated\npublic class JwtItemController {\n\n    @RequestMapping(value = \"/{text}\", method = RequestMethod.GET)\n    public ResponseEntity search(@PathVariable(\"text\") @Pattern(regexp = \"^[a-zA-Z0-9\\\\s]*$\") @Size(min = 1, max = 255) String text) {\n        // Your search logic here\n        return ResponseEntity.ok().build();\n    }\n}\n```\n\nThis code uses the `@Pattern` annotation to apply the regex pattern and `@Size` annotation to ensure the length of the parameter value is between 1 and 255 characters. The `@Validated` annotation is used at the class level to enable validation of method parameters.\n\nDependencies needed to run this application:\n\n```xml\n<dependencies>\n    <dependency>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-web</artifactId>\n    </dependency>\n    <dependency>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-validation</artifactId>\n    </dependency>\n</dependencies>\n```\n\nThis example assumes you are using Spring Boot and Maven. The `spring-boot-starter-web` dependency is for creating web applications and the `spring-boot-starter-validation` dependency is for validation support.\n\n#### Remediation 2\nHere is a simple Java console application that validates the \"text\" parameter using the provided regex pattern and length constraints. This example uses Java's built-in Pattern and Matcher classes for regex validation.\n\n```java\nimport java.util.regex.Matcher;\nimport java.util.regex.Pattern;\n\npublic class Main {\n    public static void main(String[] args) {\n        String text = \"test\"; // replace with user input\n        if (validateText(text)) {\n            System.out.println(\"Valid input\");\n        } else {\n            System.out.println(\"Invalid input\");\n        }\n    }\n\n    public static boolean validateText(String text) {\n        if (text.length() < 1 || text.length() > 255) {\n            return false;\n        }\n        Pattern pattern = Pattern.compile(\"^[a-zA-Z0-9\\\\s]*$\");\n        Matcher matcher = pattern.matcher(text);\n        return matcher.matches();\n    }\n}\n```\n\nThis application doesn't require any additional dependencies to run, as it only uses built-in Java classes. To run this application, you need to have Java installed on your machine. You can replace the \"test\" string with the user input you want to validate.\n\nPlease note that this is a simple console application and doesn't include the actual method \"hawk.api.jwt.JwtItemController.public ResponseEntity search(@PathVariable(\"text\") String text)\" mentioned in the question. The validation logic can be used in the mentioned method or in a custom validation service as per your application's architecture and requirements.\n\n#### Remediation 2\nHere is a simple Java console application that validates the \"text\" parameter using a regex pattern and checks the length of the parameter value.\n\n```java\nimport java.util.regex.Pattern;\nimport java.util.regex.Matcher;\n\npublic class Main {\n    public static void main(String[] args) {\n        String text = \"test123\"; // This is the text to be validated\n        System.out.println(validateText(text));\n    }\n\n    public static boolean validateText(String text) {\n        String pattern = \"^[a-zA-Z0-9\\\\s]*$\";\n        Pattern compiledPattern = Pattern.compile(pattern);\n        Matcher matcher = compiledPattern.matcher(text);\n\n        if (matcher.matches() && text.length() >= 1 && text.length() <= 255) {\n            return true;\n        } else {\n            return false;\n        }\n    }\n}\n```\n\nThis application does not require any additional dependencies to run, as it uses only the standard Java libraries. The `java.util.regex` package is used for the regex pattern matching.\n\nTo run this application, you can simply compile the `Main.java` file and then run the `Main` class. Here are the commands to do this from the command line:\n\n```bash\njavac Main.java\njava Main\n```\n\nThis will print `true` or `false` to the console, depending on whether the \"text\" parameter is valid or not.\n\nPlease note that this is a simple console application for demonstration purposes. In a real-world application, you would likely want to handle invalid input in a more user-friendly way, such as by displaying an error message or prompting the user to enter the text again.\n\n___\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
               },
               "properties": {
                 "cwe": [],
@@ -319,20 +245,6 @@
                   "CWE-79",
                   "CWE-287"
                 ]
-              }
-            },
-            {
-              "id": "be960123-c828-3652-8eee-5197c668c55d",
-              "name": "Found Spring endpoint",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n## In Context Remediation\n#### Fields to remediate: text\n### Field: text\n```\nField name: text\nValidation regex: text=\"^[a-zA-Z0-9\\s]*$\"\nMinimum length: 1\nMaximum length: 255\n```\n#### Remediation 1\nHere is a simple example of how you can validate the \"text\" parameter using Java Bean Validation and regex pattern:\n\n```java\nimport javax.validation.constraints.*;\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.validation.annotation.Validated;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RequestMethod;\nimport org.springframework.web.bind.annotation.RestController;\n\n@RestController\n@RequestMapping(\"/hawk/api/jwt\")\n@Validated\npublic class JwtItemController {\n\n    @RequestMapping(value = \"/{text}\", method = RequestMethod.GET)\n    public ResponseEntity search(@PathVariable(\"text\") @Pattern(regexp = \"^[a-zA-Z0-9\\\\s]*$\") @Size(min = 1, max = 255) String text) {\n        // Your search logic here\n        return ResponseEntity.ok().build();\n    }\n}\n```\n\nIn this example, `@Pattern` annotation is used to validate the \"text\" parameter against the provided regex pattern. `@Size` annotation is used to ensure that the length of the \"text\" parameter is between 1 and 255 characters.\n\nDependencies needed to run this application:\n\n```xml\n<dependencies>\n    <dependency>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-web</artifactId>\n    </dependency>\n    <dependency>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-validation</artifactId>\n    </dependency>\n</dependencies>\n```\n\nThis example assumes that you are using Spring Boot and Maven. The `spring-boot-starter-web` dependency is used to create a web application. The `spring-boot-starter-validation` dependency is used to enable Bean Validation.\n\n#### Remediation 1\nHere is a simple example of how you can validate the \"text\" parameter using Java Bean Validation and regex pattern. \n\n```java\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.validation.annotation.Validated;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RequestMethod;\nimport org.springframework.web.bind.annotation.RestController;\nimport javax.validation.constraints.Pattern;\nimport javax.validation.constraints.Size;\n\n@RestController\n@RequestMapping(\"/hawk/api/jwt\")\n@Validated\npublic class JwtItemController {\n\n    @RequestMapping(value = \"/{text}\", method = RequestMethod.GET)\n    public ResponseEntity search(@PathVariable(\"text\") @Pattern(regexp = \"^[a-zA-Z0-9\\\\s]*$\") @Size(min = 1, max = 255) String text) {\n        // Your search logic here\n        return ResponseEntity.ok().build();\n    }\n}\n```\n\nThis code uses the `@Pattern` annotation to apply the regex pattern and `@Size` annotation to ensure the length of the parameter value is between 1 and 255 characters. The `@Validated` annotation is used at the class level to enable validation of method parameters.\n\nDependencies needed to run this application:\n\n```xml\n<dependencies>\n    <dependency>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-web</artifactId>\n    </dependency>\n    <dependency>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-validation</artifactId>\n    </dependency>\n</dependencies>\n```\n\nThis example assumes you are using Spring Boot and Maven. The `spring-boot-starter-web` dependency is for creating web applications and the `spring-boot-starter-validation` dependency is for validation support.\n\n#### Remediation 2\nHere is a simple Java console application that validates the \"text\" parameter using the provided regex pattern and length constraints. This example uses Java's built-in Pattern and Matcher classes for regex validation.\n\n```java\nimport java.util.regex.Matcher;\nimport java.util.regex.Pattern;\n\npublic class Main {\n    public static void main(String[] args) {\n        String text = \"test\"; // replace with user input\n        if (validateText(text)) {\n            System.out.println(\"Valid input\");\n        } else {\n            System.out.println(\"Invalid input\");\n        }\n    }\n\n    public static boolean validateText(String text) {\n        if (text.length() < 1 || text.length() > 255) {\n            return false;\n        }\n        Pattern pattern = Pattern.compile(\"^[a-zA-Z0-9\\\\s]*$\");\n        Matcher matcher = pattern.matcher(text);\n        return matcher.matches();\n    }\n}\n```\n\nThis application doesn't require any additional dependencies to run, as it only uses built-in Java classes. To run this application, you need to have Java installed on your machine. You can replace the \"test\" string with the user input you want to validate.\n\nPlease note that this is a simple console application and doesn't include the actual method \"hawk.api.jwt.JwtItemController.public ResponseEntity search(@PathVariable(\"text\") String text)\" mentioned in the question. The validation logic can be used in the mentioned method or in a custom validation service as per your application's architecture and requirements.\n\n#### Remediation 2\nHere is a simple Java console application that validates the \"text\" parameter using a regex pattern and checks the length of the parameter value.\n\n```java\nimport java.util.regex.Pattern;\nimport java.util.regex.Matcher;\n\npublic class Main {\n    public static void main(String[] args) {\n        String text = \"test123\"; // This is the text to be validated\n        System.out.println(validateText(text));\n    }\n\n    public static boolean validateText(String text) {\n        String pattern = \"^[a-zA-Z0-9\\\\s]*$\";\n        Pattern compiledPattern = Pattern.compile(pattern);\n        Matcher matcher = compiledPattern.matcher(text);\n\n        if (matcher.matches() && text.length() >= 1 && text.length() <= 255) {\n            return true;\n        } else {\n            return false;\n        }\n    }\n}\n```\n\nThis application does not require any additional dependencies to run, as it uses only the standard Java libraries. The `java.util.regex` package is used for the regex pattern matching.\n\nTo run this application, you can simply compile the `Main.java` file and then run the `Main` class. Here are the commands to do this from the command line:\n\n```bash\njavac Main.java\njava Main\n```\n\nThis will print `true` or `false` to the console, depending on whether the \"text\" parameter is valid or not.\n\nPlease note that this is a simple console application for demonstration purposes. In a real-world application, you would likely want to handle invalid input in a more user-friendly way, such as by displaying an error message or prompting the user to enter the text again.\n\n___\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
-              },
-              "properties": {
-                "cwe": [],
-                "severity": "LOW",
-                "kind": "FAIL"
               }
             },
             {
@@ -623,6 +535,20 @@
               }
             },
             {
+              "id": "40486eef-b7b1-333f-b81f-8dd2868526d2",
+              "name": "Found Spring endpoint",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n## In Context Remediation\n#### Fields to remediate: text\n### Field: text\n```\nField name: text\nValidation regex: text=\"^[a-zA-Z0-9\\s]*$\"\nMinimum length: 1\nMaximum length: 255\n```\n#### Remediation 1\nHere is a simple example of how you can validate the \"text\" parameter using Java Bean Validation and regex pattern:\n\n```java\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RequestMethod;\nimport org.springframework.web.bind.annotation.RestController;\nimport javax.validation.constraints.Pattern;\nimport javax.validation.constraints.Size;\n\n@RestController\n@RequestMapping(\"/hawk/api/jwt\")\npublic class JwtUserController {\n\n    @RequestMapping(value = \"/search/{text}\", method = RequestMethod.GET)\n    public ResponseEntity search(@PathVariable(\"text\") @Pattern(regexp = \"^[a-zA-Z0-9\\\\s]*$\") @Size(min = 1, max = 255) String text) {\n        // Your search logic here\n        return ResponseEntity.ok().build();\n    }\n}\n```\n\nTo run this application, you will need the following dependencies:\n\n1. Spring Boot Starter Web: It is used to build web, including RESTful, applications using Spring MVC. It uses Tomcat as the default embedded container.\n\n```xml\n<dependency>\n    <groupId>org.springframework.boot</groupId>\n    <artifactId>spring-boot-starter-web</artifactId>\n</dependency>\n```\n\n2. Spring Boot Starter Validation: It is used to validate the input. It includes the Hibernate Validator which is the reference implementation of the validation API.\n\n```xml\n<dependency>\n    <groupId>org.springframework.boot</groupId>\n    <artifactId>spring-boot-starter-validation</artifactId>\n</dependency>\n```\n\nPlease note that the validation annotations (`@Pattern` and `@Size`) will not work out of the box in a Spring Boot application. You need to add `@Validated` annotation on the class level to enable method parameter validation.\n\n```java\nimport org.springframework.validation.annotation.Validated;\n\n@Validated\n@RestController\n@RequestMapping(\"/hawk/api/jwt\")\npublic class JwtUserController {\n    //...\n}\n```\n\nThis will cause Spring to throw a `MethodArgumentNotValidException` when the validation fails. You can handle this exception to return a custom error response.\n\n#### Remediation 2\nHere is a simple Java console application that validates the \"text\" parameter using the provided regex pattern and length constraints. This example uses Java's built-in Pattern and Matcher classes for regex validation.\n\n```java\nimport java.util.regex.Matcher;\nimport java.util.regex.Pattern;\n\npublic class Main {\n    public static void main(String[] args) {\n        String text = \"test\"; // replace with user input\n        if (validateText(text)) {\n            System.out.println(\"Valid input\");\n        } else {\n            System.out.println(\"Invalid input\");\n        }\n    }\n\n    public static boolean validateText(String text) {\n        if (text.length() < 1 || text.length() > 255) {\n            return false;\n        }\n        Pattern pattern = Pattern.compile(\"^[a-zA-Z0-9\\\\s]*$\");\n        Matcher matcher = pattern.matcher(text);\n        return matcher.matches();\n    }\n}\n```\n\nThis application doesn't require any additional dependencies to run, as it uses only built-in Java classes. To run this application, you need to have Java installed on your machine. You can replace the \"test\" string with the user input you want to validate.\n\nPlease note that this is a simple console application and doesn't include the actual method \"hawk.api.jwt.JwtUserController.public ResponseEntity search(@PathVariable(\"text\") String text)\" mentioned in the question. The validation logic can be used in the mentioned method or in a custom validation service as per your application's architecture and requirements.\n\n___\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
+              },
+              "properties": {
+                "cwe": [],
+                "severity": "LOW",
+                "kind": "FAIL"
+              }
+            },
+            {
               "id": "2ff77974-10f7-39fd-bb4d-2976ff215572",
               "name": "Found Spring endpoint",
               "helpUri": "https://www.glog.ai/",
@@ -657,20 +583,6 @@
               "help": {
                 "text": "",
                 "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
-              },
-              "properties": {
-                "cwe": [],
-                "severity": "LOW",
-                "kind": "FAIL"
-              }
-            },
-            {
-              "id": "40486eef-b7b1-333f-b81f-8dd2868526d2",
-              "name": "Found Spring endpoint",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n## In Context Remediation\n#### Fields to remediate: text\n### Field: text\n```\nField name: text\nValidation regex: text=\"^[a-zA-Z0-9\\s]*$\"\nMinimum length: 1\nMaximum length: 255\n```\n#### Remediation 1\nHere is a simple example of how you can validate the \"text\" parameter using Java Bean Validation and regex pattern:\n\n```java\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RequestMethod;\nimport org.springframework.web.bind.annotation.RestController;\nimport javax.validation.constraints.Pattern;\nimport javax.validation.constraints.Size;\n\n@RestController\n@RequestMapping(\"/hawk/api/jwt\")\npublic class JwtUserController {\n\n    @RequestMapping(value = \"/search/{text}\", method = RequestMethod.GET)\n    public ResponseEntity search(@PathVariable(\"text\") @Pattern(regexp = \"^[a-zA-Z0-9\\\\s]*$\") @Size(min = 1, max = 255) String text) {\n        // Your search logic here\n        return ResponseEntity.ok().build();\n    }\n}\n```\n\nTo run this application, you will need the following dependencies:\n\n1. Spring Boot Starter Web: It is used to build web, including RESTful, applications using Spring MVC. It uses Tomcat as the default embedded container.\n\n```xml\n<dependency>\n    <groupId>org.springframework.boot</groupId>\n    <artifactId>spring-boot-starter-web</artifactId>\n</dependency>\n```\n\n2. Spring Boot Starter Validation: It is used to validate the input. It includes the Hibernate Validator which is the reference implementation of the validation API.\n\n```xml\n<dependency>\n    <groupId>org.springframework.boot</groupId>\n    <artifactId>spring-boot-starter-validation</artifactId>\n</dependency>\n```\n\nPlease note that the validation annotations (`@Pattern` and `@Size`) will not work out of the box in a Spring Boot application. You need to add `@Validated` annotation on the class level to enable method parameter validation.\n\n```java\nimport org.springframework.validation.annotation.Validated;\n\n@Validated\n@RestController\n@RequestMapping(\"/hawk/api/jwt\")\npublic class JwtUserController {\n    //...\n}\n```\n\nThis will cause Spring to throw a `MethodArgumentNotValidException` when the validation fails. You can handle this exception to return a custom error response.\n\n#### Remediation 2\nHere is a simple Java console application that validates the \"text\" parameter using the provided regex pattern and length constraints. This example uses Java's built-in Pattern and Matcher classes for regex validation.\n\n```java\nimport java.util.regex.Matcher;\nimport java.util.regex.Pattern;\n\npublic class Main {\n    public static void main(String[] args) {\n        String text = \"test\"; // replace with user input\n        if (validateText(text)) {\n            System.out.println(\"Valid input\");\n        } else {\n            System.out.println(\"Invalid input\");\n        }\n    }\n\n    public static boolean validateText(String text) {\n        if (text.length() < 1 || text.length() > 255) {\n            return false;\n        }\n        Pattern pattern = Pattern.compile(\"^[a-zA-Z0-9\\\\s]*$\");\n        Matcher matcher = pattern.matcher(text);\n        return matcher.matches();\n    }\n}\n```\n\nThis application doesn't require any additional dependencies to run, as it uses only built-in Java classes. To run this application, you need to have Java installed on your machine. You can replace the \"test\" string with the user input you want to validate.\n\nPlease note that this is a simple console application and doesn't include the actual method \"hawk.api.jwt.JwtUserController.public ResponseEntity search(@PathVariable(\"text\") String text)\" mentioned in the question. The validation logic can be used in the mentioned method or in a custom validation service as per your application's architecture and requirements.\n\n___\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
               },
               "properties": {
                 "cwe": [],
@@ -735,6 +647,20 @@
               }
             },
             {
+              "id": "b3a0450a-084e-3032-95c9-ca960b865707",
+              "name": "Found Spring endpoint",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n## In Context Remediation\n#### Fields to remediate: text\n### Field: text\n```\nField name: text\nValidation regex: text=\"^[a-zA-Z0-9\\s]*$\"\nMinimum length: 1\nMaximum length: 255\n```\n#### Remediation 1\nHere is a simple example of how you can validate the \"text\" parameter using Java Bean Validation and regex pattern. \n\n```java\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.validation.annotation.Validated;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RequestMethod;\nimport org.springframework.web.bind.annotation.RestController;\nimport javax.validation.constraints.Pattern;\nimport javax.validation.constraints.Size;\n\n@RestController\n@Validated\npublic class JwtUserController {\n\n    @RequestMapping(value = \"/searchCrappy/{text}\", method = RequestMethod.GET)\n    public ResponseEntity searchCrappy(@PathVariable(\"text\") @Pattern(regexp = \"^[a-zA-Z0-9\\\\s]*$\") @Size(min = 1, max = 255) String text) {\n        // Your code here\n        return ResponseEntity.ok().build();\n    }\n}\n```\n\nIn this example, `@Pattern` annotation is used to validate the \"text\" parameter against the provided regex pattern. `@Size` annotation is used to ensure that the length of the \"text\" parameter is between 1 and 255 characters.\n\nDependencies needed to run this application:\n\n```xml\n<dependencies>\n    <dependency>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-web</artifactId>\n    </dependency>\n    <dependency>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-validation</artifactId>\n    </dependency>\n</dependencies>\n```\n\nThis example assumes that you are using Spring Boot. The `spring-boot-starter-web` dependency is used to create a web application. The `spring-boot-starter-validation` dependency is used to enable Bean Validation support.\n\n#### Remediation 2\nHere is a simple Java console application that validates the \"text\" parameter using the provided regex pattern and length constraints. This example uses Java's built-in Pattern and Matcher classes for regex matching.\n\n```java\nimport java.util.regex.Matcher;\nimport java.util.regex.Pattern;\n\npublic class Main {\n    public static void main(String[] args) {\n        String text = args[0]; // get the text parameter from command line arguments\n        if (validateText(text)) {\n            System.out.println(\"Valid text\");\n        } else {\n            System.out.println(\"Invalid text\");\n        }\n    }\n\n    public static boolean validateText(String text) {\n        if (text.length() < 1 || text.length() > 255) {\n            return false;\n        }\n        Pattern pattern = Pattern.compile(\"^[a-zA-Z0-9\\\\s]*$\");\n        Matcher matcher = pattern.matcher(text);\n        return matcher.matches();\n    }\n}\n```\n\nTo run this application, you need to have Java Development Kit (JDK) installed on your machine. You can run the application from the command line by compiling the Java file and then running the compiled class, passing the \"text\" parameter as a command line argument.\n\n```bash\njavac Main.java\njava Main \"your text here\"\n```\n\nThis application does not require any additional dependencies beyond the JDK. The regex pattern \"^[a-zA-Z0-9\\s]*$\" matches any string that contains only alphanumeric characters and spaces. The `validateText` method checks that the length of the \"text\" parameter is between 1 and 255 characters, and that it matches the regex pattern. If both conditions are met, the method returns true; otherwise, it returns false.\n\n___\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
+              },
+              "properties": {
+                "cwe": [],
+                "severity": "LOW",
+                "kind": "FAIL"
+              }
+            },
+            {
               "id": "0c33f4e9-6f80-3ed4-abb1-38558b9ef925",
               "name": "Unreliable HTTP Headers Vulnerability",
               "helpUri": "https://www.glog.ai/",
@@ -754,20 +680,6 @@
                 "tags": [
                   "CWE-113"
                 ]
-              }
-            },
-            {
-              "id": "b3a0450a-084e-3032-95c9-ca960b865707",
-              "name": "Found Spring endpoint",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n## In Context Remediation\n#### Fields to remediate: text\n### Field: text\n```\nField name: text\nValidation regex: text=\"^[a-zA-Z0-9\\s]*$\"\nMinimum length: 1\nMaximum length: 255\n```\n#### Remediation 1\nHere is a simple example of how you can validate the \"text\" parameter using Java Bean Validation and regex pattern. \n\n```java\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.validation.annotation.Validated;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RequestMethod;\nimport org.springframework.web.bind.annotation.RestController;\nimport javax.validation.constraints.Pattern;\nimport javax.validation.constraints.Size;\n\n@RestController\n@Validated\npublic class JwtUserController {\n\n    @RequestMapping(value = \"/searchCrappy/{text}\", method = RequestMethod.GET)\n    public ResponseEntity searchCrappy(@PathVariable(\"text\") @Pattern(regexp = \"^[a-zA-Z0-9\\\\s]*$\") @Size(min = 1, max = 255) String text) {\n        // Your code here\n        return ResponseEntity.ok().build();\n    }\n}\n```\n\nIn this example, `@Pattern` annotation is used to validate the \"text\" parameter against the provided regex pattern. `@Size` annotation is used to ensure that the length of the \"text\" parameter is between 1 and 255 characters.\n\nDependencies needed to run this application:\n\n```xml\n<dependencies>\n    <dependency>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-web</artifactId>\n    </dependency>\n    <dependency>\n        <groupId>org.springframework.boot</groupId>\n        <artifactId>spring-boot-starter-validation</artifactId>\n    </dependency>\n</dependencies>\n```\n\nThis example assumes that you are using Spring Boot. The `spring-boot-starter-web` dependency is used to create a web application. The `spring-boot-starter-validation` dependency is used to enable Bean Validation support.\n\n#### Remediation 2\nHere is a simple Java console application that validates the \"text\" parameter using the provided regex pattern and length constraints. This example uses Java's built-in Pattern and Matcher classes for regex matching.\n\n```java\nimport java.util.regex.Matcher;\nimport java.util.regex.Pattern;\n\npublic class Main {\n    public static void main(String[] args) {\n        String text = args[0]; // get the text parameter from command line arguments\n        if (validateText(text)) {\n            System.out.println(\"Valid text\");\n        } else {\n            System.out.println(\"Invalid text\");\n        }\n    }\n\n    public static boolean validateText(String text) {\n        if (text.length() < 1 || text.length() > 255) {\n            return false;\n        }\n        Pattern pattern = Pattern.compile(\"^[a-zA-Z0-9\\\\s]*$\");\n        Matcher matcher = pattern.matcher(text);\n        return matcher.matches();\n    }\n}\n```\n\nTo run this application, you need to have Java Development Kit (JDK) installed on your machine. You can run the application from the command line by compiling the Java file and then running the compiled class, passing the \"text\" parameter as a command line argument.\n\n```bash\njavac Main.java\njava Main \"your text here\"\n```\n\nThis application does not require any additional dependencies beyond the JDK. The regex pattern \"^[a-zA-Z0-9\\s]*$\" matches any string that contains only alphanumeric characters and spaces. The `validateText` method checks that the length of the \"text\" parameter is between 1 and 255 characters, and that it matches the regex pattern. If both conditions are met, the method returns true; otherwise, it returns false.\n\n___\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
-              },
-              "properties": {
-                "cwe": [],
-                "severity": "LOW",
-                "kind": "FAIL"
               }
             },
             {
@@ -791,6 +703,94 @@
                   "CWE-501"
                 ]
               }
+            },
+            {
+              "id": "bc8d1490-d25a-3495-ac6a-96690d855517",
+              "name": "High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe \"High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification\" is a common security vulnerability in Docker where the Dockerfile does not specify a non-root user for running the container. By default, Docker containers run as root, which means that if an attacker manages to break out of the container, they would have root access to the host system. This could lead to a variety of security issues, including unauthorized access to data, execution of arbitrary code, and denial of service.\n\n## Security Concern\n\nRunning Docker containers as root is a significant security concern because it provides the container with potentially dangerous permissions. If an attacker manages to exploit a vulnerability in the container or the application it's running, they could gain root access to the host system. This could allow them to execute arbitrary code, access sensitive data, or cause a denial of service.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it's recommended to always specify a non-root user in your Dockerfile. This can be done by adding a `USER` directive in the Dockerfile that specifies a non-root user. If the application needs to perform operations that require root permissions, consider using a least privilege model where only the necessary operations are performed as root.\n\n## Source Code Fix Recommendation\n\nHere's how you can modify the Dockerfile to specify a non-root user:\n\n```Dockerfile\nFROM eclipse-temurin:17-jdk-jammy\n\n# Create a group and user\nRUN groupadd -r nonroot && useradd -r -g nonroot nonroot\n\n# Tell docker that all future commands should run as the nonroot user\nUSER nonroot\n```\n\nIn this example, a new group and user named `nonroot` are created, and the `USER` directive is used to specify that all future commands should be run as this user.\n\n## Library Dependencies\n\nThe code example does not specify any library dependencies.\n\n## References\n\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-250",
+                    "url": "https://cwe.mitre.org/data/definitions/250.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-250"
+                ]
+              }
+            },
+            {
+              "id": "78f0c135-fcd8-31c1-ab65-3ddd0ad600bd",
+              "name": "\"Exposed Asymmetric Private Key in Resource Files\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe vulnerability \"Exposed Asymmetric Private Key in Resource Files\" in Docker programming language refers to the situation where a private key is hard-coded or embedded within the Docker image or resource files. This private key can be used for various purposes such as SSH access, API access, decryption of sensitive data, etc. \n\n## Security Concern\n\nThis is a major security concern because if an attacker gains access to the Docker image or resource files, they can extract the private key. With the private key, they can impersonate the application, gain unauthorized access to systems, decrypt sensitive data, or perform other malicious activities. \n\n## Mitigation Advice\n\n- Never embed or hard-code private keys in Docker images or resource files. \n- Use environment variables or secure vault services to handle private keys.\n- Regularly rotate and change keys.\n- Use Docker secrets if you are using Docker Swarm.\n- Limit the exposure of sensitive information in Docker images.\n\n## Source Code Fix Recommendation\n\nThe private key in the given code should be removed. Instead, use Docker secrets or environment variables to handle the private key. \n\nFor example, you can use Docker secrets like this:\n\n```bash\necho \"MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ...\" | docker secret create my_secret_key -\n```\n\nThen use it in your Docker service:\n\n```bash\ndocker service  create --name=my_service --secret=my_secret_key my_image\n```\n\nIn your application, you can access this secret in the `/run/secrets/my_secret_key` file.\n\n## Library Dependencies\n\nThe code example does not provide any information about library dependencies.\n\n## References\n\n- [OWASP - Insecure Configuration](https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration)\n- [CWE-798: Use of Hard-coded Credentials](https://cwe.mitre.org/data/definitions/798.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-798",
+                    "url": "https://cwe.mitre.org/data/definitions/798.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-798"
+                ]
+              }
+            },
+            {
+              "id": "0a84dd25-d52a-366d-8470-9d54d7141b9f",
+              "name": "Exposed Asymmetric Private Key in Build Resources",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe \"Exposed Asymmetric Private Key in Build Resources\" vulnerability refers to the situation where a private key is hard-coded or embedded within the Docker build resources. This is a serious security concern as it exposes sensitive information that could be exploited by malicious actors to gain unauthorized access to systems or data.\n\n## Security Concern\n\nPrivate keys are meant to be kept secret and used to verify the identity of the sender (in asymmetric encryption) or to decrypt data (in symmetric encryption). If a private key is exposed, it can be used by an attacker to impersonate the legitimate owner, decrypt sensitive data, or even launch further attacks. In the context of Docker, an exposed private key could allow an attacker to gain unauthorized access to the Docker container or the host system.\n\n## Mitigation Advice\n\n- Never hard-code or embed private keys in your Docker build resources or any part of your application. \n- Use environment variables or secure vault services to handle keys and other sensitive information.\n- Regularly use tools to scan your codebase for exposed keys or other sensitive information.\n\n## Source Code Fix Recommendation\n\nThe provided code is an RSA private key. It should not be exposed or hard-coded in the application. Instead, use Docker secrets or environment variables to handle such sensitive data. \n\nFor example, you can use Docker secrets as follows:\n\n```bash\necho \"MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ...\" | docker secret create my_secret_key -\n```\n\nThen use it in your Docker service:\n\n```bash\ndocker service  create --name my_service --secret my_secret_key my_image\n```\n\nIn your application, you can then access the secret from `/run/secrets/my_secret_key`.\n\n## Library Dependencies\n\nThe provided code does not require any library dependencies as it is a private key.\n\n## References\n\n- [OWASP - Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-798: Use of Hard-coded Credentials](https://cwe.mitre.org/data/definitions/798.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-798",
+                    "url": "https://cwe.mitre.org/data/definitions/798.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-798"
+                ]
+              }
+            },
+            {
+              "id": "10fb63e3-85d0-347e-9e79-c3419a3b0650",
+              "name": "Unsecured Cookie Detected",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\n\"Unsecured Cookie Detected\" is a vulnerability that occurs when a web application does not properly secure its cookies. This can lead to unauthorized access to sensitive information stored in the cookies, such as user session identifiers, which can lead to session hijacking and other serious security issues.\n\nIn the provided Java code, a new cookie named \"XLOGINID\" is being created and added to the HTTP response without any security flags. This means that the cookie can be transmitted over unsecured HTTP connections, making it vulnerable to interception and tampering.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always secure your cookies by setting the `Secure` and `HttpOnly` flags. The `Secure` flag ensures that the cookie is only sent over HTTPS, preventing it from being intercepted during transmission. The `HttpOnly` flag prevents the cookie from being accessed through client-side scripts, reducing the risk of cross-site scripting (XSS) attacks.\n\n## Source Code Fix\n\nHere is how you can modify the provided code to secure the cookie:\n\n```java\nimport javax.servlet.http.Cookie;\n\nCookie cookie = new Cookie(\"XLOGINID\", cookieCode);\ncookie.setSecure(true);\ncookie.setHttpOnly(true);\nresp.addCookie(cookie);\n```\n\n## Library Dependencies\n\nThe provided code requires the following library to execute properly:\n\n- `javax.servlet.http.Cookie`\n\n## References\n\n- [CWE-614: Sensitive Cookie in HTTPS Session Without 'Secure' Attribute](https://cwe.mitre.org/data/definitions/614.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-614",
+                    "url": "https://cwe.mitre.org/data/definitions/614.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-614"
+                ]
+              }
             }
           ],
           "language": "en-US",
@@ -804,216 +804,37 @@
       "language": "en-US",
       "results": [
         {
-          "ruleId": "78f0c135-fcd8-31c1-ab65-3ddd0ad600bd",
-          "kind": "fail",
-          "level": "error",
-          "message": {
-            "text": "\"Exposed Asymmetric Private Key in Resource Files\""
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/resources/keyStore.pem",
-                  "uriBaseId": "ROOTPATH"
-                },
-                "region": {
-                  "startLine": 6,
-                  "startColumn": 1,
-                  "endLine": 31,
-                  "endColumn": 1,
-                  "snippet": {
-                    "text": "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ\n+JKBb4tcwJ1m5lTYccZbvsvCkCdQF0Ge0PhqYK8I9XyFTMPDv88h1Q+qDVlkqV5v\nVKFeR6v/REOH0AFJ4qC/mmhb9h3LnvyU6KtsZ4KWUfNfGhbpYxVTLU98CzqO9VTN\nxVCreXkTWCpbFTHGyb31sNG3xobL5PLgtNPECaDTJeiY0Z2ID/6fARWv4zn0luQS\ngDRLE2K73i2YjgD05OwdNRHklfnQKZLdkXX/TMVqzNT0Hg9a/thBQAIuozwK1SVs\nOfry/xFGWii19nDR4PaYjT0Xt/BQIt6tk4rg2Xt1XrTRxzrdzSIpHPQoO9g1nl9F\n/yoaq87VAgMBAAECggEBAK47UMfDmrxvu9E+lUJWdhWhQ6L47WPcmL22YaAFtIIA\n8EkpW9Ay4e56A06EgINdh7S4SqmqpxYRY3v90Vfli8MGB9yqPnXtJEKRo7ONHMHh\nHheP8cAWfiFSjDfC5HXDGpFNqpUjeMQCyzmixXaHQMFLkmAwI81hQ6JO6FvKrEz5\n2WCja/OyBwlAybpZgzKTkKGXSBY8NrcWfm8QEZHaJkDDw0aBhgANB2+He6dJCfyM\n1NqauTvbTjeYb5XXQffMhCbYmZM0+f/R4vF3N39lGkcaHMCh9r7c1+lsUKT4oT6p\nYRwvUP3uzBfKIUJJCqw4PD30JDcT+CxMnXn27KLu0cECgYEA3zKxAfOAySz7vVmV\nnIc8p7q09QGOYkx1m3+gAyCJqUAUX1ypPw+C3rk9zAThnZYsJL//5daxw8FMXCSm\nJkcMB2Sj0FKhiqIi+LEgu0tni4COVaTTCG27IXs9sgZTyPGQIwjoT3NhB1Bt3Ksi\nh7hnv8fHDPXzv7ptYpwfyRWDZpkCgYEAzed8S37GeZGbW5qqDyuKnWjG/UPPeTrw\n5DjCSyBVEF3kZrMSc+O2bgf87VFOHBTORzr5r0zNWy12r9w3Ky02z4cxeujulihz\n9ObY6aim6iRHwYpB0D5Eqs4R6mK189bKb9OD/F7USGy//tPP7hqfQC1JHJed4fwR\n0esIOFJ5250CgYAKwVCSPX+ZMhe3WhfBgSrFElQh8j9AMVsBcTbur6SyiSnyJm7p\nYP/3Z4m4yQtuIoxiAPZ9xsiuHCRn1ERFV+sWeB0Ertal7YYt4asoG0wUBs/VBKo+\nn7sCtAOXDoL/DdTaO1WmbnLgfVmt5nk1fQdS0HehAkEKnhsjQ06sy+KXEQKBgBuU\n9b57NgUU7zW/KyarE39wiK9mhQVdUuWPgN9lbl+p5C2psUAa8dYdddEoggka9GLw\nUIAeDqg3F94I5s7+2IfGOWeYilVNB/N3dPkf4XQd9grEBXrqzHIA9r9qB6upSybd\ns6F75n3pK3LsVr8zi7+iEVgmKz0Zch2nmUtKKQ61AoGAPHVizunifBjtKaQHFBdr\np5llidfBU6S0DsdRBG2PYxHB4TMc16gYpZicCIOsTavjS++ZBdtcL1VFiutavKop\nJhZbwH6PR76GJbdwUS3pl8s5+w21KtMxOwR8Oqoc/Sr+Bno37Yek/5CaVwnysEd0\nGWwVDi+xxRJnUIsVzdUBP+8="
-                  }
-                }
-              },
-              "message": {
-                "text": "src/main/resources/keyStore.pem"
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "763419e3ed38141479848303552de3ddc33fa1609b3e8e08b8224690218d0e2b",
-            "glog-pfp-ruleFileCode/v1": "a84fe89386abd576deb23381498aee92486568e5436bedb386938e8b5e000a45"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "a84fe89386abd576deb23381498aee92486568e5436bedb386938e8b5e000a45"
-          }
-        },
-        {
-          "ruleId": "bc8d1490-d25a-3495-ac6a-96690d855517",
-          "kind": "fail",
-          "level": "error",
-          "message": {
-            "text": "High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "Dockerfile",
-                  "uriBaseId": "ROOTPATH"
-                },
-                "region": {
-                  "startLine": 1,
-                  "startColumn": 1,
-                  "endLine": 1,
-                  "endColumn": 1,
-                  "snippet": {
-                    "text": "FROM eclipse-temurin:17-jdk-jammy"
-                  }
-                }
-              },
-              "message": {
-                "text": "Dockerfile"
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "cc01dfd2946e50dff6861d3988ed694f1210186d23722393917794fcdaf7983f",
-            "glog-pfp-ruleFileCode/v1": "a2db13e2cbbdd619dccaa0fa3203030ef1c36f7243e3535676d08791f9bbd155"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "a2db13e2cbbdd619dccaa0fa3203030ef1c36f7243e3535676d08791f9bbd155"
-          }
-        },
-        {
-          "ruleId": "38da4bb4-1209-36d5-ad93-f94728333fa7",
+          "ruleId": "c715549b-a9b6-3a33-b131-6d91bbc2d851",
           "kind": "fail",
           "level": "warning",
           "message": {
-            "text": "Disabled CSRF Protection Vulnerability"
+            "text": "XSS Vulnerability from User-Controlled Data in HTML String"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/main/java/hawk/MultiHttpSecurityConfig.java",
+                  "uri": "hawkscripts/authentication/form-auth-multi.js",
                   "uriBaseId": "%SRCROOT%"
                 },
                 "region": {
-                  "startLine": 110,
-                  "startColumn": 13,
-                  "endLine": 112,
-                  "endColumn": 38,
+                  "startLine": 59,
+                  "startColumn": 5,
+                  "endLine": 59,
+                  "endColumn": 55,
                   "snippet": {
-                    "text": "            http\n                    .antMatcher(\"/api/basic/**\")\n                    .csrf().disable()"
+                    "text": "    str += `${urlEncode(key)}=${urlEncode(obj[key])}`;"
                   }
                 }
               }
             }
           ],
           "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "ac602a1ba36735965be7c64dc9ba517e3707508c8168e4e5c4f9c7d67098207e",
-            "glog-pfp-ruleFileCode/v1": "a190aa40ec88a9c5e186bb07230f3c6917b57f0ce25934df1804a932d17a170c"
+            "glog-pfp-ruleFileLineCode/v1": "46c0708921fb21867f6bbef56108d8e6c6a26dc949dc4573f62220936a16cb5e",
+            "glog-pfp-ruleFileCode/v1": "12cb9afa6ea742d7638207bfb0c811e06d4935b4fad2d4500ca741629c8c236e"
           },
           "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "a190aa40ec88a9c5e186bb07230f3c6917b57f0ce25934df1804a932d17a170c"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "9e1cc365-0a1d-3e9f-a10b-b2b63140a9fb",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "Disabled CSRF Protection Vulnerability"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/java/hawk/MultiHttpSecurityConfig.java",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 47,
-                  "startColumn": 13,
-                  "endLine": 50,
-                  "endColumn": 42,
-                  "snippet": {
-                    "text": "            http\n                    .antMatcher(\"/api/jwt/**\")\n                        .httpBasic().disable()\n                        .csrf().disable()"
-                  }
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "8f51e319f4f3ffa8d32ac51fe6d9efaa7c4410fa342b436d81bcf14ee96c6c52",
-            "glog-pfp-ruleFileCode/v1": "12e87d28067748934f54689817feae078e59bbc795b5551d883ca80e62c56f9b"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "12e87d28067748934f54689817feae078e59bbc795b5551d883ca80e62c56f9b"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "c86a9303-b202-3616-9cd6-ac10f2778df2",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "Disabled CSRF Protection Vulnerability"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/java/hawk/MultiHttpSecurityConfig.java",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 88,
-                  "startColumn": 13,
-                  "endLine": 91,
-                  "endColumn": 38,
-                  "snippet": {
-                    "text": "            http\n                    .antMatcher(\"/api/token/**\")\n                    .httpBasic().disable()\n                    .csrf().disable()"
-                  }
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "8eeebcae0f90c7a710b821c77804bd0a4e4424b9eb86cd1a296999d12d7f8639",
-            "glog-pfp-ruleFileCode/v1": "71a8ffcca981a3594921c82be3278c0f9e21c8f134194710873d253e266904bb"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "71a8ffcca981a3594921c82be3278c0f9e21c8f134194710873d253e266904bb"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "10fb63e3-85d0-347e-9e79-c3419a3b0650",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "'HttpOnly' flag not set for cookie vulnerability"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/java/hawk/controller/LoginController.java",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 57,
-                  "startColumn": 9,
-                  "endLine": 57,
-                  "endColumn": 60,
-                  "snippet": {
-                    "text": "        resp.addCookie(new Cookie(\"XLOGINID\", cookieCode));"
-                  }
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "54a906d495c6e2c549b989d7c5d037ef82dc013d57d07f029ac98b39121dcec7",
-            "glog-pfp-ruleFileCode/v1": "ebd1393711ab07b860d4a9239ddcae8b69d18a7e418c770dc7ed320f32d038e9"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "ebd1393711ab07b860d4a9239ddcae8b69d18a7e418c770dc7ed320f32d038e9"
+            "glog-fp-ruleFileCode/v1": "12cb9afa6ea742d7638207bfb0c811e06d4935b4fad2d4500ca741629c8c236e"
           },
           "properties": {}
         },
@@ -1053,41 +874,6 @@
           "properties": {}
         },
         {
-          "ruleId": "c715549b-a9b6-3a33-b131-6d91bbc2d851",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "XSS Vulnerability from User-Controlled Data in HTML String"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "hawkscripts/authentication/form-auth-multi.js",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 59,
-                  "startColumn": 5,
-                  "endLine": 59,
-                  "endColumn": 55,
-                  "snippet": {
-                    "text": "    str += `${urlEncode(key)}=${urlEncode(obj[key])}`;"
-                  }
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "46c0708921fb21867f6bbef56108d8e6c6a26dc949dc4573f62220936a16cb5e",
-            "glog-pfp-ruleFileCode/v1": "12cb9afa6ea742d7638207bfb0c811e06d4935b4fad2d4500ca741629c8c236e"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "12cb9afa6ea742d7638207bfb0c811e06d4935b4fad2d4500ca741629c8c236e"
-          },
-          "properties": {}
-        },
-        {
           "ruleId": "4923fc7d-94f8-3cc9-89f2-91769612e757",
           "kind": "fail",
           "level": "warning",
@@ -1121,46 +907,6 @@
             "glog-fp-ruleFileCode/v1": "fd48250c61bc770267710a06698f6a8f9ef1518f1ada4c28adc506d0ffd9cb42"
           },
           "properties": {}
-        },
-        {
-          "ruleId": "4dcfa34f-0a4d-3635-a9fa-7cf9cfcccb3b",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "Fixed Password Vulnerability"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/java/hawk/MultiHttpSecurityConfig.java"
-                },
-                "region": {
-                  "startLine": 167,
-                  "startColumn": 35,
-                  "endLine": 167,
-                  "endColumn": 44,
-                  "snippet": {
-                    "text": "\"password\""
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "name": "userDetailsService()",
-                  "fullyQualifiedName": "hawk.MultiHttpSecurityConfig.userDetailsService()",
-                  "kind": "function"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "bd2e6f161e0b243b003d47635c9e14628085d49c3b8ef8db1eb8e425c1db14a9",
-            "glog-pfp-ruleFileCode/v1": "ac48f2b67183410c5c0bba2916bb6020e399e01e2e87d7a538b0d52d5b6218db"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "ac48f2b67183410c5c0bba2916bb6020e399e01e2e87d7a538b0d52d5b6218db"
-          }
         },
         {
           "ruleId": "428f6192-8ea6-3891-811b-85fa5c108fc9",
@@ -1203,40 +949,163 @@
           }
         },
         {
-          "ruleId": "0a84dd25-d52a-366d-8470-9d54d7141b9f",
+          "ruleId": "4dcfa34f-0a4d-3635-a9fa-7cf9cfcccb3b",
           "kind": "fail",
-          "level": "error",
+          "level": "warning",
           "message": {
-            "text": "Exposed Asymmetric Private Key in Build Resources"
+            "text": "Fixed Password Vulnerability"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "build/resources/main/keyStore.pem",
-                  "uriBaseId": "ROOTPATH"
+                  "uri": "src/main/java/hawk/MultiHttpSecurityConfig.java"
                 },
                 "region": {
-                  "startLine": 6,
-                  "startColumn": 1,
-                  "endLine": 31,
-                  "endColumn": 1,
+                  "startLine": 167,
+                  "startColumn": 35,
+                  "endLine": 167,
+                  "endColumn": 44,
                   "snippet": {
-                    "text": "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ\n+JKBb4tcwJ1m5lTYccZbvsvCkCdQF0Ge0PhqYK8I9XyFTMPDv88h1Q+qDVlkqV5v\nVKFeR6v/REOH0AFJ4qC/mmhb9h3LnvyU6KtsZ4KWUfNfGhbpYxVTLU98CzqO9VTN\nxVCreXkTWCpbFTHGyb31sNG3xobL5PLgtNPECaDTJeiY0Z2ID/6fARWv4zn0luQS\ngDRLE2K73i2YjgD05OwdNRHklfnQKZLdkXX/TMVqzNT0Hg9a/thBQAIuozwK1SVs\nOfry/xFGWii19nDR4PaYjT0Xt/BQIt6tk4rg2Xt1XrTRxzrdzSIpHPQoO9g1nl9F\n/yoaq87VAgMBAAECggEBAK47UMfDmrxvu9E+lUJWdhWhQ6L47WPcmL22YaAFtIIA\n8EkpW9Ay4e56A06EgINdh7S4SqmqpxYRY3v90Vfli8MGB9yqPnXtJEKRo7ONHMHh\nHheP8cAWfiFSjDfC5HXDGpFNqpUjeMQCyzmixXaHQMFLkmAwI81hQ6JO6FvKrEz5\n2WCja/OyBwlAybpZgzKTkKGXSBY8NrcWfm8QEZHaJkDDw0aBhgANB2+He6dJCfyM\n1NqauTvbTjeYb5XXQffMhCbYmZM0+f/R4vF3N39lGkcaHMCh9r7c1+lsUKT4oT6p\nYRwvUP3uzBfKIUJJCqw4PD30JDcT+CxMnXn27KLu0cECgYEA3zKxAfOAySz7vVmV\nnIc8p7q09QGOYkx1m3+gAyCJqUAUX1ypPw+C3rk9zAThnZYsJL//5daxw8FMXCSm\nJkcMB2Sj0FKhiqIi+LEgu0tni4COVaTTCG27IXs9sgZTyPGQIwjoT3NhB1Bt3Ksi\nh7hnv8fHDPXzv7ptYpwfyRWDZpkCgYEAzed8S37GeZGbW5qqDyuKnWjG/UPPeTrw\n5DjCSyBVEF3kZrMSc+O2bgf87VFOHBTORzr5r0zNWy12r9w3Ky02z4cxeujulihz\n9ObY6aim6iRHwYpB0D5Eqs4R6mK189bKb9OD/F7USGy//tPP7hqfQC1JHJed4fwR\n0esIOFJ5250CgYAKwVCSPX+ZMhe3WhfBgSrFElQh8j9AMVsBcTbur6SyiSnyJm7p\nYP/3Z4m4yQtuIoxiAPZ9xsiuHCRn1ERFV+sWeB0Ertal7YYt4asoG0wUBs/VBKo+\nn7sCtAOXDoL/DdTaO1WmbnLgfVmt5nk1fQdS0HehAkEKnhsjQ06sy+KXEQKBgBuU\n9b57NgUU7zW/KyarE39wiK9mhQVdUuWPgN9lbl+p5C2psUAa8dYdddEoggka9GLw\nUIAeDqg3F94I5s7+2IfGOWeYilVNB/N3dPkf4XQd9grEBXrqzHIA9r9qB6upSybd\ns6F75n3pK3LsVr8zi7+iEVgmKz0Zch2nmUtKKQ61AoGAPHVizunifBjtKaQHFBdr\np5llidfBU6S0DsdRBG2PYxHB4TMc16gYpZicCIOsTavjS++ZBdtcL1VFiutavKop\nJhZbwH6PR76GJbdwUS3pl8s5+w21KtMxOwR8Oqoc/Sr+Bno37Yek/5CaVwnysEd0\nGWwVDi+xxRJnUIsVzdUBP+8="
+                    "text": "\"password\""
                   }
                 }
               },
-              "message": {
-                "text": "build/resources/main/keyStore.pem"
-              }
+              "logicalLocations": [
+                {
+                  "name": "userDetailsService()",
+                  "fullyQualifiedName": "hawk.MultiHttpSecurityConfig.userDetailsService()",
+                  "kind": "function"
+                }
+              ]
             }
           ],
           "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "044d96f69749663b3e288898f298f05c2023c362b63a0dbcd1f606b7997f7256",
-            "glog-pfp-ruleFileCode/v1": "539b675102218aa8a3367e1a8505d609fbac447e0848521d20cc45f6f3556dea"
+            "glog-pfp-ruleFileLineCode/v1": "bd2e6f161e0b243b003d47635c9e14628085d49c3b8ef8db1eb8e425c1db14a9",
+            "glog-pfp-ruleFileCode/v1": "ac48f2b67183410c5c0bba2916bb6020e399e01e2e87d7a538b0d52d5b6218db"
           },
           "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "539b675102218aa8a3367e1a8505d609fbac447e0848521d20cc45f6f3556dea"
+            "glog-fp-ruleFileCode/v1": "ac48f2b67183410c5c0bba2916bb6020e399e01e2e87d7a538b0d52d5b6218db"
+          }
+        },
+        {
+          "ruleId": "488ecac0-7bce-30ec-9e03-a61591b072e1",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Disabled CSRF Protection in Spring"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/MultiHttpSecurityConfig.java"
+                },
+                "region": {
+                  "startLine": 112,
+                  "startColumn": 21,
+                  "endLine": 112,
+                  "endColumn": 37,
+                  "snippet": {
+                    "text": ".csrf().disable()"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "configure(HttpSecurity)",
+                  "fullyQualifiedName": "hawk.MultiHttpSecurityConfig$BasicAuthWebSecurityConfigurerAdapter.configure(HttpSecurity)",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "3d6cb07acb07c85b528ce3a12662052122cc32c51b16e3f1de22d4fdbff0ba42",
+            "glog-pfp-ruleFileCode/v1": "eaf038604c4201c4fc292f0ebd417952d6416cc109da365659fe9c04cf2c44c5"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "eaf038604c4201c4fc292f0ebd417952d6416cc109da365659fe9c04cf2c44c5"
+          }
+        },
+        {
+          "ruleId": "a0e0d878-65d8-3e2c-8dc8-e8e3afc33b5c",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Disabled CSRF Protection in Spring"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/MultiHttpSecurityConfig.java"
+                },
+                "region": {
+                  "startLine": 50,
+                  "startColumn": 25,
+                  "endLine": 50,
+                  "endColumn": 41,
+                  "snippet": {
+                    "text": ".csrf().disable()"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "configure(HttpSecurity)",
+                  "fullyQualifiedName": "hawk.MultiHttpSecurityConfig$JwtWebSecurityConfigurationAdapter.configure(HttpSecurity)",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "22212ae4381ea4820f51e3161404ea45e430560c13d2787323fd29fe857b467e",
+            "glog-pfp-ruleFileCode/v1": "ea0f4f8c7ae5e271da1ffd0734cb31c47dd602fadcb458b2162d7834ebbce4bc"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "ea0f4f8c7ae5e271da1ffd0734cb31c47dd602fadcb458b2162d7834ebbce4bc"
+          }
+        },
+        {
+          "ruleId": "26802867-953d-3894-a91a-5ce43a52a634",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Disabled CSRF Protection in Spring"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/MultiHttpSecurityConfig.java"
+                },
+                "region": {
+                  "startLine": 91,
+                  "startColumn": 21,
+                  "endLine": 91,
+                  "endColumn": 37,
+                  "snippet": {
+                    "text": ".csrf().disable()"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "configure(HttpSecurity)",
+                  "fullyQualifiedName": "hawk.MultiHttpSecurityConfig$TokenWebSecurityConfigurationAdapter.configure(HttpSecurity)",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "c3e38182cd4a51ab50fc1c174fea0fa12003de2061493b83b807b08483ba5b23",
+            "glog-pfp-ruleFileCode/v1": "483b9790c99624acb309a9c505f0ab073dee23360e8fcff2915bdd0beee30861"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "483b9790c99624acb309a9c505f0ab073dee23360e8fcff2915bdd0beee30861"
           }
         },
         {
@@ -1284,46 +1153,6 @@
           }
         },
         {
-          "ruleId": "8017e8e9-4911-39ba-8592-070f7313345d",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Spring Endpoint Vulnerability"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/java/hawk/api/jwt/JwtAuthController.java"
-                },
-                "region": {
-                  "startLine": 45,
-                  "startColumn": 13,
-                  "endLine": 45,
-                  "endColumn": 48,
-                  "snippet": {
-                    "text": "String username = data.getUsername()"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "name": "signin(AuthenticationRequest)",
-                  "fullyQualifiedName": "hawk.api.jwt.JwtAuthController.signin(AuthenticationRequest)",
-                  "kind": "function"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "7bc2428356dbb858afd2f9e7ee03aa44bbd072c050f81beb4fb859b60c324017",
-            "glog-pfp-ruleFileCode/v1": "634f2f08a7bda2ef1e60bed3acc6ed055db5ec542223aac5b06409a28672ca87"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "634f2f08a7bda2ef1e60bed3acc6ed055db5ec542223aac5b06409a28672ca87"
-          }
-        },
-        {
           "ruleId": "be960123-c828-3652-8eee-5197c668c55d",
           "kind": "fail",
           "level": "note",
@@ -1365,6 +1194,46 @@
           },
           "fingerprints": {
             "glog-fp-ruleFileCode/v1": "76c095814449437855ebf103205f05af5c206b8fc6eef79c20133549490c6153"
+          }
+        },
+        {
+          "ruleId": "8017e8e9-4911-39ba-8592-070f7313345d",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Spring Endpoint Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/api/jwt/JwtAuthController.java"
+                },
+                "region": {
+                  "startLine": 45,
+                  "startColumn": 13,
+                  "endLine": 45,
+                  "endColumn": 48,
+                  "snippet": {
+                    "text": "String username = data.getUsername()"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "signin(AuthenticationRequest)",
+                  "fullyQualifiedName": "hawk.api.jwt.JwtAuthController.signin(AuthenticationRequest)",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "7bc2428356dbb858afd2f9e7ee03aa44bbd072c050f81beb4fb859b60c324017",
+            "glog-pfp-ruleFileCode/v1": "634f2f08a7bda2ef1e60bed3acc6ed055db5ec542223aac5b06409a28672ca87"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "634f2f08a7bda2ef1e60bed3acc6ed055db5ec542223aac5b06409a28672ca87"
           }
         },
         {
@@ -2189,6 +2058,50 @@
           }
         },
         {
+          "ruleId": "40486eef-b7b1-333f-b81f-8dd2868526d2",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Found Spring endpoint",
+            "id": "default",
+            "arguments": [
+              "hawk.api.jwt.JwtUserController"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/api/jwt/JwtUserController.java"
+                },
+                "region": {
+                  "startLine": 38,
+                  "startColumn": 9,
+                  "endLine": 38,
+                  "endColumn": 40,
+                  "snippet": {
+                    "text": "Search search = new Search(text)"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "search(String)",
+                  "fullyQualifiedName": "hawk.api.jwt.JwtUserController.search(String)",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "6251cda77c41af5fe746da0c4e8771d4b95688a183287624650201f20e3155c6",
+            "glog-pfp-ruleFileCode/v1": "d45aef1fbfacb2237ef09ff6e5ca062308c5da3cb3d2ad3814347553c4a05c4c"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "d45aef1fbfacb2237ef09ff6e5ca062308c5da3cb3d2ad3814347553c4a05c4c"
+          }
+        },
+        {
           "ruleId": "2ff77974-10f7-39fd-bb4d-2976ff215572",
           "kind": "fail",
           "level": "note",
@@ -2318,50 +2231,6 @@
           },
           "fingerprints": {
             "glog-fp-ruleFileCode/v1": "52b55209c4c59dc00868661da64d025c4e4d2c4ed26f9a4130b938c905f099e8"
-          }
-        },
-        {
-          "ruleId": "40486eef-b7b1-333f-b81f-8dd2868526d2",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Found Spring endpoint",
-            "id": "default",
-            "arguments": [
-              "hawk.api.jwt.JwtUserController"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/java/hawk/api/jwt/JwtUserController.java"
-                },
-                "region": {
-                  "startLine": 38,
-                  "startColumn": 9,
-                  "endLine": 38,
-                  "endColumn": 40,
-                  "snippet": {
-                    "text": "Search search = new Search(text)"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "name": "search(String)",
-                  "fullyQualifiedName": "hawk.api.jwt.JwtUserController.search(String)",
-                  "kind": "function"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "6251cda77c41af5fe746da0c4e8771d4b95688a183287624650201f20e3155c6",
-            "glog-pfp-ruleFileCode/v1": "d45aef1fbfacb2237ef09ff6e5ca062308c5da3cb3d2ad3814347553c4a05c4c"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "d45aef1fbfacb2237ef09ff6e5ca062308c5da3cb3d2ad3814347553c4a05c4c"
           }
         },
         {
@@ -2537,46 +2406,6 @@
           }
         },
         {
-          "ruleId": "0c33f4e9-6f80-3ed4-abb1-38558b9ef925",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Unreliable HTTP Headers Vulnerability"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/java/hawk/api/token/TokenFilter.java"
-                },
-                "region": {
-                  "startLine": 17,
-                  "startColumn": 9,
-                  "endLine": 17,
-                  "endColumn": 49,
-                  "snippet": {
-                    "text": "return request.getHeader(authHeaderName);"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "name": "getPreAuthenticatedPrincipal(HttpServletRequest)",
-                  "fullyQualifiedName": "hawk.api.token.TokenFilter.getPreAuthenticatedPrincipal(HttpServletRequest)",
-                  "kind": "function"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "e34a7e9e7e04b6446c62786fe16c1df66a58b34c4301395485cd260f228c03eb",
-            "glog-pfp-ruleFileCode/v1": "725f8d460ada158b93a0b58748dc25c785fdbfd06449207229831e826a46f563"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "725f8d460ada158b93a0b58748dc25c785fdbfd06449207229831e826a46f563"
-          }
-        },
-        {
           "ruleId": "b3a0450a-084e-3032-95c9-ca960b865707",
           "kind": "fail",
           "level": "note",
@@ -2621,6 +2450,46 @@
           }
         },
         {
+          "ruleId": "0c33f4e9-6f80-3ed4-abb1-38558b9ef925",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Unreliable HTTP Headers Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/api/token/TokenFilter.java"
+                },
+                "region": {
+                  "startLine": 17,
+                  "startColumn": 9,
+                  "endLine": 17,
+                  "endColumn": 49,
+                  "snippet": {
+                    "text": "return request.getHeader(authHeaderName);"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "getPreAuthenticatedPrincipal(HttpServletRequest)",
+                  "fullyQualifiedName": "hawk.api.token.TokenFilter.getPreAuthenticatedPrincipal(HttpServletRequest)",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "e34a7e9e7e04b6446c62786fe16c1df66a58b34c4301395485cd260f228c03eb",
+            "glog-pfp-ruleFileCode/v1": "725f8d460ada158b93a0b58748dc25c785fdbfd06449207229831e826a46f563"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "725f8d460ada158b93a0b58748dc25c785fdbfd06449207229831e826a46f563"
+          }
+        },
+        {
           "ruleId": "a3a14f30-d332-32a2-8bbc-e79e3ff8a6ea",
           "kind": "fail",
           "level": "note",
@@ -2659,6 +2528,152 @@
           "fingerprints": {
             "glog-fp-ruleFileCode/v1": "c8e6bf94d1fa5e5c7ee1ded621f580cce0cf08b32e3df856bef088e85aceccfc"
           }
+        },
+        {
+          "ruleId": "bc8d1490-d25a-3495-ac6a-96690d855517",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "Dockerfile",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "FROM eclipse-temurin:17-jdk-jammy"
+                  }
+                }
+              },
+              "message": {
+                "text": "Dockerfile"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "cc01dfd2946e50dff6861d3988ed694f1210186d23722393917794fcdaf7983f",
+            "glog-pfp-ruleFileCode/v1": "a2db13e2cbbdd619dccaa0fa3203030ef1c36f7243e3535676d08791f9bbd155"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "a2db13e2cbbdd619dccaa0fa3203030ef1c36f7243e3535676d08791f9bbd155"
+          }
+        },
+        {
+          "ruleId": "78f0c135-fcd8-31c1-ab65-3ddd0ad600bd",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"Exposed Asymmetric Private Key in Resource Files\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/resources/keyStore.pem",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 6,
+                  "startColumn": 1,
+                  "endLine": 31,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ\n+JKBb4tcwJ1m5lTYccZbvsvCkCdQF0Ge0PhqYK8I9XyFTMPDv88h1Q+qDVlkqV5v\nVKFeR6v/REOH0AFJ4qC/mmhb9h3LnvyU6KtsZ4KWUfNfGhbpYxVTLU98CzqO9VTN\nxVCreXkTWCpbFTHGyb31sNG3xobL5PLgtNPECaDTJeiY0Z2ID/6fARWv4zn0luQS\ngDRLE2K73i2YjgD05OwdNRHklfnQKZLdkXX/TMVqzNT0Hg9a/thBQAIuozwK1SVs\nOfry/xFGWii19nDR4PaYjT0Xt/BQIt6tk4rg2Xt1XrTRxzrdzSIpHPQoO9g1nl9F\n/yoaq87VAgMBAAECggEBAK47UMfDmrxvu9E+lUJWdhWhQ6L47WPcmL22YaAFtIIA\n8EkpW9Ay4e56A06EgINdh7S4SqmqpxYRY3v90Vfli8MGB9yqPnXtJEKRo7ONHMHh\nHheP8cAWfiFSjDfC5HXDGpFNqpUjeMQCyzmixXaHQMFLkmAwI81hQ6JO6FvKrEz5\n2WCja/OyBwlAybpZgzKTkKGXSBY8NrcWfm8QEZHaJkDDw0aBhgANB2+He6dJCfyM\n1NqauTvbTjeYb5XXQffMhCbYmZM0+f/R4vF3N39lGkcaHMCh9r7c1+lsUKT4oT6p\nYRwvUP3uzBfKIUJJCqw4PD30JDcT+CxMnXn27KLu0cECgYEA3zKxAfOAySz7vVmV\nnIc8p7q09QGOYkx1m3+gAyCJqUAUX1ypPw+C3rk9zAThnZYsJL//5daxw8FMXCSm\nJkcMB2Sj0FKhiqIi+LEgu0tni4COVaTTCG27IXs9sgZTyPGQIwjoT3NhB1Bt3Ksi\nh7hnv8fHDPXzv7ptYpwfyRWDZpkCgYEAzed8S37GeZGbW5qqDyuKnWjG/UPPeTrw\n5DjCSyBVEF3kZrMSc+O2bgf87VFOHBTORzr5r0zNWy12r9w3Ky02z4cxeujulihz\n9ObY6aim6iRHwYpB0D5Eqs4R6mK189bKb9OD/F7USGy//tPP7hqfQC1JHJed4fwR\n0esIOFJ5250CgYAKwVCSPX+ZMhe3WhfBgSrFElQh8j9AMVsBcTbur6SyiSnyJm7p\nYP/3Z4m4yQtuIoxiAPZ9xsiuHCRn1ERFV+sWeB0Ertal7YYt4asoG0wUBs/VBKo+\nn7sCtAOXDoL/DdTaO1WmbnLgfVmt5nk1fQdS0HehAkEKnhsjQ06sy+KXEQKBgBuU\n9b57NgUU7zW/KyarE39wiK9mhQVdUuWPgN9lbl+p5C2psUAa8dYdddEoggka9GLw\nUIAeDqg3F94I5s7+2IfGOWeYilVNB/N3dPkf4XQd9grEBXrqzHIA9r9qB6upSybd\ns6F75n3pK3LsVr8zi7+iEVgmKz0Zch2nmUtKKQ61AoGAPHVizunifBjtKaQHFBdr\np5llidfBU6S0DsdRBG2PYxHB4TMc16gYpZicCIOsTavjS++ZBdtcL1VFiutavKop\nJhZbwH6PR76GJbdwUS3pl8s5+w21KtMxOwR8Oqoc/Sr+Bno37Yek/5CaVwnysEd0\nGWwVDi+xxRJnUIsVzdUBP+8="
+                  }
+                }
+              },
+              "message": {
+                "text": "src/main/resources/keyStore.pem"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "763419e3ed38141479848303552de3ddc33fa1609b3e8e08b8224690218d0e2b",
+            "glog-pfp-ruleFileCode/v1": "a84fe89386abd576deb23381498aee92486568e5436bedb386938e8b5e000a45"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "a84fe89386abd576deb23381498aee92486568e5436bedb386938e8b5e000a45"
+          }
+        },
+        {
+          "ruleId": "0a84dd25-d52a-366d-8470-9d54d7141b9f",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "Exposed Asymmetric Private Key in Build Resources"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "build/resources/main/keyStore.pem",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 6,
+                  "startColumn": 1,
+                  "endLine": 31,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ\n+JKBb4tcwJ1m5lTYccZbvsvCkCdQF0Ge0PhqYK8I9XyFTMPDv88h1Q+qDVlkqV5v\nVKFeR6v/REOH0AFJ4qC/mmhb9h3LnvyU6KtsZ4KWUfNfGhbpYxVTLU98CzqO9VTN\nxVCreXkTWCpbFTHGyb31sNG3xobL5PLgtNPECaDTJeiY0Z2ID/6fARWv4zn0luQS\ngDRLE2K73i2YjgD05OwdNRHklfnQKZLdkXX/TMVqzNT0Hg9a/thBQAIuozwK1SVs\nOfry/xFGWii19nDR4PaYjT0Xt/BQIt6tk4rg2Xt1XrTRxzrdzSIpHPQoO9g1nl9F\n/yoaq87VAgMBAAECggEBAK47UMfDmrxvu9E+lUJWdhWhQ6L47WPcmL22YaAFtIIA\n8EkpW9Ay4e56A06EgINdh7S4SqmqpxYRY3v90Vfli8MGB9yqPnXtJEKRo7ONHMHh\nHheP8cAWfiFSjDfC5HXDGpFNqpUjeMQCyzmixXaHQMFLkmAwI81hQ6JO6FvKrEz5\n2WCja/OyBwlAybpZgzKTkKGXSBY8NrcWfm8QEZHaJkDDw0aBhgANB2+He6dJCfyM\n1NqauTvbTjeYb5XXQffMhCbYmZM0+f/R4vF3N39lGkcaHMCh9r7c1+lsUKT4oT6p\nYRwvUP3uzBfKIUJJCqw4PD30JDcT+CxMnXn27KLu0cECgYEA3zKxAfOAySz7vVmV\nnIc8p7q09QGOYkx1m3+gAyCJqUAUX1ypPw+C3rk9zAThnZYsJL//5daxw8FMXCSm\nJkcMB2Sj0FKhiqIi+LEgu0tni4COVaTTCG27IXs9sgZTyPGQIwjoT3NhB1Bt3Ksi\nh7hnv8fHDPXzv7ptYpwfyRWDZpkCgYEAzed8S37GeZGbW5qqDyuKnWjG/UPPeTrw\n5DjCSyBVEF3kZrMSc+O2bgf87VFOHBTORzr5r0zNWy12r9w3Ky02z4cxeujulihz\n9ObY6aim6iRHwYpB0D5Eqs4R6mK189bKb9OD/F7USGy//tPP7hqfQC1JHJed4fwR\n0esIOFJ5250CgYAKwVCSPX+ZMhe3WhfBgSrFElQh8j9AMVsBcTbur6SyiSnyJm7p\nYP/3Z4m4yQtuIoxiAPZ9xsiuHCRn1ERFV+sWeB0Ertal7YYt4asoG0wUBs/VBKo+\nn7sCtAOXDoL/DdTaO1WmbnLgfVmt5nk1fQdS0HehAkEKnhsjQ06sy+KXEQKBgBuU\n9b57NgUU7zW/KyarE39wiK9mhQVdUuWPgN9lbl+p5C2psUAa8dYdddEoggka9GLw\nUIAeDqg3F94I5s7+2IfGOWeYilVNB/N3dPkf4XQd9grEBXrqzHIA9r9qB6upSybd\ns6F75n3pK3LsVr8zi7+iEVgmKz0Zch2nmUtKKQ61AoGAPHVizunifBjtKaQHFBdr\np5llidfBU6S0DsdRBG2PYxHB4TMc16gYpZicCIOsTavjS++ZBdtcL1VFiutavKop\nJhZbwH6PR76GJbdwUS3pl8s5+w21KtMxOwR8Oqoc/Sr+Bno37Yek/5CaVwnysEd0\nGWwVDi+xxRJnUIsVzdUBP+8="
+                  }
+                }
+              },
+              "message": {
+                "text": "build/resources/main/keyStore.pem"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "044d96f69749663b3e288898f298f05c2023c362b63a0dbcd1f606b7997f7256",
+            "glog-pfp-ruleFileCode/v1": "539b675102218aa8a3367e1a8505d609fbac447e0848521d20cc45f6f3556dea"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "539b675102218aa8a3367e1a8505d609fbac447e0848521d20cc45f6f3556dea"
+          }
+        },
+        {
+          "ruleId": "10fb63e3-85d0-347e-9e79-c3419a3b0650",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "'HttpOnly' flag not set for cookie vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/controller/LoginController.java",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 57,
+                  "startColumn": 9,
+                  "endLine": 57,
+                  "endColumn": 60,
+                  "snippet": {
+                    "text": "        resp.addCookie(new Cookie(\"XLOGINID\", cookieCode));"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "54a906d495c6e2c549b989d7c5d037ef82dc013d57d07f029ac98b39121dcec7",
+            "glog-pfp-ruleFileCode/v1": "ebd1393711ab07b860d4a9239ddcae8b69d18a7e418c770dc7ed320f32d038e9"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "ebd1393711ab07b860d4a9239ddcae8b69d18a7e418c770dc7ed320f32d038e9"
+          },
+          "properties": {}
         }
       ],
       "newlineSequences": [
