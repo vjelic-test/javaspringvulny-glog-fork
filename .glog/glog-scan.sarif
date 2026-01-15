@@ -12,112 +12,68 @@
           "informationUri": "https://www.glog.ai",
           "rules": [
             {
-              "id": "6874cf9b-e97b-39bc-8156-8ff0d1172299",
-              "name": "XSS Vulnerability from User-Controlled Data in HTML String",
+              "id": "bc8d1490-d25a-3495-ac6a-96690d855517",
+              "name": "High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification",
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided JavaScript code, the vulnerability arises from the use of template literals to construct a string that includes user-controlled data (`paramsValues.get(paramName)`). If an attacker can control the `paramName` value, they could potentially inject malicious scripts.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, you should:\n\n- Use frameworks that automatically escape XSS by design, such as Ruby on Rails, React JS, etc.\n- Escape untrusted HTTP request data based on the context in the HTML output (body, attribute, JavaScript, CSS, or URL).\n- Apply context-sensitive encoding when modifying the browser document on the client side.\n- Validate, filter, or sanitize user-generated inputs.\n\n## Source Code Fix Recommendation\n\nIn this specific case, you can mitigate the vulnerability by properly encoding the user-controlled data before including it in the HTML string. Here's a simple fix using the `encodeURI` function:\n\n```javascript\nreturn `${hawkConf[\"app\"][\"host\"]}${encodeURI(paramsValues.get(paramName))}`\n```\n\n## Library Dependencies\n\nThe provided code does not seem to require any specific library dependencies.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+                "markdown": "## Description\n\nThe \"High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification\" is a common security vulnerability in Docker where the Dockerfile does not specify a non-root user for running the container. By default, Docker containers run as root, which means that if an attacker manages to break out of the container, they would have root access to the host system. This could lead to a variety of security issues, including unauthorized access to data, execution of arbitrary code, and denial of service.\n\n## Security Concern\n\nRunning Docker containers as root is a significant security concern because it provides the container with potentially dangerous permissions. If an attacker manages to exploit a vulnerability in the container or the application it's running, they could gain root access to the host system. This could allow them to execute arbitrary code, access sensitive data, or cause a denial of service.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it's recommended to always specify a non-root user in your Dockerfile. This can be done by adding a `USER` directive in the Dockerfile that specifies a non-root user. If the application needs to perform operations that require root permissions, consider using a least privilege model where only the necessary operations are performed as root.\n\n## Source Code Fix Recommendation\n\nHere's how you can modify the Dockerfile to specify a non-root user:\n\n```Dockerfile\nFROM eclipse-temurin:17-jdk-jammy\n\n# Create a group and user\nRUN groupadd -r nonroot && useradd -r -g nonroot nonroot\n\n# Tell docker that all future commands should run as the nonroot user\nUSER nonroot\n```\n\nIn this example, a new group and user named `nonroot` are created, and the `USER` directive is used to specify that all future commands should be run as this user.\n\n## Library Dependencies\n\nThe code example does not specify any library dependencies.\n\n## References\n\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)"
               },
               "properties": {
                 "cwe": [
                   {
-                    "id": "CWE-79",
-                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                    "id": "CWE-250",
+                    "url": "https://cwe.mitre.org/data/definitions/250.html"
                   }
                 ],
-                "severity": "MEDIUM",
+                "severity": "HIGH",
                 "kind": "FAIL",
                 "tags": [
-                  "CWE-79"
+                  "CWE-250"
                 ]
               }
             },
             {
-              "id": "c715549b-a9b6-3a33-b131-6d91bbc2d851",
-              "name": "XSS Vulnerability from User-Controlled Data in HTML String",
+              "id": "78f0c135-fcd8-31c1-ab65-3ddd0ad600bd",
+              "name": "\"Exposed Asymmetric Private Key in Resource Files\"",
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided code snippet, the application is vulnerable to XSS because it's directly using user-controlled data in an HTML string without proper sanitization or encoding.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, it's recommended to:\n\n- Use frameworks that automatically escape XSS by design, such as Ruby on Rails, React JS, etc.\n- Escape untrusted HTTP request data based on the context in the HTML output (body, attribute, JavaScript, CSS, or URL).\n- Apply context-sensitive encoding when modifying the browser document on the client side.\n- Validate, filter, or sanitize user-generated input to prevent malicious data from being executed as code in the browser.\n\n## Source Code Fix Recommendation\n\nIn the provided code snippet, you can use the `encodeURIComponent` function to encode user-controlled data:\n\n```javascript\nstr += `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`;\n```\n\nThis function encodes special characters. In addition, it encodes the following characters: `, / ? : @ & = + $ #`.\n\n## Library Dependencies\n\nThe provided code snippet does not require any additional library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+                "markdown": "## Description\n\nThe vulnerability \"Exposed Asymmetric Private Key in Resource Files\" in Docker programming language refers to the situation where a private key is hard-coded or embedded within the Docker image or resource files. This private key can be used for various purposes such as SSH access, API access, decryption of sensitive data, etc. \n\n## Security Concern\n\nThis is a major security concern because if an attacker gains access to the Docker image or resource files, they can extract the private key. With the private key, they can impersonate the application, gain unauthorized access to systems, decrypt sensitive data, or perform other malicious activities. \n\n## Mitigation Advice\n\n- Never embed or hard-code private keys in Docker images or resource files. \n- Use environment variables or secure vault services to handle private keys.\n- Regularly rotate and change keys.\n- Use Docker secrets if you are using Docker Swarm.\n- Limit the exposure of sensitive information in Docker images.\n\n## Source Code Fix Recommendation\n\nThe private key in the given code should be removed. Instead, use Docker secrets or environment variables to handle the private key. \n\nFor example, you can use Docker secrets like this:\n\n```bash\necho \"MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ...\" | docker secret create my_secret_key -\n```\n\nThen use it in your Docker service:\n\n```bash\ndocker service  create --name=my_service --secret=my_secret_key my_image\n```\n\nIn your application, you can access this secret in the `/run/secrets/my_secret_key` file.\n\n## Library Dependencies\n\nThe code example does not provide any information about library dependencies.\n\n## References\n\n- [OWASP - Insecure Configuration](https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration)\n- [CWE-798: Use of Hard-coded Credentials](https://cwe.mitre.org/data/definitions/798.html)"
               },
               "properties": {
                 "cwe": [
                   {
-                    "id": "CWE-79",
-                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                    "id": "CWE-798",
+                    "url": "https://cwe.mitre.org/data/definitions/798.html"
                   }
                 ],
-                "severity": "MEDIUM",
+                "severity": "HIGH",
                 "kind": "FAIL",
                 "tags": [
-                  "CWE-79"
+                  "CWE-798"
                 ]
               }
             },
             {
-              "id": "4923fc7d-94f8-3cc9-89f2-91769612e757",
-              "name": "\"Potential XSS Vulnerability from User-Controlled Data in HTML String\"",
+              "id": "0a84dd25-d52a-366d-8470-9d54d7141b9f",
+              "name": "Exposed Asymmetric Private Key in Build Resources",
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided JavaScript code, the potential XSS vulnerability arises from the use of template literals to include user-controlled data (`msg.requestHeader`, `msg.requestBody`, `msg.responseHeader`, `msg.responseBody`) in an HTML string without any form of sanitization or encoding.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always escape untrusted HTTP request data based on the HTML context (body, attribute, JavaScript, CSS, or URL) that the data will be placed into. \n\nIn JavaScript, you can use functions like `encodeURIComponent()`, `encodeURI()`, or `escape()` to encode user-controlled data. However, these are not sufficient to prevent all XSS attacks. It's recommended to use a trusted library that makes it easier to encode data safely.\n\n## Source Code Fix Recommendation\n\nHere is a simple fix using the `escape()` function:\n\n```javascript\nreturn `${escape(msg.requestHeader)}\\r\\n\\r\\n${escape(msg.requestBody)}\\r\\n---\\r\\n${escape(msg.responseHeader)}\\r\\n\\r\\n${escape(msg.responseBody)}`;\n```\n\n## Library Dependencies\n\nThe provided code does not require any additional library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+                "markdown": "## Description\n\nThe \"Exposed Asymmetric Private Key in Build Resources\" vulnerability refers to the situation where a private key is hard-coded or embedded within the Docker build resources. This is a serious security concern as it exposes sensitive information that could be exploited by malicious actors to gain unauthorized access to systems or data.\n\n## Security Concern\n\nPrivate keys are meant to be kept secret and used to verify the identity of the sender (in asymmetric encryption) or to decrypt data (in symmetric encryption). If a private key is exposed, it can be used by an attacker to impersonate the legitimate owner, decrypt sensitive data, or even launch further attacks. In the context of Docker, an exposed private key could allow an attacker to gain unauthorized access to the Docker container or the host system.\n\n## Mitigation Advice\n\n- Never hard-code or embed private keys in your Docker build resources or any part of your application. \n- Use environment variables or secure vault services to handle keys and other sensitive information.\n- Regularly use tools to scan your codebase for exposed keys or other sensitive information.\n\n## Source Code Fix Recommendation\n\nThe provided code is an RSA private key. It should not be exposed or hard-coded in the application. Instead, use Docker secrets or environment variables to handle such sensitive data. \n\nFor example, you can use Docker secrets as follows:\n\n```bash\necho \"MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ...\" | docker secret create my_secret_key -\n```\n\nThen use it in your Docker service:\n\n```bash\ndocker service  create --name my_service --secret my_secret_key my_image\n```\n\nIn your application, you can then access the secret from `/run/secrets/my_secret_key`.\n\n## Library Dependencies\n\nThe provided code does not require any library dependencies as it is a private key.\n\n## References\n\n- [OWASP - Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-798: Use of Hard-coded Credentials](https://cwe.mitre.org/data/definitions/798.html)"
               },
               "properties": {
                 "cwe": [
                   {
-                    "id": "CWE-79",
-                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                    "id": "CWE-798",
+                    "url": "https://cwe.mitre.org/data/definitions/798.html"
                   }
                 ],
-                "severity": "MEDIUM",
+                "severity": "HIGH",
                 "kind": "FAIL",
                 "tags": [
-                  "CWE-79"
-                ]
-              }
-            },
-            {
-              "id": "428f6192-8ea6-3891-811b-85fa5c108fc9",
-              "name": "Fixed Password Vulnerability",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nFixed Password Vulnerability in Java refers to the insecure practice of hardcoding passwords directly into the source code. This is a serious security risk because anyone who has access to the source code can easily read the password. This vulnerability can lead to unauthorized access, data breaches, and other security issues.\n\n## Mitigation Advice\n\nAvoid hardcoding passwords in your source code. Instead, use environment variables, configuration files, or secure password management solutions to store passwords. These methods allow you to change passwords without modifying and redeploying your code. \n\nEnsure that the storage method you choose is secure. For example, if you use configuration files, make sure they are not included in the version control system and are properly protected by file system permissions.\n\n## Source Code Fix Recommendation\n\nInstead of hardcoding the password like this:\n\n```java\nString password = \"password\";\n```\n\nYou can use an environment variable:\n\n```java\nString password = System.getenv(\"PASSWORD\");\n```\n\nOr a properties file:\n\n```java\nProperties prop = new Properties();\nInputStream input = new FileInputStream(\"config.properties\");\nprop.load(input);\nString password = prop.getProperty(\"password\");\n```\n\n## Library Dependencies\n\nFor the properties file example, you need the `java.util.Properties` and `java.io` libraries, which are included in the Java standard library.\n\n## References\n\n- [CWE-259: Use of Hard-coded Password](https://cwe.mitre.org/data/definitions/259.html)"
-              },
-              "properties": {
-                "cwe": [
-                  {
-                    "id": "CWE-259",
-                    "url": "https://cwe.mitre.org/data/definitions/259.html"
-                  }
-                ],
-                "severity": "MEDIUM",
-                "kind": "FAIL",
-                "tags": [
-                  "CWE-259"
-                ]
-              }
-            },
-            {
-              "id": "4dcfa34f-0a4d-3635-a9fa-7cf9cfcccb3b",
-              "name": "Fixed Password Vulnerability",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nFixed Password Vulnerability in Java refers to the insecure practice of hardcoding passwords directly into the source code. This is a serious security risk because anyone who has access to the source code can easily read the password. This vulnerability can lead to unauthorized access, data breaches, and other security issues.\n\n## Mitigation Advice\n\nAvoid hardcoding passwords in your source code. Instead, use environment variables, configuration files, or secure password management solutions to store passwords. These methods allow you to change passwords without modifying and redeploying your code. \n\nEnsure that the storage method you choose is secure. For example, if you use configuration files, make sure they are not included in the version control system and are properly protected by file system permissions.\n\n## Source Code Fix Recommendation\n\nInstead of hardcoding the password like this:\n\n```java\nString password = \"password\";\n```\n\nYou can use an environment variable:\n\n```java\nString password = System.getenv(\"PASSWORD\");\n```\n\nOr a properties file:\n\n```java\nProperties prop = new Properties();\nInputStream input = new FileInputStream(\"config.properties\");\nprop.load(input);\nString password = prop.getProperty(\"password\");\n```\n\n## Library Dependencies\n\nFor the properties file example, you need the `java.util.Properties` and `java.io` libraries, which are included in the Java standard library.\n\n## References\n\n- [CWE-259: Use of Hard-coded Password](https://cwe.mitre.org/data/definitions/259.html)"
-              },
-              "properties": {
-                "cwe": [
-                  {
-                    "id": "CWE-259",
-                    "url": "https://cwe.mitre.org/data/definitions/259.html"
-                  }
-                ],
-                "severity": "MEDIUM",
-                "kind": "FAIL",
-                "tags": [
-                  "CWE-259"
+                  "CWE-798"
                 ]
               }
             },
@@ -166,6 +122,50 @@
               }
             },
             {
+              "id": "428f6192-8ea6-3891-811b-85fa5c108fc9",
+              "name": "Fixed Password Vulnerability",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nFixed Password Vulnerability in Java refers to the insecure practice of hardcoding passwords directly into the source code. This is a serious security risk because anyone who has access to the source code can easily read the password. This vulnerability can lead to unauthorized access, data breaches, and other security issues.\n\n## Mitigation Advice\n\nAvoid hardcoding passwords in your source code. Instead, use environment variables, configuration files, or secure password management solutions to store passwords. These methods allow you to change passwords without modifying and redeploying your code. \n\nEnsure that the storage method you choose is secure. For example, if you use configuration files, make sure they are not included in the version control system and are properly protected by file system permissions.\n\n## Source Code Fix Recommendation\n\nInstead of hardcoding the password like this:\n\n```java\nString password = \"password\";\n```\n\nYou can use an environment variable:\n\n```java\nString password = System.getenv(\"PASSWORD\");\n```\n\nOr a properties file:\n\n```java\nProperties prop = new Properties();\nInputStream input = new FileInputStream(\"config.properties\");\nprop.load(input);\nString password = prop.getProperty(\"password\");\n```\n\n## Library Dependencies\n\nFor the properties file example, you need the `java.util.Properties` and `java.io` libraries, which are included in the Java standard library.\n\n## References\n\n- [CWE-259: Use of Hard-coded Password](https://cwe.mitre.org/data/definitions/259.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-259",
+                    "url": "https://cwe.mitre.org/data/definitions/259.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-259"
+                ]
+              }
+            },
+            {
+              "id": "4dcfa34f-0a4d-3635-a9fa-7cf9cfcccb3b",
+              "name": "Fixed Password Vulnerability",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nFixed Password Vulnerability in Java refers to the insecure practice of hardcoding passwords directly into the source code. This is a serious security risk because anyone who has access to the source code can easily read the password. This vulnerability can lead to unauthorized access, data breaches, and other security issues.\n\n## Mitigation Advice\n\nAvoid hardcoding passwords in your source code. Instead, use environment variables, configuration files, or secure password management solutions to store passwords. These methods allow you to change passwords without modifying and redeploying your code. \n\nEnsure that the storage method you choose is secure. For example, if you use configuration files, make sure they are not included in the version control system and are properly protected by file system permissions.\n\n## Source Code Fix Recommendation\n\nInstead of hardcoding the password like this:\n\n```java\nString password = \"password\";\n```\n\nYou can use an environment variable:\n\n```java\nString password = System.getenv(\"PASSWORD\");\n```\n\nOr a properties file:\n\n```java\nProperties prop = new Properties();\nInputStream input = new FileInputStream(\"config.properties\");\nprop.load(input);\nString password = prop.getProperty(\"password\");\n```\n\n## Library Dependencies\n\nFor the properties file example, you need the `java.util.Properties` and `java.io` libraries, which are included in the Java standard library.\n\n## References\n\n- [CWE-259: Use of Hard-coded Password](https://cwe.mitre.org/data/definitions/259.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-259",
+                    "url": "https://cwe.mitre.org/data/definitions/259.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-259"
+                ]
+              }
+            },
+            {
               "id": "26802867-953d-3894-a91a-5ce43a52a634",
               "name": "Disabled CSRF Protection in Spring",
               "helpUri": "https://www.glog.ai/",
@@ -188,7 +188,7 @@
               }
             },
             {
-              "id": "a3ca461e-db59-3419-93ac-212539361720",
+              "id": "be960123-c828-3652-8eee-5197c668c55d",
               "name": "Found Spring endpoint",
               "helpUri": "https://www.glog.ai/",
               "help": {
@@ -202,7 +202,7 @@
               }
             },
             {
-              "id": "be960123-c828-3652-8eee-5197c668c55d",
+              "id": "a3ca461e-db59-3419-93ac-212539361720",
               "name": "Found Spring endpoint",
               "helpUri": "https://www.glog.ai/",
               "help": {
@@ -284,30 +284,17 @@
               }
             },
             {
-              "id": "6067bb0c-447a-31b2-b796-9a6252877b16",
-              "name": "Unreliable HTTP Headers Vulnerability",
+              "id": "40486eef-b7b1-333f-b81f-8dd2868526d2",
+              "name": "Found Spring endpoint",
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nUnreliable HTTP Headers Vulnerability refers to the security flaw where an application trusts and uses HTTP headers without proper validation. HTTP headers are part of the HTTP request and response messages and can be manipulated by an attacker. In Java, this vulnerability can occur when the `HttpServletRequest.getHeader()` method is used to retrieve header values without validating or sanitizing them. This can lead to various attacks such as HTTP Response Splitting, Header Injection, Cross-Site Scripting (XSS), etc.\n\nIn the given code snippet, the `Authorization` header value is directly retrieved and stored in the `bearerToken` variable without any validation:\n\n```java\nString bearerToken = req.getHeader(\"Authorization\");\n```\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to validate and sanitize all HTTP header values before using them. This can be done using regular expressions, whitelist validation, or by using a security library that provides these features.\n\n## Source Code Fix Recommendation\n\nHere is a simple fix using regular expressions to validate the `Authorization` header value:\n\n```java\nString bearerToken = req.getHeader(\"Authorization\");\nif (bearerToken != null && bearerToken.matches(\"Bearer [a-zA-Z0-9]{1,256}\")) {\n    // Proceed with the bearer token\n} else {\n    // Invalid or missing Authorization header\n}\n```\n\nThis code checks if the `Authorization` header value matches the pattern \"Bearer \" followed by 1 to 256 alphanumeric characters. If it doesn't match, it is considered invalid.\n\n## Library Dependencies\n\nThe given code snippet requires the following library dependencies:\n\n- `javax.servlet-api` for `HttpServletRequest`\n\n## References\n\n- [OWASP Unvalidated Redirects and Forwards Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html)\n- [OWASP Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n\n## CWE\n\n- [CWE-113: Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Response Splitting')](https://cwe.mitre.org/data/definitions/113.html)\n- [CWE-20: Improper Input Validation](https://cwe.mitre.org/data/definitions/20.html)"
+                "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n## In Context Remediation\n#### Fields to remediate: text\n### Field: text\n```\nField name: text\nValidation regex: text=\"^[a-zA-Z0-9\\s]*$\"\nMinimum length: 1\nMaximum length: 255\n```\n#### Remediation 1\nHere is a simple example of how you can validate the \"text\" parameter using Java Bean Validation and regex pattern:\n\n```java\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RequestMethod;\nimport org.springframework.web.bind.annotation.RestController;\nimport javax.validation.constraints.Pattern;\nimport javax.validation.constraints.Size;\n\n@RestController\n@RequestMapping(\"/hawk/api/jwt\")\npublic class JwtUserController {\n\n    @RequestMapping(value = \"/search/{text}\", method = RequestMethod.GET)\n    public ResponseEntity search(@PathVariable(\"text\") @Pattern(regexp = \"^[a-zA-Z0-9\\\\s]*$\") @Size(min = 1, max = 255) String text) {\n        // Your search logic here\n        return ResponseEntity.ok().build();\n    }\n}\n```\n\nTo run this application, you will need the following dependencies:\n\n1. Spring Boot Starter Web: It is used to build web, including RESTful, applications using Spring MVC. It uses Tomcat as the default embedded container.\n\n```xml\n<dependency>\n    <groupId>org.springframework.boot</groupId>\n    <artifactId>spring-boot-starter-web</artifactId>\n</dependency>\n```\n\n2. Spring Boot Starter Validation: It is used to validate the input. It includes the Hibernate Validator which is the reference implementation of the validation API.\n\n```xml\n<dependency>\n    <groupId>org.springframework.boot</groupId>\n    <artifactId>spring-boot-starter-validation</artifactId>\n</dependency>\n```\n\nPlease note that the validation annotations (`@Pattern` and `@Size`) will not work out of the box in a Spring Boot application. You need to add `@Validated` annotation on the class level to enable method parameter validation.\n\n```java\nimport org.springframework.validation.annotation.Validated;\n\n@Validated\n@RestController\n@RequestMapping(\"/hawk/api/jwt\")\npublic class JwtUserController {\n    //...\n}\n```\n\nThis will cause Spring to throw a `MethodArgumentNotValidException` when the validation fails. You can handle this exception to return a custom error response.\n\n#### Remediation 2\nHere is a simple Java console application that validates the \"text\" parameter using the provided regex pattern and length constraints. This example uses Java's built-in Pattern and Matcher classes for regex validation.\n\n```java\nimport java.util.regex.Matcher;\nimport java.util.regex.Pattern;\n\npublic class Main {\n    public static void main(String[] args) {\n        String text = \"test\"; // replace with user input\n        if (validateText(text)) {\n            System.out.println(\"Valid input\");\n        } else {\n            System.out.println(\"Invalid input\");\n        }\n    }\n\n    public static boolean validateText(String text) {\n        if (text.length() < 1 || text.length() > 255) {\n            return false;\n        }\n        Pattern pattern = Pattern.compile(\"^[a-zA-Z0-9\\\\s]*$\");\n        Matcher matcher = pattern.matcher(text);\n        return matcher.matches();\n    }\n}\n```\n\nThis application doesn't require any additional dependencies to run, as it uses only built-in Java classes. To run this application, you need to have Java installed on your machine. You can replace the \"test\" string with the user input you want to validate.\n\nPlease note that this is a simple console application and doesn't include the actual method \"hawk.api.jwt.JwtUserController.public ResponseEntity search(@PathVariable(\"text\") String text)\" mentioned in the question. The validation logic can be used in the mentioned method or in a custom validation service as per your application's architecture and requirements.\n\n___\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
               },
               "properties": {
-                "cwe": [
-                  {
-                    "id": "CWE-113",
-                    "url": "https://cwe.mitre.org/data/definitions/113.html"
-                  },
-                  {
-                    "id": "CWE-20",
-                    "url": "https://cwe.mitre.org/data/definitions/20.html"
-                  }
-                ],
+                "cwe": [],
                 "severity": "LOW",
-                "kind": "FAIL",
-                "tags": [
-                  "CWE-113",
-                  "CWE-20"
-                ]
+                "kind": "FAIL"
               }
             },
             {
@@ -350,6 +337,33 @@
                 "cwe": [],
                 "severity": "LOW",
                 "kind": "FAIL"
+              }
+            },
+            {
+              "id": "6067bb0c-447a-31b2-b796-9a6252877b16",
+              "name": "Unreliable HTTP Headers Vulnerability",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nUnreliable HTTP Headers Vulnerability refers to the security flaw where an application trusts and uses HTTP headers without proper validation. HTTP headers are part of the HTTP request and response messages and can be manipulated by an attacker. In Java, this vulnerability can occur when the `HttpServletRequest.getHeader()` method is used to retrieve header values without validating or sanitizing them. This can lead to various attacks such as HTTP Response Splitting, Header Injection, Cross-Site Scripting (XSS), etc.\n\nIn the given code snippet, the `Authorization` header value is directly retrieved and stored in the `bearerToken` variable without any validation:\n\n```java\nString bearerToken = req.getHeader(\"Authorization\");\n```\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to validate and sanitize all HTTP header values before using them. This can be done using regular expressions, whitelist validation, or by using a security library that provides these features.\n\n## Source Code Fix Recommendation\n\nHere is a simple fix using regular expressions to validate the `Authorization` header value:\n\n```java\nString bearerToken = req.getHeader(\"Authorization\");\nif (bearerToken != null && bearerToken.matches(\"Bearer [a-zA-Z0-9]{1,256}\")) {\n    // Proceed with the bearer token\n} else {\n    // Invalid or missing Authorization header\n}\n```\n\nThis code checks if the `Authorization` header value matches the pattern \"Bearer \" followed by 1 to 256 alphanumeric characters. If it doesn't match, it is considered invalid.\n\n## Library Dependencies\n\nThe given code snippet requires the following library dependencies:\n\n- `javax.servlet-api` for `HttpServletRequest`\n\n## References\n\n- [OWASP Unvalidated Redirects and Forwards Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html)\n- [OWASP Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n\n## CWE\n\n- [CWE-113: Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Response Splitting')](https://cwe.mitre.org/data/definitions/113.html)\n- [CWE-20: Improper Input Validation](https://cwe.mitre.org/data/definitions/20.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-113",
+                    "url": "https://cwe.mitre.org/data/definitions/113.html"
+                  },
+                  {
+                    "id": "CWE-20",
+                    "url": "https://cwe.mitre.org/data/definitions/20.html"
+                  }
+                ],
+                "severity": "LOW",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-113",
+                  "CWE-20"
+                ]
               }
             },
             {
@@ -451,20 +465,6 @@
               }
             },
             {
-              "id": "346a775d-6fa0-3016-8317-f51a06186c61",
-              "name": "Found Spring endpoint",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
-              },
-              "properties": {
-                "cwe": [],
-                "severity": "LOW",
-                "kind": "FAIL"
-              }
-            },
-            {
               "id": "de6afc69-2393-3eba-aeca-ced9207a260a",
               "name": "Found Spring endpoint",
               "helpUri": "https://www.glog.ai/",
@@ -493,7 +493,7 @@
               }
             },
             {
-              "id": "c488398d-6373-300e-9674-8539eae45250",
+              "id": "346a775d-6fa0-3016-8317-f51a06186c61",
               "name": "Found Spring endpoint",
               "helpUri": "https://www.glog.ai/",
               "help": {
@@ -521,26 +521,12 @@
               }
             },
             {
-              "id": "866102c1-8960-3baa-8720-83f1f7ece441",
+              "id": "c488398d-6373-300e-9674-8539eae45250",
               "name": "Found Spring endpoint",
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
                 "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
-              },
-              "properties": {
-                "cwe": [],
-                "severity": "LOW",
-                "kind": "FAIL"
-              }
-            },
-            {
-              "id": "40486eef-b7b1-333f-b81f-8dd2868526d2",
-              "name": "Found Spring endpoint",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n## In Context Remediation\n#### Fields to remediate: text\n### Field: text\n```\nField name: text\nValidation regex: text=\"^[a-zA-Z0-9\\s]*$\"\nMinimum length: 1\nMaximum length: 255\n```\n#### Remediation 1\nHere is a simple example of how you can validate the \"text\" parameter using Java Bean Validation and regex pattern:\n\n```java\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RequestMethod;\nimport org.springframework.web.bind.annotation.RestController;\nimport javax.validation.constraints.Pattern;\nimport javax.validation.constraints.Size;\n\n@RestController\n@RequestMapping(\"/hawk/api/jwt\")\npublic class JwtUserController {\n\n    @RequestMapping(value = \"/search/{text}\", method = RequestMethod.GET)\n    public ResponseEntity search(@PathVariable(\"text\") @Pattern(regexp = \"^[a-zA-Z0-9\\\\s]*$\") @Size(min = 1, max = 255) String text) {\n        // Your search logic here\n        return ResponseEntity.ok().build();\n    }\n}\n```\n\nTo run this application, you will need the following dependencies:\n\n1. Spring Boot Starter Web: It is used to build web, including RESTful, applications using Spring MVC. It uses Tomcat as the default embedded container.\n\n```xml\n<dependency>\n    <groupId>org.springframework.boot</groupId>\n    <artifactId>spring-boot-starter-web</artifactId>\n</dependency>\n```\n\n2. Spring Boot Starter Validation: It is used to validate the input. It includes the Hibernate Validator which is the reference implementation of the validation API.\n\n```xml\n<dependency>\n    <groupId>org.springframework.boot</groupId>\n    <artifactId>spring-boot-starter-validation</artifactId>\n</dependency>\n```\n\nPlease note that the validation annotations (`@Pattern` and `@Size`) will not work out of the box in a Spring Boot application. You need to add `@Validated` annotation on the class level to enable method parameter validation.\n\n```java\nimport org.springframework.validation.annotation.Validated;\n\n@Validated\n@RestController\n@RequestMapping(\"/hawk/api/jwt\")\npublic class JwtUserController {\n    //...\n}\n```\n\nThis will cause Spring to throw a `MethodArgumentNotValidException` when the validation fails. You can handle this exception to return a custom error response.\n\n#### Remediation 2\nHere is a simple Java console application that validates the \"text\" parameter using the provided regex pattern and length constraints. This example uses Java's built-in Pattern and Matcher classes for regex validation.\n\n```java\nimport java.util.regex.Matcher;\nimport java.util.regex.Pattern;\n\npublic class Main {\n    public static void main(String[] args) {\n        String text = \"test\"; // replace with user input\n        if (validateText(text)) {\n            System.out.println(\"Valid input\");\n        } else {\n            System.out.println(\"Invalid input\");\n        }\n    }\n\n    public static boolean validateText(String text) {\n        if (text.length() < 1 || text.length() > 255) {\n            return false;\n        }\n        Pattern pattern = Pattern.compile(\"^[a-zA-Z0-9\\\\s]*$\");\n        Matcher matcher = pattern.matcher(text);\n        return matcher.matches();\n    }\n}\n```\n\nThis application doesn't require any additional dependencies to run, as it uses only built-in Java classes. To run this application, you need to have Java installed on your machine. You can replace the \"test\" string with the user input you want to validate.\n\nPlease note that this is a simple console application and doesn't include the actual method \"hawk.api.jwt.JwtUserController.public ResponseEntity search(@PathVariable(\"text\") String text)\" mentioned in the question. The validation logic can be used in the mentioned method or in a custom validation service as per your application's architecture and requirements.\n\n___\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
               },
               "properties": {
                 "cwe": [],
@@ -564,6 +550,20 @@
             },
             {
               "id": "74a4a50f-e064-310c-b6a1-297fb3c6e945",
+              "name": "Found Spring endpoint",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
+              },
+              "properties": {
+                "cwe": [],
+                "severity": "LOW",
+                "kind": "FAIL"
+              }
+            },
+            {
+              "id": "866102c1-8960-3baa-8720-83f1f7ece441",
               "name": "Found Spring endpoint",
               "helpUri": "https://www.glog.ai/",
               "help": {
@@ -705,68 +705,46 @@
               }
             },
             {
-              "id": "bc8d1490-d25a-3495-ac6a-96690d855517",
-              "name": "High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification",
+              "id": "6874cf9b-e97b-39bc-8156-8ff0d1172299",
+              "name": "XSS Vulnerability from User-Controlled Data in HTML String",
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nThe \"High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification\" is a common security vulnerability in Docker where the Dockerfile does not specify a non-root user for running the container. By default, Docker containers run as root, which means that if an attacker manages to break out of the container, they would have root access to the host system. This could lead to a variety of security issues, including unauthorized access to data, execution of arbitrary code, and denial of service.\n\n## Security Concern\n\nRunning Docker containers as root is a significant security concern because it provides the container with potentially dangerous permissions. If an attacker manages to exploit a vulnerability in the container or the application it's running, they could gain root access to the host system. This could allow them to execute arbitrary code, access sensitive data, or cause a denial of service.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it's recommended to always specify a non-root user in your Dockerfile. This can be done by adding a `USER` directive in the Dockerfile that specifies a non-root user. If the application needs to perform operations that require root permissions, consider using a least privilege model where only the necessary operations are performed as root.\n\n## Source Code Fix Recommendation\n\nHere's how you can modify the Dockerfile to specify a non-root user:\n\n```Dockerfile\nFROM eclipse-temurin:17-jdk-jammy\n\n# Create a group and user\nRUN groupadd -r nonroot && useradd -r -g nonroot nonroot\n\n# Tell docker that all future commands should run as the nonroot user\nUSER nonroot\n```\n\nIn this example, a new group and user named `nonroot` are created, and the `USER` directive is used to specify that all future commands should be run as this user.\n\n## Library Dependencies\n\nThe code example does not specify any library dependencies.\n\n## References\n\n- [CWE-250: Execution with Unnecessary Privileges](https://cwe.mitre.org/data/definitions/250.html)"
+                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided JavaScript code, the vulnerability arises from the use of template literals to construct a string that includes user-controlled data (`paramsValues.get(paramName)`). If an attacker can control the `paramName` value, they could potentially inject malicious scripts.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, you should:\n\n- Use frameworks that automatically escape XSS by design, such as Ruby on Rails, React JS, etc.\n- Escape untrusted HTTP request data based on the context in the HTML output (body, attribute, JavaScript, CSS, or URL).\n- Apply context-sensitive encoding when modifying the browser document on the client side.\n- Validate, filter, or sanitize user-generated inputs.\n\n## Source Code Fix Recommendation\n\nIn this specific case, you can mitigate the vulnerability by properly encoding the user-controlled data before including it in the HTML string. Here's a simple fix using the `encodeURI` function:\n\n```javascript\nreturn `${hawkConf[\"app\"][\"host\"]}${encodeURI(paramsValues.get(paramName))}`\n```\n\n## Library Dependencies\n\nThe provided code does not seem to require any specific library dependencies.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
               },
               "properties": {
                 "cwe": [
                   {
-                    "id": "CWE-250",
-                    "url": "https://cwe.mitre.org/data/definitions/250.html"
+                    "id": "CWE-79",
+                    "url": "https://cwe.mitre.org/data/definitions/79.html"
                   }
                 ],
-                "severity": "HIGH",
+                "severity": "MEDIUM",
                 "kind": "FAIL",
                 "tags": [
-                  "CWE-250"
+                  "CWE-79"
                 ]
               }
             },
             {
-              "id": "78f0c135-fcd8-31c1-ab65-3ddd0ad600bd",
-              "name": "\"Exposed Asymmetric Private Key in Resource Files\"",
+              "id": "c715549b-a9b6-3a33-b131-6d91bbc2d851",
+              "name": "XSS Vulnerability from User-Controlled Data in HTML String",
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nThe vulnerability \"Exposed Asymmetric Private Key in Resource Files\" in Docker programming language refers to the situation where a private key is hard-coded or embedded within the Docker image or resource files. This private key can be used for various purposes such as SSH access, API access, decryption of sensitive data, etc. \n\n## Security Concern\n\nThis is a major security concern because if an attacker gains access to the Docker image or resource files, they can extract the private key. With the private key, they can impersonate the application, gain unauthorized access to systems, decrypt sensitive data, or perform other malicious activities. \n\n## Mitigation Advice\n\n- Never embed or hard-code private keys in Docker images or resource files. \n- Use environment variables or secure vault services to handle private keys.\n- Regularly rotate and change keys.\n- Use Docker secrets if you are using Docker Swarm.\n- Limit the exposure of sensitive information in Docker images.\n\n## Source Code Fix Recommendation\n\nThe private key in the given code should be removed. Instead, use Docker secrets or environment variables to handle the private key. \n\nFor example, you can use Docker secrets like this:\n\n```bash\necho \"MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ...\" | docker secret create my_secret_key -\n```\n\nThen use it in your Docker service:\n\n```bash\ndocker service  create --name=my_service --secret=my_secret_key my_image\n```\n\nIn your application, you can access this secret in the `/run/secrets/my_secret_key` file.\n\n## Library Dependencies\n\nThe code example does not provide any information about library dependencies.\n\n## References\n\n- [OWASP - Insecure Configuration](https://owasp.org/www-project-top-ten/2017/A6_2017-Security_Misconfiguration)\n- [CWE-798: Use of Hard-coded Credentials](https://cwe.mitre.org/data/definitions/798.html)"
+                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided code snippet, the application is vulnerable to XSS because it's directly using user-controlled data in an HTML string without proper sanitization or encoding.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, it's recommended to:\n\n- Use frameworks that automatically escape XSS by design, such as Ruby on Rails, React JS, etc.\n- Escape untrusted HTTP request data based on the context in the HTML output (body, attribute, JavaScript, CSS, or URL).\n- Apply context-sensitive encoding when modifying the browser document on the client side.\n- Validate, filter, or sanitize user-generated input to prevent malicious data from being executed as code in the browser.\n\n## Source Code Fix Recommendation\n\nIn the provided code snippet, you can use the `encodeURIComponent` function to encode user-controlled data:\n\n```javascript\nstr += `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`;\n```\n\nThis function encodes special characters. In addition, it encodes the following characters: `, / ? : @ & = + $ #`.\n\n## Library Dependencies\n\nThe provided code snippet does not require any additional library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
               },
               "properties": {
                 "cwe": [
                   {
-                    "id": "CWE-798",
-                    "url": "https://cwe.mitre.org/data/definitions/798.html"
+                    "id": "CWE-79",
+                    "url": "https://cwe.mitre.org/data/definitions/79.html"
                   }
                 ],
-                "severity": "HIGH",
+                "severity": "MEDIUM",
                 "kind": "FAIL",
                 "tags": [
-                  "CWE-798"
-                ]
-              }
-            },
-            {
-              "id": "0a84dd25-d52a-366d-8470-9d54d7141b9f",
-              "name": "Exposed Asymmetric Private Key in Build Resources",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nThe \"Exposed Asymmetric Private Key in Build Resources\" vulnerability refers to the situation where a private key is hard-coded or embedded within the Docker build resources. This is a serious security concern as it exposes sensitive information that could be exploited by malicious actors to gain unauthorized access to systems or data.\n\n## Security Concern\n\nPrivate keys are meant to be kept secret and used to verify the identity of the sender (in asymmetric encryption) or to decrypt data (in symmetric encryption). If a private key is exposed, it can be used by an attacker to impersonate the legitimate owner, decrypt sensitive data, or even launch further attacks. In the context of Docker, an exposed private key could allow an attacker to gain unauthorized access to the Docker container or the host system.\n\n## Mitigation Advice\n\n- Never hard-code or embed private keys in your Docker build resources or any part of your application. \n- Use environment variables or secure vault services to handle keys and other sensitive information.\n- Regularly use tools to scan your codebase for exposed keys or other sensitive information.\n\n## Source Code Fix Recommendation\n\nThe provided code is an RSA private key. It should not be exposed or hard-coded in the application. Instead, use Docker secrets or environment variables to handle such sensitive data. \n\nFor example, you can use Docker secrets as follows:\n\n```bash\necho \"MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ...\" | docker secret create my_secret_key -\n```\n\nThen use it in your Docker service:\n\n```bash\ndocker service  create --name my_service --secret my_secret_key my_image\n```\n\nIn your application, you can then access the secret from `/run/secrets/my_secret_key`.\n\n## Library Dependencies\n\nThe provided code does not require any library dependencies as it is a private key.\n\n## References\n\n- [OWASP - Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-798: Use of Hard-coded Credentials](https://cwe.mitre.org/data/definitions/798.html)"
-              },
-              "properties": {
-                "cwe": [
-                  {
-                    "id": "CWE-798",
-                    "url": "https://cwe.mitre.org/data/definitions/798.html"
-                  }
-                ],
-                "severity": "HIGH",
-                "kind": "FAIL",
-                "tags": [
-                  "CWE-798"
+                  "CWE-79"
                 ]
               }
             },
@@ -791,6 +769,28 @@
                   "CWE-614"
                 ]
               }
+            },
+            {
+              "id": "4923fc7d-94f8-3cc9-89f2-91769612e757",
+              "name": "\"Potential XSS Vulnerability from User-Controlled Data in HTML String\"",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided JavaScript code, the potential XSS vulnerability arises from the use of template literals to include user-controlled data (`msg.requestHeader`, `msg.requestBody`, `msg.responseHeader`, `msg.responseBody`) in an HTML string without any form of sanitization or encoding.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always escape untrusted HTTP request data based on the HTML context (body, attribute, JavaScript, CSS, or URL) that the data will be placed into. \n\nIn JavaScript, you can use functions like `encodeURIComponent()`, `encodeURI()`, or `escape()` to encode user-controlled data. However, these are not sufficient to prevent all XSS attacks. It's recommended to use a trusted library that makes it easier to encode data safely.\n\n## Source Code Fix Recommendation\n\nHere is a simple fix using the `escape()` function:\n\n```javascript\nreturn `${escape(msg.requestHeader)}\\r\\n\\r\\n${escape(msg.requestBody)}\\r\\n---\\r\\n${escape(msg.responseHeader)}\\r\\n\\r\\n${escape(msg.responseBody)}`;\n```\n\n## Library Dependencies\n\nThe provided code does not require any additional library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-79",
+                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-79"
+                ]
+              }
             }
           ],
           "language": "en-US",
@@ -804,188 +804,114 @@
       "language": "en-US",
       "results": [
         {
-          "ruleId": "c715549b-a9b6-3a33-b131-6d91bbc2d851",
+          "ruleId": "78f0c135-fcd8-31c1-ab65-3ddd0ad600bd",
           "kind": "fail",
-          "level": "warning",
+          "level": "error",
           "message": {
-            "text": "XSS Vulnerability from User-Controlled Data in HTML String"
+            "text": "\"Exposed Asymmetric Private Key in Resource Files\""
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "hawkscripts/authentication/form-auth-multi.js",
-                  "uriBaseId": "%SRCROOT%"
+                  "uri": "src/main/resources/keyStore.pem",
+                  "uriBaseId": "ROOTPATH"
                 },
                 "region": {
-                  "startLine": 59,
-                  "startColumn": 5,
-                  "endLine": 59,
-                  "endColumn": 55,
+                  "startLine": 6,
+                  "startColumn": 1,
+                  "endLine": 31,
+                  "endColumn": 1,
                   "snippet": {
-                    "text": "    str += `${urlEncode(key)}=${urlEncode(obj[key])}`;"
-                  }
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "46c0708921fb21867f6bbef56108d8e6c6a26dc949dc4573f62220936a16cb5e",
-            "glog-pfp-ruleFileCode/v1": "12cb9afa6ea742d7638207bfb0c811e06d4935b4fad2d4500ca741629c8c236e"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "12cb9afa6ea742d7638207bfb0c811e06d4935b4fad2d4500ca741629c8c236e"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "6874cf9b-e97b-39bc-8156-8ff0d1172299",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "XSS Vulnerability from User-Controlled Data in HTML String"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "hawkscripts/authentication/form-auth-multi.js",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 48,
-                  "startColumn": 3,
-                  "endLine": 48,
-                  "endColumn": 68,
-                  "snippet": {
-                    "text": "  return `${hawkConf[\"app\"][\"host\"]}${paramsValues.get(paramName)}`"
-                  }
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "fe63742e2f8d92695c776dd52122df33f3250e0f6f43c118cd0a531934d4f9e8",
-            "glog-pfp-ruleFileCode/v1": "1bef8c42bf9fd248ff79a488b54430f444ac9667fa3984f53981e6afe7adc56b"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "1bef8c42bf9fd248ff79a488b54430f444ac9667fa3984f53981e6afe7adc56b"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "4923fc7d-94f8-3cc9-89f2-91769612e757",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "\"Potential XSS Vulnerability from User-Controlled Data in HTML String\""
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "hawkscripts/authentication/form-auth-multi.js",
-                  "uriBaseId": "%SRCROOT%"
-                },
-                "region": {
-                  "startLine": 139,
-                  "startColumn": 3,
-                  "endLine": 139,
-                  "endColumn": 118,
-                  "snippet": {
-                    "text": "  return `${msg.requestHeader}\\r\\n\\r\\n${msg.requestBody}\\r\\n---\\r\\n${msg.responseHeader}\\r\\n\\r\\n${msg.responseBody}`;"
-                  }
-                }
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "35c09933adf825c6ae1524f096406251cffab0fb3feea4aba7a7d01427f72809",
-            "glog-pfp-ruleFileCode/v1": "fd48250c61bc770267710a06698f6a8f9ef1518f1ada4c28adc506d0ffd9cb42"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "fd48250c61bc770267710a06698f6a8f9ef1518f1ada4c28adc506d0ffd9cb42"
-          },
-          "properties": {}
-        },
-        {
-          "ruleId": "428f6192-8ea6-3891-811b-85fa5c108fc9",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "Fixed Password Vulnerability"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/java/hawk/MultiHttpSecurityConfig.java"
-                },
-                "region": {
-                  "startLine": 160,
-                  "startColumn": 35,
-                  "endLine": 160,
-                  "endColumn": 44,
-                  "snippet": {
-                    "text": "\"password\""
+                    "text": "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ\n+JKBb4tcwJ1m5lTYccZbvsvCkCdQF0Ge0PhqYK8I9XyFTMPDv88h1Q+qDVlkqV5v\nVKFeR6v/REOH0AFJ4qC/mmhb9h3LnvyU6KtsZ4KWUfNfGhbpYxVTLU98CzqO9VTN\nxVCreXkTWCpbFTHGyb31sNG3xobL5PLgtNPECaDTJeiY0Z2ID/6fARWv4zn0luQS\ngDRLE2K73i2YjgD05OwdNRHklfnQKZLdkXX/TMVqzNT0Hg9a/thBQAIuozwK1SVs\nOfry/xFGWii19nDR4PaYjT0Xt/BQIt6tk4rg2Xt1XrTRxzrdzSIpHPQoO9g1nl9F\n/yoaq87VAgMBAAECggEBAK47UMfDmrxvu9E+lUJWdhWhQ6L47WPcmL22YaAFtIIA\n8EkpW9Ay4e56A06EgINdh7S4SqmqpxYRY3v90Vfli8MGB9yqPnXtJEKRo7ONHMHh\nHheP8cAWfiFSjDfC5HXDGpFNqpUjeMQCyzmixXaHQMFLkmAwI81hQ6JO6FvKrEz5\n2WCja/OyBwlAybpZgzKTkKGXSBY8NrcWfm8QEZHaJkDDw0aBhgANB2+He6dJCfyM\n1NqauTvbTjeYb5XXQffMhCbYmZM0+f/R4vF3N39lGkcaHMCh9r7c1+lsUKT4oT6p\nYRwvUP3uzBfKIUJJCqw4PD30JDcT+CxMnXn27KLu0cECgYEA3zKxAfOAySz7vVmV\nnIc8p7q09QGOYkx1m3+gAyCJqUAUX1ypPw+C3rk9zAThnZYsJL//5daxw8FMXCSm\nJkcMB2Sj0FKhiqIi+LEgu0tni4COVaTTCG27IXs9sgZTyPGQIwjoT3NhB1Bt3Ksi\nh7hnv8fHDPXzv7ptYpwfyRWDZpkCgYEAzed8S37GeZGbW5qqDyuKnWjG/UPPeTrw\n5DjCSyBVEF3kZrMSc+O2bgf87VFOHBTORzr5r0zNWy12r9w3Ky02z4cxeujulihz\n9ObY6aim6iRHwYpB0D5Eqs4R6mK189bKb9OD/F7USGy//tPP7hqfQC1JHJed4fwR\n0esIOFJ5250CgYAKwVCSPX+ZMhe3WhfBgSrFElQh8j9AMVsBcTbur6SyiSnyJm7p\nYP/3Z4m4yQtuIoxiAPZ9xsiuHCRn1ERFV+sWeB0Ertal7YYt4asoG0wUBs/VBKo+\nn7sCtAOXDoL/DdTaO1WmbnLgfVmt5nk1fQdS0HehAkEKnhsjQ06sy+KXEQKBgBuU\n9b57NgUU7zW/KyarE39wiK9mhQVdUuWPgN9lbl+p5C2psUAa8dYdddEoggka9GLw\nUIAeDqg3F94I5s7+2IfGOWeYilVNB/N3dPkf4XQd9grEBXrqzHIA9r9qB6upSybd\ns6F75n3pK3LsVr8zi7+iEVgmKz0Zch2nmUtKKQ61AoGAPHVizunifBjtKaQHFBdr\np5llidfBU6S0DsdRBG2PYxHB4TMc16gYpZicCIOsTavjS++ZBdtcL1VFiutavKop\nJhZbwH6PR76GJbdwUS3pl8s5+w21KtMxOwR8Oqoc/Sr+Bno37Yek/5CaVwnysEd0\nGWwVDi+xxRJnUIsVzdUBP+8="
                   }
                 }
               },
-              "logicalLocations": [
-                {
-                  "name": "userDetailsService()",
-                  "fullyQualifiedName": "hawk.MultiHttpSecurityConfig.userDetailsService()",
-                  "kind": "function"
-                }
-              ]
+              "message": {
+                "text": "src/main/resources/keyStore.pem"
+              }
             }
           ],
           "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "41a17364c95a127aa88d2fac1edd9675a3a27e30ba6fb2be27372bfdf3999e02",
-            "glog-pfp-ruleFileCode/v1": "c98cfeee8a24b03c411384a1b643842a8af3b0ed7cb79b60ea55a959bfb2b541"
+            "glog-pfp-ruleFileLineCode/v1": "763419e3ed38141479848303552de3ddc33fa1609b3e8e08b8224690218d0e2b",
+            "glog-pfp-ruleFileCode/v1": "a84fe89386abd576deb23381498aee92486568e5436bedb386938e8b5e000a45"
           },
           "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "c98cfeee8a24b03c411384a1b643842a8af3b0ed7cb79b60ea55a959bfb2b541"
+            "glog-fp-ruleFileCode/v1": "a84fe89386abd576deb23381498aee92486568e5436bedb386938e8b5e000a45"
           }
         },
         {
-          "ruleId": "4dcfa34f-0a4d-3635-a9fa-7cf9cfcccb3b",
+          "ruleId": "bc8d1490-d25a-3495-ac6a-96690d855517",
           "kind": "fail",
-          "level": "warning",
+          "level": "error",
           "message": {
-            "text": "Fixed Password Vulnerability"
+            "text": "High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/main/java/hawk/MultiHttpSecurityConfig.java"
+                  "uri": "Dockerfile",
+                  "uriBaseId": "ROOTPATH"
                 },
                 "region": {
-                  "startLine": 167,
-                  "startColumn": 35,
-                  "endLine": 167,
-                  "endColumn": 44,
+                  "startLine": 1,
+                  "startColumn": 1,
+                  "endLine": 1,
+                  "endColumn": 1,
                   "snippet": {
-                    "text": "\"password\""
+                    "text": "FROM eclipse-temurin:17-jdk-jammy"
                   }
                 }
               },
-              "logicalLocations": [
-                {
-                  "name": "userDetailsService()",
-                  "fullyQualifiedName": "hawk.MultiHttpSecurityConfig.userDetailsService()",
-                  "kind": "function"
-                }
-              ]
+              "message": {
+                "text": "Dockerfile"
+              }
             }
           ],
           "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "bd2e6f161e0b243b003d47635c9e14628085d49c3b8ef8db1eb8e425c1db14a9",
-            "glog-pfp-ruleFileCode/v1": "ac48f2b67183410c5c0bba2916bb6020e399e01e2e87d7a538b0d52d5b6218db"
+            "glog-pfp-ruleFileLineCode/v1": "cc01dfd2946e50dff6861d3988ed694f1210186d23722393917794fcdaf7983f",
+            "glog-pfp-ruleFileCode/v1": "a2db13e2cbbdd619dccaa0fa3203030ef1c36f7243e3535676d08791f9bbd155"
           },
           "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "ac48f2b67183410c5c0bba2916bb6020e399e01e2e87d7a538b0d52d5b6218db"
+            "glog-fp-ruleFileCode/v1": "a2db13e2cbbdd619dccaa0fa3203030ef1c36f7243e3535676d08791f9bbd155"
+          }
+        },
+        {
+          "ruleId": "0a84dd25-d52a-366d-8470-9d54d7141b9f",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "Exposed Asymmetric Private Key in Build Resources"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "build/resources/main/keyStore.pem",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 6,
+                  "startColumn": 1,
+                  "endLine": 31,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ\n+JKBb4tcwJ1m5lTYccZbvsvCkCdQF0Ge0PhqYK8I9XyFTMPDv88h1Q+qDVlkqV5v\nVKFeR6v/REOH0AFJ4qC/mmhb9h3LnvyU6KtsZ4KWUfNfGhbpYxVTLU98CzqO9VTN\nxVCreXkTWCpbFTHGyb31sNG3xobL5PLgtNPECaDTJeiY0Z2ID/6fARWv4zn0luQS\ngDRLE2K73i2YjgD05OwdNRHklfnQKZLdkXX/TMVqzNT0Hg9a/thBQAIuozwK1SVs\nOfry/xFGWii19nDR4PaYjT0Xt/BQIt6tk4rg2Xt1XrTRxzrdzSIpHPQoO9g1nl9F\n/yoaq87VAgMBAAECggEBAK47UMfDmrxvu9E+lUJWdhWhQ6L47WPcmL22YaAFtIIA\n8EkpW9Ay4e56A06EgINdh7S4SqmqpxYRY3v90Vfli8MGB9yqPnXtJEKRo7ONHMHh\nHheP8cAWfiFSjDfC5HXDGpFNqpUjeMQCyzmixXaHQMFLkmAwI81hQ6JO6FvKrEz5\n2WCja/OyBwlAybpZgzKTkKGXSBY8NrcWfm8QEZHaJkDDw0aBhgANB2+He6dJCfyM\n1NqauTvbTjeYb5XXQffMhCbYmZM0+f/R4vF3N39lGkcaHMCh9r7c1+lsUKT4oT6p\nYRwvUP3uzBfKIUJJCqw4PD30JDcT+CxMnXn27KLu0cECgYEA3zKxAfOAySz7vVmV\nnIc8p7q09QGOYkx1m3+gAyCJqUAUX1ypPw+C3rk9zAThnZYsJL//5daxw8FMXCSm\nJkcMB2Sj0FKhiqIi+LEgu0tni4COVaTTCG27IXs9sgZTyPGQIwjoT3NhB1Bt3Ksi\nh7hnv8fHDPXzv7ptYpwfyRWDZpkCgYEAzed8S37GeZGbW5qqDyuKnWjG/UPPeTrw\n5DjCSyBVEF3kZrMSc+O2bgf87VFOHBTORzr5r0zNWy12r9w3Ky02z4cxeujulihz\n9ObY6aim6iRHwYpB0D5Eqs4R6mK189bKb9OD/F7USGy//tPP7hqfQC1JHJed4fwR\n0esIOFJ5250CgYAKwVCSPX+ZMhe3WhfBgSrFElQh8j9AMVsBcTbur6SyiSnyJm7p\nYP/3Z4m4yQtuIoxiAPZ9xsiuHCRn1ERFV+sWeB0Ertal7YYt4asoG0wUBs/VBKo+\nn7sCtAOXDoL/DdTaO1WmbnLgfVmt5nk1fQdS0HehAkEKnhsjQ06sy+KXEQKBgBuU\n9b57NgUU7zW/KyarE39wiK9mhQVdUuWPgN9lbl+p5C2psUAa8dYdddEoggka9GLw\nUIAeDqg3F94I5s7+2IfGOWeYilVNB/N3dPkf4XQd9grEBXrqzHIA9r9qB6upSybd\ns6F75n3pK3LsVr8zi7+iEVgmKz0Zch2nmUtKKQ61AoGAPHVizunifBjtKaQHFBdr\np5llidfBU6S0DsdRBG2PYxHB4TMc16gYpZicCIOsTavjS++ZBdtcL1VFiutavKop\nJhZbwH6PR76GJbdwUS3pl8s5+w21KtMxOwR8Oqoc/Sr+Bno37Yek/5CaVwnysEd0\nGWwVDi+xxRJnUIsVzdUBP+8="
+                  }
+                }
+              },
+              "message": {
+                "text": "build/resources/main/keyStore.pem"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "044d96f69749663b3e288898f298f05c2023c362b63a0dbcd1f606b7997f7256",
+            "glog-pfp-ruleFileCode/v1": "539b675102218aa8a3367e1a8505d609fbac447e0848521d20cc45f6f3556dea"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "539b675102218aa8a3367e1a8505d609fbac447e0848521d20cc45f6f3556dea"
           }
         },
         {
@@ -1069,6 +995,86 @@
           }
         },
         {
+          "ruleId": "428f6192-8ea6-3891-811b-85fa5c108fc9",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Fixed Password Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/MultiHttpSecurityConfig.java"
+                },
+                "region": {
+                  "startLine": 160,
+                  "startColumn": 35,
+                  "endLine": 160,
+                  "endColumn": 44,
+                  "snippet": {
+                    "text": "\"password\""
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "userDetailsService()",
+                  "fullyQualifiedName": "hawk.MultiHttpSecurityConfig.userDetailsService()",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "41a17364c95a127aa88d2fac1edd9675a3a27e30ba6fb2be27372bfdf3999e02",
+            "glog-pfp-ruleFileCode/v1": "c98cfeee8a24b03c411384a1b643842a8af3b0ed7cb79b60ea55a959bfb2b541"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "c98cfeee8a24b03c411384a1b643842a8af3b0ed7cb79b60ea55a959bfb2b541"
+          }
+        },
+        {
+          "ruleId": "4dcfa34f-0a4d-3635-a9fa-7cf9cfcccb3b",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Fixed Password Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/MultiHttpSecurityConfig.java"
+                },
+                "region": {
+                  "startLine": 167,
+                  "startColumn": 35,
+                  "endLine": 167,
+                  "endColumn": 44,
+                  "snippet": {
+                    "text": "\"password\""
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "userDetailsService()",
+                  "fullyQualifiedName": "hawk.MultiHttpSecurityConfig.userDetailsService()",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "bd2e6f161e0b243b003d47635c9e14628085d49c3b8ef8db1eb8e425c1db14a9",
+            "glog-pfp-ruleFileCode/v1": "ac48f2b67183410c5c0bba2916bb6020e399e01e2e87d7a538b0d52d5b6218db"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "ac48f2b67183410c5c0bba2916bb6020e399e01e2e87d7a538b0d52d5b6218db"
+          }
+        },
+        {
           "ruleId": "26802867-953d-3894-a91a-5ce43a52a634",
           "kind": "fail",
           "level": "warning",
@@ -1106,50 +1112,6 @@
           },
           "fingerprints": {
             "glog-fp-ruleFileCode/v1": "483b9790c99624acb309a9c505f0ab073dee23360e8fcff2915bdd0beee30861"
-          }
-        },
-        {
-          "ruleId": "a3ca461e-db59-3419-93ac-212539361720",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Found Spring endpoint",
-            "id": "default",
-            "arguments": [
-              "hawk.api.jwt.JwtItemController"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/java/hawk/api/jwt/JwtItemController.java"
-                },
-                "region": {
-                  "startLine": 36,
-                  "startColumn": 9,
-                  "endLine": 36,
-                  "endColumn": 40,
-                  "snippet": {
-                    "text": "Search search = new Search(text)"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "name": "search(String)",
-                  "fullyQualifiedName": "hawk.api.jwt.JwtItemController.search(String)",
-                  "kind": "function"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "bc16f52d740649639b81d23f0c878dee99fd251ba3cff31f875776d0e103854a",
-            "glog-pfp-ruleFileCode/v1": "198590dc467cd1745b2da24838a33e7f4b6985380d1ce04660d048b5b058872a"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "198590dc467cd1745b2da24838a33e7f4b6985380d1ce04660d048b5b058872a"
           }
         },
         {
@@ -1194,6 +1156,50 @@
           },
           "fingerprints": {
             "glog-fp-ruleFileCode/v1": "76c095814449437855ebf103205f05af5c206b8fc6eef79c20133549490c6153"
+          }
+        },
+        {
+          "ruleId": "a3ca461e-db59-3419-93ac-212539361720",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Found Spring endpoint",
+            "id": "default",
+            "arguments": [
+              "hawk.api.jwt.JwtItemController"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/api/jwt/JwtItemController.java"
+                },
+                "region": {
+                  "startLine": 36,
+                  "startColumn": 9,
+                  "endLine": 36,
+                  "endColumn": 40,
+                  "snippet": {
+                    "text": "Search search = new Search(text)"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "search(String)",
+                  "fullyQualifiedName": "hawk.api.jwt.JwtItemController.search(String)",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "bc16f52d740649639b81d23f0c878dee99fd251ba3cff31f875776d0e103854a",
+            "glog-pfp-ruleFileCode/v1": "198590dc467cd1745b2da24838a33e7f4b6985380d1ce04660d048b5b058872a"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "198590dc467cd1745b2da24838a33e7f4b6985380d1ce04660d048b5b058872a"
           }
         },
         {
@@ -1316,43 +1322,47 @@
           }
         },
         {
-          "ruleId": "6067bb0c-447a-31b2-b796-9a6252877b16",
+          "ruleId": "40486eef-b7b1-333f-b81f-8dd2868526d2",
           "kind": "fail",
           "level": "note",
           "message": {
-            "text": "Unreliable HTTP Headers Vulnerability"
+            "text": "Found Spring endpoint",
+            "id": "default",
+            "arguments": [
+              "hawk.api.jwt.JwtUserController"
+            ]
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/main/java/hawk/api/jwt/JwtTokenProvider.java"
+                  "uri": "src/main/java/hawk/api/jwt/JwtUserController.java"
                 },
                 "region": {
-                  "startLine": 67,
+                  "startLine": 38,
                   "startColumn": 9,
-                  "endLine": 67,
-                  "endColumn": 59,
+                  "endLine": 38,
+                  "endColumn": 40,
                   "snippet": {
-                    "text": "String bearerToken = req.getHeader(\"Authorization\")"
+                    "text": "Search search = new Search(text)"
                   }
                 }
               },
               "logicalLocations": [
                 {
-                  "name": "resolveToken(HttpServletRequest)",
-                  "fullyQualifiedName": "hawk.api.jwt.JwtTokenProvider.resolveToken(HttpServletRequest)",
+                  "name": "search(String)",
+                  "fullyQualifiedName": "hawk.api.jwt.JwtUserController.search(String)",
                   "kind": "function"
                 }
               ]
             }
           ],
           "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "ad9bc0cf3e5d5feb25a10317625e6066b159f0a4ecd2b5cd762e21f30192041f",
-            "glog-pfp-ruleFileCode/v1": "fba48c97e9e1f011dff74c2c3559eab33b500a2cf79c49e0314d2f4903606d77"
+            "glog-pfp-ruleFileLineCode/v1": "6251cda77c41af5fe746da0c4e8771d4b95688a183287624650201f20e3155c6",
+            "glog-pfp-ruleFileCode/v1": "d45aef1fbfacb2237ef09ff6e5ca062308c5da3cb3d2ad3814347553c4a05c4c"
           },
           "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "fba48c97e9e1f011dff74c2c3559eab33b500a2cf79c49e0314d2f4903606d77"
+            "glog-fp-ruleFileCode/v1": "d45aef1fbfacb2237ef09ff6e5ca062308c5da3cb3d2ad3814347553c4a05c4c"
           }
         },
         {
@@ -1441,6 +1451,46 @@
           },
           "fingerprints": {
             "glog-fp-ruleFileCode/v1": "eac14df9ed87424f33b3faf7880a1ce7fefb8ea1863c6d91917d481bccb5bd70"
+          }
+        },
+        {
+          "ruleId": "6067bb0c-447a-31b2-b796-9a6252877b16",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Unreliable HTTP Headers Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/api/jwt/JwtTokenProvider.java"
+                },
+                "region": {
+                  "startLine": 67,
+                  "startColumn": 9,
+                  "endLine": 67,
+                  "endColumn": 59,
+                  "snippet": {
+                    "text": "String bearerToken = req.getHeader(\"Authorization\")"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "resolveToken(HttpServletRequest)",
+                  "fullyQualifiedName": "hawk.api.jwt.JwtTokenProvider.resolveToken(HttpServletRequest)",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "ad9bc0cf3e5d5feb25a10317625e6066b159f0a4ecd2b5cd762e21f30192041f",
+            "glog-pfp-ruleFileCode/v1": "fba48c97e9e1f011dff74c2c3559eab33b500a2cf79c49e0314d2f4903606d77"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "fba48c97e9e1f011dff74c2c3559eab33b500a2cf79c49e0314d2f4903606d77"
           }
         },
         {
@@ -1662,50 +1712,6 @@
           }
         },
         {
-          "ruleId": "7637adb5-8381-3f60-95bb-bffc12d78a25",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Found Spring endpoint",
-            "id": "default",
-            "arguments": [
-              "hawk.controller.HiddenController"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/java/hawk/controller/HiddenController.java"
-                },
-                "region": {
-                  "startLine": 13,
-                  "startColumn": 15,
-                  "endLine": 13,
-                  "endColumn": 50,
-                  "snippet": {
-                    "text": "addAttribute(\"title\", \"Hidden Page\")"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "name": "index(Model)",
-                  "fullyQualifiedName": "hawk.controller.HiddenController.index(Model)",
-                  "kind": "function"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "30244cf514358ea705c225b2ea46983a16b6f0d6391541f8ff062dc50835a48e",
-            "glog-pfp-ruleFileCode/v1": "a5f7eccc61b05d8565869f0f0ec2bc34dd2e89dcc8607048aa9505dd2f7c9db2"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "a5f7eccc61b05d8565869f0f0ec2bc34dd2e89dcc8607048aa9505dd2f7c9db2"
-          }
-        },
-        {
           "ruleId": "f6a81377-dc72-37b4-8063-248b2e6d184b",
           "kind": "fail",
           "level": "note",
@@ -1794,47 +1800,47 @@
           }
         },
         {
-          "ruleId": "346a775d-6fa0-3016-8317-f51a06186c61",
+          "ruleId": "7637adb5-8381-3f60-95bb-bffc12d78a25",
           "kind": "fail",
           "level": "note",
           "message": {
             "text": "Found Spring endpoint",
             "id": "default",
             "arguments": [
-              "hawk.controller.IndexController"
+              "hawk.controller.HiddenController"
             ]
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/main/java/hawk/controller/IndexController.java"
+                  "uri": "src/main/java/hawk/controller/HiddenController.java"
                 },
                 "region": {
-                  "startLine": 30,
+                  "startLine": 13,
                   "startColumn": 15,
-                  "endLine": 30,
-                  "endColumn": 49,
+                  "endLine": 13,
+                  "endColumn": 50,
                   "snippet": {
-                    "text": "addAttribute(\"title\", \"Basic Auth\")"
+                    "text": "addAttribute(\"title\", \"Hidden Page\")"
                   }
                 }
               },
               "logicalLocations": [
                 {
-                  "name": "basicAuth(Model)",
-                  "fullyQualifiedName": "hawk.controller.IndexController.basicAuth(Model)",
+                  "name": "index(Model)",
+                  "fullyQualifiedName": "hawk.controller.HiddenController.index(Model)",
                   "kind": "function"
                 }
               ]
             }
           ],
           "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "7b19ee393bfc29c63d648665eee2e244c515bda7d2d5435ce4ce046f5db672a1",
-            "glog-pfp-ruleFileCode/v1": "a29e6145d1c05f7c56517f0904d4b6e306438217ce7e776dcbd442816f2fbe9e"
+            "glog-pfp-ruleFileLineCode/v1": "30244cf514358ea705c225b2ea46983a16b6f0d6391541f8ff062dc50835a48e",
+            "glog-pfp-ruleFileCode/v1": "a5f7eccc61b05d8565869f0f0ec2bc34dd2e89dcc8607048aa9505dd2f7c9db2"
           },
           "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "a29e6145d1c05f7c56517f0904d4b6e306438217ce7e776dcbd442816f2fbe9e"
+            "glog-fp-ruleFileCode/v1": "a5f7eccc61b05d8565869f0f0ec2bc34dd2e89dcc8607048aa9505dd2f7c9db2"
           }
         },
         {
@@ -1926,7 +1932,7 @@
           }
         },
         {
-          "ruleId": "c488398d-6373-300e-9674-8539eae45250",
+          "ruleId": "346a775d-6fa0-3016-8317-f51a06186c61",
           "kind": "fail",
           "level": "note",
           "message": {
@@ -1943,30 +1949,30 @@
                   "uri": "src/main/java/hawk/controller/IndexController.java"
                 },
                 "region": {
-                  "startLine": 24,
+                  "startLine": 30,
                   "startColumn": 15,
-                  "endLine": 24,
+                  "endLine": 30,
                   "endColumn": 49,
                   "snippet": {
-                    "text": "addAttribute(\"title\", \"Token Auth\")"
+                    "text": "addAttribute(\"title\", \"Basic Auth\")"
                   }
                 }
               },
               "logicalLocations": [
                 {
-                  "name": "tokenAuth(Model)",
-                  "fullyQualifiedName": "hawk.controller.IndexController.tokenAuth(Model)",
+                  "name": "basicAuth(Model)",
+                  "fullyQualifiedName": "hawk.controller.IndexController.basicAuth(Model)",
                   "kind": "function"
                 }
               ]
             }
           ],
           "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "c6087ff60c1a444b05278f1994cdc2d5dbe08b7c54857aa7134dc8dccd5922bc",
-            "glog-pfp-ruleFileCode/v1": "329887d812774938ebdee16bd4714f0519d6b02c5949dfea7cdd9f7be222a611"
+            "glog-pfp-ruleFileLineCode/v1": "7b19ee393bfc29c63d648665eee2e244c515bda7d2d5435ce4ce046f5db672a1",
+            "glog-pfp-ruleFileCode/v1": "a29e6145d1c05f7c56517f0904d4b6e306438217ce7e776dcbd442816f2fbe9e"
           },
           "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "329887d812774938ebdee16bd4714f0519d6b02c5949dfea7cdd9f7be222a611"
+            "glog-fp-ruleFileCode/v1": "a29e6145d1c05f7c56517f0904d4b6e306438217ce7e776dcbd442816f2fbe9e"
           }
         },
         {
@@ -2014,91 +2020,47 @@
           }
         },
         {
-          "ruleId": "866102c1-8960-3baa-8720-83f1f7ece441",
+          "ruleId": "c488398d-6373-300e-9674-8539eae45250",
           "kind": "fail",
           "level": "note",
           "message": {
             "text": "Found Spring endpoint",
             "id": "default",
             "arguments": [
-              "hawk.controller.LoginController"
+              "hawk.controller.IndexController"
             ]
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/main/java/hawk/controller/LoginController.java"
+                  "uri": "src/main/java/hawk/controller/IndexController.java"
                 },
                 "region": {
-                  "startLine": 110,
-                  "startColumn": 9,
-                  "endLine": 110,
-                  "endColumn": 48,
+                  "startLine": 24,
+                  "startColumn": 15,
+                  "endLine": 24,
+                  "endColumn": 49,
                   "snippet": {
-                    "text": "String sessId = req.getSession().getId()"
+                    "text": "addAttribute(\"title\", \"Token Auth\")"
                   }
                 }
               },
               "logicalLocations": [
                 {
-                  "name": "loginCheck(HttpServletRequest, HttpServletResponse, Model, String)",
-                  "fullyQualifiedName": "hawk.controller.LoginController.loginCheck(HttpServletRequest, HttpServletResponse, Model, String)",
+                  "name": "tokenAuth(Model)",
+                  "fullyQualifiedName": "hawk.controller.IndexController.tokenAuth(Model)",
                   "kind": "function"
                 }
               ]
             }
           ],
           "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "0463fa5b5df7d13b244c7a9aba3c1ee706cf78d620648aef34162d33a2af5237",
-            "glog-pfp-ruleFileCode/v1": "1d4801a0af368cf83c694e1058c40eef29d60679a6bcd03b3ca9fdc6c5131aac"
+            "glog-pfp-ruleFileLineCode/v1": "c6087ff60c1a444b05278f1994cdc2d5dbe08b7c54857aa7134dc8dccd5922bc",
+            "glog-pfp-ruleFileCode/v1": "329887d812774938ebdee16bd4714f0519d6b02c5949dfea7cdd9f7be222a611"
           },
           "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "1d4801a0af368cf83c694e1058c40eef29d60679a6bcd03b3ca9fdc6c5131aac"
-          }
-        },
-        {
-          "ruleId": "40486eef-b7b1-333f-b81f-8dd2868526d2",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Found Spring endpoint",
-            "id": "default",
-            "arguments": [
-              "hawk.api.jwt.JwtUserController"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/java/hawk/api/jwt/JwtUserController.java"
-                },
-                "region": {
-                  "startLine": 38,
-                  "startColumn": 9,
-                  "endLine": 38,
-                  "endColumn": 40,
-                  "snippet": {
-                    "text": "Search search = new Search(text)"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "name": "search(String)",
-                  "fullyQualifiedName": "hawk.api.jwt.JwtUserController.search(String)",
-                  "kind": "function"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "6251cda77c41af5fe746da0c4e8771d4b95688a183287624650201f20e3155c6",
-            "glog-pfp-ruleFileCode/v1": "d45aef1fbfacb2237ef09ff6e5ca062308c5da3cb3d2ad3814347553c4a05c4c"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "d45aef1fbfacb2237ef09ff6e5ca062308c5da3cb3d2ad3814347553c4a05c4c"
+            "glog-fp-ruleFileCode/v1": "329887d812774938ebdee16bd4714f0519d6b02c5949dfea7cdd9f7be222a611"
           }
         },
         {
@@ -2187,6 +2149,50 @@
           },
           "fingerprints": {
             "glog-fp-ruleFileCode/v1": "e356d05eadb714d01a0dd393f686a5e8b28af5bb788013cce9ce76e278382fa4"
+          }
+        },
+        {
+          "ruleId": "866102c1-8960-3baa-8720-83f1f7ece441",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Found Spring endpoint",
+            "id": "default",
+            "arguments": [
+              "hawk.controller.LoginController"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/controller/LoginController.java"
+                },
+                "region": {
+                  "startLine": 110,
+                  "startColumn": 9,
+                  "endLine": 110,
+                  "endColumn": 48,
+                  "snippet": {
+                    "text": "String sessId = req.getSession().getId()"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "loginCheck(HttpServletRequest, HttpServletResponse, Model, String)",
+                  "fullyQualifiedName": "hawk.controller.LoginController.loginCheck(HttpServletRequest, HttpServletResponse, Model, String)",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "0463fa5b5df7d13b244c7a9aba3c1ee706cf78d620648aef34162d33a2af5237",
+            "glog-pfp-ruleFileCode/v1": "1d4801a0af368cf83c694e1058c40eef29d60679a6bcd03b3ca9fdc6c5131aac"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "1d4801a0af368cf83c694e1058c40eef29d60679a6bcd03b3ca9fdc6c5131aac"
           }
         },
         {
@@ -2530,117 +2536,6 @@
           }
         },
         {
-          "ruleId": "bc8d1490-d25a-3495-ac6a-96690d855517",
-          "kind": "fail",
-          "level": "error",
-          "message": {
-            "text": "High-Risk Dockerfile Vulnerability: Lack of Non-Root User Specification"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "Dockerfile",
-                  "uriBaseId": "ROOTPATH"
-                },
-                "region": {
-                  "startLine": 1,
-                  "startColumn": 1,
-                  "endLine": 1,
-                  "endColumn": 1,
-                  "snippet": {
-                    "text": "FROM eclipse-temurin:17-jdk-jammy"
-                  }
-                }
-              },
-              "message": {
-                "text": "Dockerfile"
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "cc01dfd2946e50dff6861d3988ed694f1210186d23722393917794fcdaf7983f",
-            "glog-pfp-ruleFileCode/v1": "a2db13e2cbbdd619dccaa0fa3203030ef1c36f7243e3535676d08791f9bbd155"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "a2db13e2cbbdd619dccaa0fa3203030ef1c36f7243e3535676d08791f9bbd155"
-          }
-        },
-        {
-          "ruleId": "78f0c135-fcd8-31c1-ab65-3ddd0ad600bd",
-          "kind": "fail",
-          "level": "error",
-          "message": {
-            "text": "\"Exposed Asymmetric Private Key in Resource Files\""
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/resources/keyStore.pem",
-                  "uriBaseId": "ROOTPATH"
-                },
-                "region": {
-                  "startLine": 6,
-                  "startColumn": 1,
-                  "endLine": 31,
-                  "endColumn": 1,
-                  "snippet": {
-                    "text": "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ\n+JKBb4tcwJ1m5lTYccZbvsvCkCdQF0Ge0PhqYK8I9XyFTMPDv88h1Q+qDVlkqV5v\nVKFeR6v/REOH0AFJ4qC/mmhb9h3LnvyU6KtsZ4KWUfNfGhbpYxVTLU98CzqO9VTN\nxVCreXkTWCpbFTHGyb31sNG3xobL5PLgtNPECaDTJeiY0Z2ID/6fARWv4zn0luQS\ngDRLE2K73i2YjgD05OwdNRHklfnQKZLdkXX/TMVqzNT0Hg9a/thBQAIuozwK1SVs\nOfry/xFGWii19nDR4PaYjT0Xt/BQIt6tk4rg2Xt1XrTRxzrdzSIpHPQoO9g1nl9F\n/yoaq87VAgMBAAECggEBAK47UMfDmrxvu9E+lUJWdhWhQ6L47WPcmL22YaAFtIIA\n8EkpW9Ay4e56A06EgINdh7S4SqmqpxYRY3v90Vfli8MGB9yqPnXtJEKRo7ONHMHh\nHheP8cAWfiFSjDfC5HXDGpFNqpUjeMQCyzmixXaHQMFLkmAwI81hQ6JO6FvKrEz5\n2WCja/OyBwlAybpZgzKTkKGXSBY8NrcWfm8QEZHaJkDDw0aBhgANB2+He6dJCfyM\n1NqauTvbTjeYb5XXQffMhCbYmZM0+f/R4vF3N39lGkcaHMCh9r7c1+lsUKT4oT6p\nYRwvUP3uzBfKIUJJCqw4PD30JDcT+CxMnXn27KLu0cECgYEA3zKxAfOAySz7vVmV\nnIc8p7q09QGOYkx1m3+gAyCJqUAUX1ypPw+C3rk9zAThnZYsJL//5daxw8FMXCSm\nJkcMB2Sj0FKhiqIi+LEgu0tni4COVaTTCG27IXs9sgZTyPGQIwjoT3NhB1Bt3Ksi\nh7hnv8fHDPXzv7ptYpwfyRWDZpkCgYEAzed8S37GeZGbW5qqDyuKnWjG/UPPeTrw\n5DjCSyBVEF3kZrMSc+O2bgf87VFOHBTORzr5r0zNWy12r9w3Ky02z4cxeujulihz\n9ObY6aim6iRHwYpB0D5Eqs4R6mK189bKb9OD/F7USGy//tPP7hqfQC1JHJed4fwR\n0esIOFJ5250CgYAKwVCSPX+ZMhe3WhfBgSrFElQh8j9AMVsBcTbur6SyiSnyJm7p\nYP/3Z4m4yQtuIoxiAPZ9xsiuHCRn1ERFV+sWeB0Ertal7YYt4asoG0wUBs/VBKo+\nn7sCtAOXDoL/DdTaO1WmbnLgfVmt5nk1fQdS0HehAkEKnhsjQ06sy+KXEQKBgBuU\n9b57NgUU7zW/KyarE39wiK9mhQVdUuWPgN9lbl+p5C2psUAa8dYdddEoggka9GLw\nUIAeDqg3F94I5s7+2IfGOWeYilVNB/N3dPkf4XQd9grEBXrqzHIA9r9qB6upSybd\ns6F75n3pK3LsVr8zi7+iEVgmKz0Zch2nmUtKKQ61AoGAPHVizunifBjtKaQHFBdr\np5llidfBU6S0DsdRBG2PYxHB4TMc16gYpZicCIOsTavjS++ZBdtcL1VFiutavKop\nJhZbwH6PR76GJbdwUS3pl8s5+w21KtMxOwR8Oqoc/Sr+Bno37Yek/5CaVwnysEd0\nGWwVDi+xxRJnUIsVzdUBP+8="
-                  }
-                }
-              },
-              "message": {
-                "text": "src/main/resources/keyStore.pem"
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "763419e3ed38141479848303552de3ddc33fa1609b3e8e08b8224690218d0e2b",
-            "glog-pfp-ruleFileCode/v1": "a84fe89386abd576deb23381498aee92486568e5436bedb386938e8b5e000a45"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "a84fe89386abd576deb23381498aee92486568e5436bedb386938e8b5e000a45"
-          }
-        },
-        {
-          "ruleId": "0a84dd25-d52a-366d-8470-9d54d7141b9f",
-          "kind": "fail",
-          "level": "error",
-          "message": {
-            "text": "Exposed Asymmetric Private Key in Build Resources"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "build/resources/main/keyStore.pem",
-                  "uriBaseId": "ROOTPATH"
-                },
-                "region": {
-                  "startLine": 6,
-                  "startColumn": 1,
-                  "endLine": 31,
-                  "endColumn": 1,
-                  "snippet": {
-                    "text": "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ\n+JKBb4tcwJ1m5lTYccZbvsvCkCdQF0Ge0PhqYK8I9XyFTMPDv88h1Q+qDVlkqV5v\nVKFeR6v/REOH0AFJ4qC/mmhb9h3LnvyU6KtsZ4KWUfNfGhbpYxVTLU98CzqO9VTN\nxVCreXkTWCpbFTHGyb31sNG3xobL5PLgtNPECaDTJeiY0Z2ID/6fARWv4zn0luQS\ngDRLE2K73i2YjgD05OwdNRHklfnQKZLdkXX/TMVqzNT0Hg9a/thBQAIuozwK1SVs\nOfry/xFGWii19nDR4PaYjT0Xt/BQIt6tk4rg2Xt1XrTRxzrdzSIpHPQoO9g1nl9F\n/yoaq87VAgMBAAECggEBAK47UMfDmrxvu9E+lUJWdhWhQ6L47WPcmL22YaAFtIIA\n8EkpW9Ay4e56A06EgINdh7S4SqmqpxYRY3v90Vfli8MGB9yqPnXtJEKRo7ONHMHh\nHheP8cAWfiFSjDfC5HXDGpFNqpUjeMQCyzmixXaHQMFLkmAwI81hQ6JO6FvKrEz5\n2WCja/OyBwlAybpZgzKTkKGXSBY8NrcWfm8QEZHaJkDDw0aBhgANB2+He6dJCfyM\n1NqauTvbTjeYb5XXQffMhCbYmZM0+f/R4vF3N39lGkcaHMCh9r7c1+lsUKT4oT6p\nYRwvUP3uzBfKIUJJCqw4PD30JDcT+CxMnXn27KLu0cECgYEA3zKxAfOAySz7vVmV\nnIc8p7q09QGOYkx1m3+gAyCJqUAUX1ypPw+C3rk9zAThnZYsJL//5daxw8FMXCSm\nJkcMB2Sj0FKhiqIi+LEgu0tni4COVaTTCG27IXs9sgZTyPGQIwjoT3NhB1Bt3Ksi\nh7hnv8fHDPXzv7ptYpwfyRWDZpkCgYEAzed8S37GeZGbW5qqDyuKnWjG/UPPeTrw\n5DjCSyBVEF3kZrMSc+O2bgf87VFOHBTORzr5r0zNWy12r9w3Ky02z4cxeujulihz\n9ObY6aim6iRHwYpB0D5Eqs4R6mK189bKb9OD/F7USGy//tPP7hqfQC1JHJed4fwR\n0esIOFJ5250CgYAKwVCSPX+ZMhe3WhfBgSrFElQh8j9AMVsBcTbur6SyiSnyJm7p\nYP/3Z4m4yQtuIoxiAPZ9xsiuHCRn1ERFV+sWeB0Ertal7YYt4asoG0wUBs/VBKo+\nn7sCtAOXDoL/DdTaO1WmbnLgfVmt5nk1fQdS0HehAkEKnhsjQ06sy+KXEQKBgBuU\n9b57NgUU7zW/KyarE39wiK9mhQVdUuWPgN9lbl+p5C2psUAa8dYdddEoggka9GLw\nUIAeDqg3F94I5s7+2IfGOWeYilVNB/N3dPkf4XQd9grEBXrqzHIA9r9qB6upSybd\ns6F75n3pK3LsVr8zi7+iEVgmKz0Zch2nmUtKKQ61AoGAPHVizunifBjtKaQHFBdr\np5llidfBU6S0DsdRBG2PYxHB4TMc16gYpZicCIOsTavjS++ZBdtcL1VFiutavKop\nJhZbwH6PR76GJbdwUS3pl8s5+w21KtMxOwR8Oqoc/Sr+Bno37Yek/5CaVwnysEd0\nGWwVDi+xxRJnUIsVzdUBP+8="
-                  }
-                }
-              },
-              "message": {
-                "text": "build/resources/main/keyStore.pem"
-              }
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "044d96f69749663b3e288898f298f05c2023c362b63a0dbcd1f606b7997f7256",
-            "glog-pfp-ruleFileCode/v1": "539b675102218aa8a3367e1a8505d609fbac447e0848521d20cc45f6f3556dea"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "539b675102218aa8a3367e1a8505d609fbac447e0848521d20cc45f6f3556dea"
-          }
-        },
-        {
           "ruleId": "10fb63e3-85d0-347e-9e79-c3419a3b0650",
           "kind": "fail",
           "level": "warning",
@@ -2672,6 +2567,111 @@
           },
           "fingerprints": {
             "glog-fp-ruleFileCode/v1": "ebd1393711ab07b860d4a9239ddcae8b69d18a7e418c770dc7ed320f32d038e9"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "6874cf9b-e97b-39bc-8156-8ff0d1172299",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "XSS Vulnerability from User-Controlled Data in HTML String"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "hawkscripts/authentication/form-auth-multi.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 48,
+                  "startColumn": 3,
+                  "endLine": 48,
+                  "endColumn": 68,
+                  "snippet": {
+                    "text": "  return `${hawkConf[\"app\"][\"host\"]}${paramsValues.get(paramName)}`"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "fe63742e2f8d92695c776dd52122df33f3250e0f6f43c118cd0a531934d4f9e8",
+            "glog-pfp-ruleFileCode/v1": "1bef8c42bf9fd248ff79a488b54430f444ac9667fa3984f53981e6afe7adc56b"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "1bef8c42bf9fd248ff79a488b54430f444ac9667fa3984f53981e6afe7adc56b"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "c715549b-a9b6-3a33-b131-6d91bbc2d851",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "XSS Vulnerability from User-Controlled Data in HTML String"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "hawkscripts/authentication/form-auth-multi.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 59,
+                  "startColumn": 5,
+                  "endLine": 59,
+                  "endColumn": 55,
+                  "snippet": {
+                    "text": "    str += `${urlEncode(key)}=${urlEncode(obj[key])}`;"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "46c0708921fb21867f6bbef56108d8e6c6a26dc949dc4573f62220936a16cb5e",
+            "glog-pfp-ruleFileCode/v1": "12cb9afa6ea742d7638207bfb0c811e06d4935b4fad2d4500ca741629c8c236e"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "12cb9afa6ea742d7638207bfb0c811e06d4935b4fad2d4500ca741629c8c236e"
+          },
+          "properties": {}
+        },
+        {
+          "ruleId": "4923fc7d-94f8-3cc9-89f2-91769612e757",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "\"Potential XSS Vulnerability from User-Controlled Data in HTML String\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "hawkscripts/authentication/form-auth-multi.js",
+                  "uriBaseId": "%SRCROOT%"
+                },
+                "region": {
+                  "startLine": 139,
+                  "startColumn": 3,
+                  "endLine": 139,
+                  "endColumn": 118,
+                  "snippet": {
+                    "text": "  return `${msg.requestHeader}\\r\\n\\r\\n${msg.requestBody}\\r\\n---\\r\\n${msg.responseHeader}\\r\\n\\r\\n${msg.responseBody}`;"
+                  }
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "35c09933adf825c6ae1524f096406251cffab0fb3feea4aba7a7d01427f72809",
+            "glog-pfp-ruleFileCode/v1": "fd48250c61bc770267710a06698f6a8f9ef1518f1ada4c28adc506d0ffd9cb42"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "fd48250c61bc770267710a06698f6a8f9ef1518f1ada4c28adc506d0ffd9cb42"
           },
           "properties": {}
         }
