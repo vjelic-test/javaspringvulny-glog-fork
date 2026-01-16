@@ -1,4 +1,4 @@
-Jan 15, 2026 3:39:06 PM ai.glog.plugins.spotbugs.bug.resolve.SpringMvcEndpointResolver getDetailText
+Jan 16, 2026 12:19:21 AM ai.glog.plugins.spotbugs.bug.resolve.SpringMvcEndpointResolver getDetailText
 SEVERE: next on empty iterator
 java.util.NoSuchElementException: next on empty iterator
 	at scala.collection.Iterator$$anon$19.next(Iterator.scala:973)
@@ -29,19 +29,21 @@ java.util.NoSuchElementException: next on empty iterator
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
 	at java.base/java.lang.Thread.run(Thread.java:1623)
 
-Jan 15, 2026 3:39:07 PM ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver getSinkCpg
-SEVERE: next on empty iterator
-java.util.NoSuchElementException: next on empty iterator
-	at scala.collection.Iterator$$anon$19.next(Iterator.scala:973)
-	at scala.collection.Iterator$$anon$19.next(Iterator.scala:971)
-	at scala.collection.Iterator$$anon$6.next(Iterator.scala:492)
-	at flatgraph.traversal.GenericSteps$.head$extension(Language.scala:80)
-	at ai.glog.cpg.analysis.SinkAnalyzer$.getSink(SinkAnalyzer.scala:27)
-	at ai.glog.cpg.analysis.SinkAnalyzer.getSink(SinkAnalyzer.scala)
-	at ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver.getSinkCpg(SqlInjectionResolver.java:181)
-	at ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver.remediation(SqlInjectionResolver.java:96)
+Jan 16, 2026 12:19:22 AM ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver remediation
+SEVERE: getMethod: no Method found for typeFQDN='hawk.service.UserSearchService' (or inner), methodName='lambda$search$0'
+java.util.NoSuchElementException: getMethod: no Method found for typeFQDN='hawk.service.UserSearchService' (or inner), methodName='lambda$search$0'
+	at ai.glog.cpg.analysis.MethodAnalyzer$.getMethod$$anonfun$1$$anonfun$1(MethodAnalyzer.scala:180)
+	at scala.Option.getOrElse(Option.scala:201)
+	at ai.glog.cpg.analysis.MethodAnalyzer$.getMethod$$anonfun$1(MethodAnalyzer.scala:182)
+	at scala.Option.getOrElse(Option.scala:201)
+	at ai.glog.cpg.analysis.MethodAnalyzer$.getMethod(MethodAnalyzer.scala:183)
+	at ai.glog.cpg.analysis.MethodAnalyzer$.getMethodCodeSignature(MethodAnalyzer.scala:158)
+	at ai.glog.cpg.analysis.MethodAnalyzer.getMethodCodeSignature(MethodAnalyzer.scala)
+	at ai.glog.service.GlogService.getVulnerableCodeRemediations(GlogService.java:46)
+	at ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver.fixSQLInjection(SqlInjectionResolver.java:86)
+	at ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver.remediation(SqlInjectionResolver.java:106)
 	at java.base/java.util.concurrent.ConcurrentHashMap.computeIfAbsent(ConcurrentHashMap.java:1708)
-	at ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver.isFalsePositive(SqlInjectionResolver.java:72)
+	at ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver.isFalsePositive(SqlInjectionResolver.java:73)
 	at ai.glog.execute.workers.TriageAndRemediationCallableWorker.isFalsePositive(TriageAndRemediationCallableWorker.java:160)
 	at ai.glog.execute.workers.TriageAndRemediationCallableWorker.call(TriageAndRemediationCallableWorker.java:67)
 	at ai.glog.execute.workers.TriageAndRemediationCallableWorker.call(TriageAndRemediationCallableWorker.java:32)
@@ -50,61 +52,19 @@ java.util.NoSuchElementException: next on empty iterator
 	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
 	at java.base/java.lang.Thread.run(Thread.java:1623)
 
-Jan 15, 2026 3:39:07 PM ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver getSinkCpg
-SEVERE: next on empty iterator
-java.util.NoSuchElementException: next on empty iterator
-	at scala.collection.Iterator$$anon$19.next(Iterator.scala:973)
-	at scala.collection.Iterator$$anon$19.next(Iterator.scala:971)
-	at scala.collection.Iterator$$anon$6.next(Iterator.scala:492)
-	at flatgraph.traversal.GenericSteps$.head$extension(Language.scala:80)
-	at ai.glog.cpg.analysis.SinkAnalyzer$.getSink(SinkAnalyzer.scala:22)
+Jan 16, 2026 12:19:22 AM ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver getSinkCpg
+SEVERE: getSink: no Expression found for typeFQDN='hawk.service.UserSearchService' (or inner), method='lambda$search$0', line=36
+java.util.NoSuchElementException: getSink: no Expression found for typeFQDN='hawk.service.UserSearchService' (or inner), method='lambda$search$0', line=36
+	at ai.glog.cpg.analysis.SinkAnalyzer$.getSink$$anonfun$1$$anonfun$1(SinkAnalyzer.scala:39)
+	at scala.Option.getOrElse(Option.scala:201)
+	at ai.glog.cpg.analysis.SinkAnalyzer$.getSink$$anonfun$1(SinkAnalyzer.scala:41)
+	at scala.Option.getOrElse(Option.scala:201)
+	at ai.glog.cpg.analysis.SinkAnalyzer$.getSink(SinkAnalyzer.scala:42)
 	at ai.glog.cpg.analysis.SinkAnalyzer.getSink(SinkAnalyzer.scala)
-	at ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver.getSinkCpg(SqlInjectionResolver.java:178)
-	at ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver.remediation(SqlInjectionResolver.java:96)
+	at ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver.getSinkCpg(SqlInjectionResolver.java:185)
+	at ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver.remediation(SqlInjectionResolver.java:100)
 	at java.base/java.util.concurrent.ConcurrentHashMap.computeIfAbsent(ConcurrentHashMap.java:1708)
-	at ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver.isFalsePositive(SqlInjectionResolver.java:72)
-	at ai.glog.execute.workers.TriageAndRemediationCallableWorker.isFalsePositive(TriageAndRemediationCallableWorker.java:160)
-	at ai.glog.execute.workers.TriageAndRemediationCallableWorker.call(TriageAndRemediationCallableWorker.java:67)
-	at ai.glog.execute.workers.TriageAndRemediationCallableWorker.call(TriageAndRemediationCallableWorker.java:32)
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
-	at java.base/java.lang.Thread.run(Thread.java:1623)
-
-Jan 15, 2026 3:39:07 PM ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver getSinkCpg
-SEVERE: next on empty iterator
-java.util.NoSuchElementException: next on empty iterator
-	at scala.collection.Iterator$$anon$19.next(Iterator.scala:973)
-	at scala.collection.Iterator$$anon$19.next(Iterator.scala:971)
-	at scala.collection.Iterator$$anon$6.next(Iterator.scala:492)
-	at flatgraph.traversal.GenericSteps$.head$extension(Language.scala:80)
-	at ai.glog.cpg.analysis.SinkAnalyzer$.getSink(SinkAnalyzer.scala:27)
-	at ai.glog.cpg.analysis.SinkAnalyzer.getSink(SinkAnalyzer.scala)
-	at ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver.getSinkCpg(SqlInjectionResolver.java:181)
-	at ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver.remediation(SqlInjectionResolver.java:96)
-	at java.base/java.util.concurrent.ConcurrentHashMap.computeIfAbsent(ConcurrentHashMap.java:1708)
-	at ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver.isFalsePositive(SqlInjectionResolver.java:72)
-	at ai.glog.execute.workers.TriageAndRemediationCallableWorker.isFalsePositive(TriageAndRemediationCallableWorker.java:160)
-	at ai.glog.execute.workers.TriageAndRemediationCallableWorker.call(TriageAndRemediationCallableWorker.java:67)
-	at ai.glog.execute.workers.TriageAndRemediationCallableWorker.call(TriageAndRemediationCallableWorker.java:32)
-	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
-	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
-	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
-	at java.base/java.lang.Thread.run(Thread.java:1623)
-
-Jan 15, 2026 3:39:07 PM ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver getSinkCpg
-SEVERE: next on empty iterator
-java.util.NoSuchElementException: next on empty iterator
-	at scala.collection.Iterator$$anon$19.next(Iterator.scala:973)
-	at scala.collection.Iterator$$anon$19.next(Iterator.scala:971)
-	at scala.collection.Iterator$$anon$6.next(Iterator.scala:492)
-	at flatgraph.traversal.GenericSteps$.head$extension(Language.scala:80)
-	at ai.glog.cpg.analysis.SinkAnalyzer$.getSink(SinkAnalyzer.scala:22)
-	at ai.glog.cpg.analysis.SinkAnalyzer.getSink(SinkAnalyzer.scala)
-	at ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver.getSinkCpg(SqlInjectionResolver.java:178)
-	at ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver.remediation(SqlInjectionResolver.java:96)
-	at java.base/java.util.concurrent.ConcurrentHashMap.computeIfAbsent(ConcurrentHashMap.java:1708)
-	at ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver.isFalsePositive(SqlInjectionResolver.java:72)
+	at ai.glog.plugins.spotbugs.bug.resolve.SqlInjectionResolver.isFalsePositive(SqlInjectionResolver.java:73)
 	at ai.glog.execute.workers.TriageAndRemediationCallableWorker.isFalsePositive(TriageAndRemediationCallableWorker.java:160)
 	at ai.glog.execute.workers.TriageAndRemediationCallableWorker.call(TriageAndRemediationCallableWorker.java:67)
 	at ai.glog.execute.workers.TriageAndRemediationCallableWorker.call(TriageAndRemediationCallableWorker.java:32)

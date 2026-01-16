@@ -34,6 +34,28 @@
               }
             },
             {
+              "id": "0a84dd25-d52a-366d-8470-9d54d7141b9f",
+              "name": "Exposed Asymmetric Private Key in Build Resources",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe \"Exposed Asymmetric Private Key in Build Resources\" vulnerability refers to the situation where a private key is hard-coded or embedded within the Docker build resources. This is a serious security concern as it exposes sensitive information that could be exploited by malicious actors to gain unauthorized access to systems or data.\n\n## Security Concern\n\nPrivate keys are meant to be kept secret and used to verify the identity of the sender (in asymmetric encryption) or to decrypt data (in symmetric encryption). If a private key is exposed, it can be used by an attacker to impersonate the legitimate owner, decrypt sensitive data, or even launch further attacks. In the context of Docker, an exposed private key could allow an attacker to gain unauthorized access to the Docker container or the host system.\n\n## Mitigation Advice\n\n- Never hard-code or embed private keys in your Docker build resources or any part of your application. \n- Use environment variables or secure vault services to handle keys and other sensitive information.\n- Regularly use tools to scan your codebase for exposed keys or other sensitive information.\n\n## Source Code Fix Recommendation\n\nThe provided code is an RSA private key. It should not be exposed or hard-coded in the application. Instead, use Docker secrets or environment variables to handle such sensitive data. \n\nFor example, you can use Docker secrets as follows:\n\n```bash\necho \"MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ...\" | docker secret create my_secret_key -\n```\n\nThen use it in your Docker service:\n\n```bash\ndocker service  create --name my_service --secret my_secret_key my_image\n```\n\nIn your application, you can then access the secret from `/run/secrets/my_secret_key`.\n\n## Library Dependencies\n\nThe provided code does not require any library dependencies as it is a private key.\n\n## References\n\n- [OWASP - Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-798: Use of Hard-coded Credentials](https://cwe.mitre.org/data/definitions/798.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-798",
+                    "url": "https://cwe.mitre.org/data/definitions/798.html"
+                  }
+                ],
+                "severity": "HIGH",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-798"
+                ]
+              }
+            },
+            {
               "id": "78f0c135-fcd8-31c1-ab65-3ddd0ad600bd",
               "name": "\"Exposed Asymmetric Private Key in Resource Files\"",
               "helpUri": "https://www.glog.ai/",
@@ -56,24 +78,46 @@
               }
             },
             {
-              "id": "0a84dd25-d52a-366d-8470-9d54d7141b9f",
-              "name": "Exposed Asymmetric Private Key in Build Resources",
+              "id": "4dcfa34f-0a4d-3635-a9fa-7cf9cfcccb3b",
+              "name": "Fixed Password Vulnerability",
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nThe \"Exposed Asymmetric Private Key in Build Resources\" vulnerability refers to the situation where a private key is hard-coded or embedded within the Docker build resources. This is a serious security concern as it exposes sensitive information that could be exploited by malicious actors to gain unauthorized access to systems or data.\n\n## Security Concern\n\nPrivate keys are meant to be kept secret and used to verify the identity of the sender (in asymmetric encryption) or to decrypt data (in symmetric encryption). If a private key is exposed, it can be used by an attacker to impersonate the legitimate owner, decrypt sensitive data, or even launch further attacks. In the context of Docker, an exposed private key could allow an attacker to gain unauthorized access to the Docker container or the host system.\n\n## Mitigation Advice\n\n- Never hard-code or embed private keys in your Docker build resources or any part of your application. \n- Use environment variables or secure vault services to handle keys and other sensitive information.\n- Regularly use tools to scan your codebase for exposed keys or other sensitive information.\n\n## Source Code Fix Recommendation\n\nThe provided code is an RSA private key. It should not be exposed or hard-coded in the application. Instead, use Docker secrets or environment variables to handle such sensitive data. \n\nFor example, you can use Docker secrets as follows:\n\n```bash\necho \"MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ...\" | docker secret create my_secret_key -\n```\n\nThen use it in your Docker service:\n\n```bash\ndocker service  create --name my_service --secret my_secret_key my_image\n```\n\nIn your application, you can then access the secret from `/run/secrets/my_secret_key`.\n\n## Library Dependencies\n\nThe provided code does not require any library dependencies as it is a private key.\n\n## References\n\n- [OWASP - Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-798: Use of Hard-coded Credentials](https://cwe.mitre.org/data/definitions/798.html)"
+                "markdown": "## Description\n\nFixed Password Vulnerability in Java refers to the insecure practice of hardcoding passwords directly into the source code. This is a serious security risk because anyone who has access to the source code can easily read the password. This vulnerability can lead to unauthorized access, data breaches, and other security issues.\n\n## Mitigation Advice\n\nAvoid hardcoding passwords in your source code. Instead, use environment variables, configuration files, or secure password management solutions to store passwords. These methods allow you to change passwords without modifying and redeploying your code. \n\nEnsure that the storage method you choose is secure. For example, if you use configuration files, make sure they are not included in the version control system and are properly protected by file system permissions.\n\n## Source Code Fix Recommendation\n\nInstead of hardcoding the password like this:\n\n```java\nString password = \"password\";\n```\n\nYou can use an environment variable:\n\n```java\nString password = System.getenv(\"PASSWORD\");\n```\n\nOr a properties file:\n\n```java\nProperties prop = new Properties();\nInputStream input = new FileInputStream(\"config.properties\");\nprop.load(input);\nString password = prop.getProperty(\"password\");\n```\n\n## Library Dependencies\n\nFor the properties file example, you need the `java.util.Properties` and `java.io` libraries, which are included in the Java standard library.\n\n## References\n\n- [CWE-259: Use of Hard-coded Password](https://cwe.mitre.org/data/definitions/259.html)"
               },
               "properties": {
                 "cwe": [
                   {
-                    "id": "CWE-798",
-                    "url": "https://cwe.mitre.org/data/definitions/798.html"
+                    "id": "CWE-259",
+                    "url": "https://cwe.mitre.org/data/definitions/259.html"
                   }
                 ],
-                "severity": "HIGH",
+                "severity": "MEDIUM",
                 "kind": "FAIL",
                 "tags": [
-                  "CWE-798"
+                  "CWE-259"
+                ]
+              }
+            },
+            {
+              "id": "428f6192-8ea6-3891-811b-85fa5c108fc9",
+              "name": "Fixed Password Vulnerability",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nFixed Password Vulnerability in Java refers to the insecure practice of hardcoding passwords directly into the source code. This is a serious security risk because anyone who has access to the source code can easily read the password. This vulnerability can lead to unauthorized access, data breaches, and other security issues.\n\n## Mitigation Advice\n\nAvoid hardcoding passwords in your source code. Instead, use environment variables, configuration files, or secure password management solutions to store passwords. These methods allow you to change passwords without modifying and redeploying your code. \n\nEnsure that the storage method you choose is secure. For example, if you use configuration files, make sure they are not included in the version control system and are properly protected by file system permissions.\n\n## Source Code Fix Recommendation\n\nInstead of hardcoding the password like this:\n\n```java\nString password = \"password\";\n```\n\nYou can use an environment variable:\n\n```java\nString password = System.getenv(\"PASSWORD\");\n```\n\nOr a properties file:\n\n```java\nProperties prop = new Properties();\nInputStream input = new FileInputStream(\"config.properties\");\nprop.load(input);\nString password = prop.getProperty(\"password\");\n```\n\n## Library Dependencies\n\nFor the properties file example, you need the `java.util.Properties` and `java.io` libraries, which are included in the Java standard library.\n\n## References\n\n- [CWE-259: Use of Hard-coded Password](https://cwe.mitre.org/data/definitions/259.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-259",
+                    "url": "https://cwe.mitre.org/data/definitions/259.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-259"
                 ]
               }
             },
@@ -122,50 +166,6 @@
               }
             },
             {
-              "id": "428f6192-8ea6-3891-811b-85fa5c108fc9",
-              "name": "Fixed Password Vulnerability",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nFixed Password Vulnerability in Java refers to the insecure practice of hardcoding passwords directly into the source code. This is a serious security risk because anyone who has access to the source code can easily read the password. This vulnerability can lead to unauthorized access, data breaches, and other security issues.\n\n## Mitigation Advice\n\nAvoid hardcoding passwords in your source code. Instead, use environment variables, configuration files, or secure password management solutions to store passwords. These methods allow you to change passwords without modifying and redeploying your code. \n\nEnsure that the storage method you choose is secure. For example, if you use configuration files, make sure they are not included in the version control system and are properly protected by file system permissions.\n\n## Source Code Fix Recommendation\n\nInstead of hardcoding the password like this:\n\n```java\nString password = \"password\";\n```\n\nYou can use an environment variable:\n\n```java\nString password = System.getenv(\"PASSWORD\");\n```\n\nOr a properties file:\n\n```java\nProperties prop = new Properties();\nInputStream input = new FileInputStream(\"config.properties\");\nprop.load(input);\nString password = prop.getProperty(\"password\");\n```\n\n## Library Dependencies\n\nFor the properties file example, you need the `java.util.Properties` and `java.io` libraries, which are included in the Java standard library.\n\n## References\n\n- [CWE-259: Use of Hard-coded Password](https://cwe.mitre.org/data/definitions/259.html)"
-              },
-              "properties": {
-                "cwe": [
-                  {
-                    "id": "CWE-259",
-                    "url": "https://cwe.mitre.org/data/definitions/259.html"
-                  }
-                ],
-                "severity": "MEDIUM",
-                "kind": "FAIL",
-                "tags": [
-                  "CWE-259"
-                ]
-              }
-            },
-            {
-              "id": "4dcfa34f-0a4d-3635-a9fa-7cf9cfcccb3b",
-              "name": "Fixed Password Vulnerability",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nFixed Password Vulnerability in Java refers to the insecure practice of hardcoding passwords directly into the source code. This is a serious security risk because anyone who has access to the source code can easily read the password. This vulnerability can lead to unauthorized access, data breaches, and other security issues.\n\n## Mitigation Advice\n\nAvoid hardcoding passwords in your source code. Instead, use environment variables, configuration files, or secure password management solutions to store passwords. These methods allow you to change passwords without modifying and redeploying your code. \n\nEnsure that the storage method you choose is secure. For example, if you use configuration files, make sure they are not included in the version control system and are properly protected by file system permissions.\n\n## Source Code Fix Recommendation\n\nInstead of hardcoding the password like this:\n\n```java\nString password = \"password\";\n```\n\nYou can use an environment variable:\n\n```java\nString password = System.getenv(\"PASSWORD\");\n```\n\nOr a properties file:\n\n```java\nProperties prop = new Properties();\nInputStream input = new FileInputStream(\"config.properties\");\nprop.load(input);\nString password = prop.getProperty(\"password\");\n```\n\n## Library Dependencies\n\nFor the properties file example, you need the `java.util.Properties` and `java.io` libraries, which are included in the Java standard library.\n\n## References\n\n- [CWE-259: Use of Hard-coded Password](https://cwe.mitre.org/data/definitions/259.html)"
-              },
-              "properties": {
-                "cwe": [
-                  {
-                    "id": "CWE-259",
-                    "url": "https://cwe.mitre.org/data/definitions/259.html"
-                  }
-                ],
-                "severity": "MEDIUM",
-                "kind": "FAIL",
-                "tags": [
-                  "CWE-259"
-                ]
-              }
-            },
-            {
               "id": "26802867-953d-3894-a91a-5ce43a52a634",
               "name": "Disabled CSRF Protection in Spring",
               "helpUri": "https://www.glog.ai/",
@@ -188,7 +188,7 @@
               }
             },
             {
-              "id": "be960123-c828-3652-8eee-5197c668c55d",
+              "id": "a3ca461e-db59-3419-93ac-212539361720",
               "name": "Found Spring endpoint",
               "helpUri": "https://www.glog.ai/",
               "help": {
@@ -202,7 +202,7 @@
               }
             },
             {
-              "id": "a3ca461e-db59-3419-93ac-212539361720",
+              "id": "be960123-c828-3652-8eee-5197c668c55d",
               "name": "Found Spring endpoint",
               "helpUri": "https://www.glog.ai/",
               "help": {
@@ -284,17 +284,30 @@
               }
             },
             {
-              "id": "40486eef-b7b1-333f-b81f-8dd2868526d2",
-              "name": "Found Spring endpoint",
+              "id": "6067bb0c-447a-31b2-b796-9a6252877b16",
+              "name": "Unreliable HTTP Headers Vulnerability",
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
-                "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n## In Context Remediation\n#### Fields to remediate: text\n### Field: text\n```\nField name: text\nValidation regex: text=\"^[a-zA-Z0-9\\s]*$\"\nMinimum length: 1\nMaximum length: 255\n```\n#### Remediation 1\nHere is a simple example of how you can validate the \"text\" parameter using Java Bean Validation and regex pattern:\n\n```java\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RequestMethod;\nimport org.springframework.web.bind.annotation.RestController;\nimport javax.validation.constraints.Pattern;\nimport javax.validation.constraints.Size;\n\n@RestController\n@RequestMapping(\"/hawk/api/jwt\")\npublic class JwtUserController {\n\n    @RequestMapping(value = \"/search/{text}\", method = RequestMethod.GET)\n    public ResponseEntity search(@PathVariable(\"text\") @Pattern(regexp = \"^[a-zA-Z0-9\\\\s]*$\") @Size(min = 1, max = 255) String text) {\n        // Your search logic here\n        return ResponseEntity.ok().build();\n    }\n}\n```\n\nTo run this application, you will need the following dependencies:\n\n1. Spring Boot Starter Web: It is used to build web, including RESTful, applications using Spring MVC. It uses Tomcat as the default embedded container.\n\n```xml\n<dependency>\n    <groupId>org.springframework.boot</groupId>\n    <artifactId>spring-boot-starter-web</artifactId>\n</dependency>\n```\n\n2. Spring Boot Starter Validation: It is used to validate the input. It includes the Hibernate Validator which is the reference implementation of the validation API.\n\n```xml\n<dependency>\n    <groupId>org.springframework.boot</groupId>\n    <artifactId>spring-boot-starter-validation</artifactId>\n</dependency>\n```\n\nPlease note that the validation annotations (`@Pattern` and `@Size`) will not work out of the box in a Spring Boot application. You need to add `@Validated` annotation on the class level to enable method parameter validation.\n\n```java\nimport org.springframework.validation.annotation.Validated;\n\n@Validated\n@RestController\n@RequestMapping(\"/hawk/api/jwt\")\npublic class JwtUserController {\n    //...\n}\n```\n\nThis will cause Spring to throw a `MethodArgumentNotValidException` when the validation fails. You can handle this exception to return a custom error response.\n\n#### Remediation 2\nHere is a simple Java console application that validates the \"text\" parameter using the provided regex pattern and length constraints. This example uses Java's built-in Pattern and Matcher classes for regex validation.\n\n```java\nimport java.util.regex.Matcher;\nimport java.util.regex.Pattern;\n\npublic class Main {\n    public static void main(String[] args) {\n        String text = \"test\"; // replace with user input\n        if (validateText(text)) {\n            System.out.println(\"Valid input\");\n        } else {\n            System.out.println(\"Invalid input\");\n        }\n    }\n\n    public static boolean validateText(String text) {\n        if (text.length() < 1 || text.length() > 255) {\n            return false;\n        }\n        Pattern pattern = Pattern.compile(\"^[a-zA-Z0-9\\\\s]*$\");\n        Matcher matcher = pattern.matcher(text);\n        return matcher.matches();\n    }\n}\n```\n\nThis application doesn't require any additional dependencies to run, as it uses only built-in Java classes. To run this application, you need to have Java installed on your machine. You can replace the \"test\" string with the user input you want to validate.\n\nPlease note that this is a simple console application and doesn't include the actual method \"hawk.api.jwt.JwtUserController.public ResponseEntity search(@PathVariable(\"text\") String text)\" mentioned in the question. The validation logic can be used in the mentioned method or in a custom validation service as per your application's architecture and requirements.\n\n___\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
+                "markdown": "## Description\n\nUnreliable HTTP Headers Vulnerability refers to the security flaw where an application trusts and uses HTTP headers without proper validation. HTTP headers are part of the HTTP request and response messages and can be manipulated by an attacker. In Java, this vulnerability can occur when the `HttpServletRequest.getHeader()` method is used to retrieve header values without validating or sanitizing them. This can lead to various attacks such as HTTP Response Splitting, Header Injection, Cross-Site Scripting (XSS), etc.\n\nIn the given code snippet, the `Authorization` header value is directly retrieved and stored in the `bearerToken` variable without any validation:\n\n```java\nString bearerToken = req.getHeader(\"Authorization\");\n```\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to validate and sanitize all HTTP header values before using them. This can be done using regular expressions, whitelist validation, or by using a security library that provides these features.\n\n## Source Code Fix Recommendation\n\nHere is a simple fix using regular expressions to validate the `Authorization` header value:\n\n```java\nString bearerToken = req.getHeader(\"Authorization\");\nif (bearerToken != null && bearerToken.matches(\"Bearer [a-zA-Z0-9]{1,256}\")) {\n    // Proceed with the bearer token\n} else {\n    // Invalid or missing Authorization header\n}\n```\n\nThis code checks if the `Authorization` header value matches the pattern \"Bearer \" followed by 1 to 256 alphanumeric characters. If it doesn't match, it is considered invalid.\n\n## Library Dependencies\n\nThe given code snippet requires the following library dependencies:\n\n- `javax.servlet-api` for `HttpServletRequest`\n\n## References\n\n- [OWASP Unvalidated Redirects and Forwards Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html)\n- [OWASP Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n\n## CWE\n\n- [CWE-113: Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Response Splitting')](https://cwe.mitre.org/data/definitions/113.html)\n- [CWE-20: Improper Input Validation](https://cwe.mitre.org/data/definitions/20.html)"
               },
               "properties": {
-                "cwe": [],
+                "cwe": [
+                  {
+                    "id": "CWE-113",
+                    "url": "https://cwe.mitre.org/data/definitions/113.html"
+                  },
+                  {
+                    "id": "CWE-20",
+                    "url": "https://cwe.mitre.org/data/definitions/20.html"
+                  }
+                ],
                 "severity": "LOW",
-                "kind": "FAIL"
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-113",
+                  "CWE-20"
+                ]
               }
             },
             {
@@ -340,39 +353,12 @@
               }
             },
             {
-              "id": "6067bb0c-447a-31b2-b796-9a6252877b16",
-              "name": "Unreliable HTTP Headers Vulnerability",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nUnreliable HTTP Headers Vulnerability refers to the security flaw where an application trusts and uses HTTP headers without proper validation. HTTP headers are part of the HTTP request and response messages and can be manipulated by an attacker. In Java, this vulnerability can occur when the `HttpServletRequest.getHeader()` method is used to retrieve header values without validating or sanitizing them. This can lead to various attacks such as HTTP Response Splitting, Header Injection, Cross-Site Scripting (XSS), etc.\n\nIn the given code snippet, the `Authorization` header value is directly retrieved and stored in the `bearerToken` variable without any validation:\n\n```java\nString bearerToken = req.getHeader(\"Authorization\");\n```\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to validate and sanitize all HTTP header values before using them. This can be done using regular expressions, whitelist validation, or by using a security library that provides these features.\n\n## Source Code Fix Recommendation\n\nHere is a simple fix using regular expressions to validate the `Authorization` header value:\n\n```java\nString bearerToken = req.getHeader(\"Authorization\");\nif (bearerToken != null && bearerToken.matches(\"Bearer [a-zA-Z0-9]{1,256}\")) {\n    // Proceed with the bearer token\n} else {\n    // Invalid or missing Authorization header\n}\n```\n\nThis code checks if the `Authorization` header value matches the pattern \"Bearer \" followed by 1 to 256 alphanumeric characters. If it doesn't match, it is considered invalid.\n\n## Library Dependencies\n\nThe given code snippet requires the following library dependencies:\n\n- `javax.servlet-api` for `HttpServletRequest`\n\n## References\n\n- [OWASP Unvalidated Redirects and Forwards Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html)\n- [OWASP Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n\n## CWE\n\n- [CWE-113: Improper Neutralization of CRLF Sequences in HTTP Headers ('HTTP Response Splitting')](https://cwe.mitre.org/data/definitions/113.html)\n- [CWE-20: Improper Input Validation](https://cwe.mitre.org/data/definitions/20.html)"
-              },
-              "properties": {
-                "cwe": [
-                  {
-                    "id": "CWE-113",
-                    "url": "https://cwe.mitre.org/data/definitions/113.html"
-                  },
-                  {
-                    "id": "CWE-20",
-                    "url": "https://cwe.mitre.org/data/definitions/20.html"
-                  }
-                ],
-                "severity": "LOW",
-                "kind": "FAIL",
-                "tags": [
-                  "CWE-113",
-                  "CWE-20"
-                ]
-              }
-            },
-            {
-              "id": "b7a82088-bd5e-3fdd-a445-4bc81366f8da",
+              "id": "40486eef-b7b1-333f-b81f-8dd2868526d2",
               "name": "Found Spring endpoint",
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
-                "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
+                "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n## In Context Remediation\n#### Fields to remediate: text\n### Field: text\n```\nField name: text\nValidation regex: text=\"^[a-zA-Z0-9\\s]*$\"\nMinimum length: 1\nMaximum length: 255\n```\n#### Remediation 1\nHere is a simple example of how you can validate the \"text\" parameter using Java Bean Validation and regex pattern:\n\n```java\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.web.bind.annotation.PathVariable;\nimport org.springframework.web.bind.annotation.RequestMapping;\nimport org.springframework.web.bind.annotation.RequestMethod;\nimport org.springframework.web.bind.annotation.RestController;\nimport javax.validation.constraints.Pattern;\nimport javax.validation.constraints.Size;\n\n@RestController\n@RequestMapping(\"/hawk/api/jwt\")\npublic class JwtUserController {\n\n    @RequestMapping(value = \"/search/{text}\", method = RequestMethod.GET)\n    public ResponseEntity search(@PathVariable(\"text\") @Pattern(regexp = \"^[a-zA-Z0-9\\\\s]*$\") @Size(min = 1, max = 255) String text) {\n        // Your search logic here\n        return ResponseEntity.ok().build();\n    }\n}\n```\n\nTo run this application, you will need the following dependencies:\n\n1. Spring Boot Starter Web: It is used to build web, including RESTful, applications using Spring MVC. It uses Tomcat as the default embedded container.\n\n```xml\n<dependency>\n    <groupId>org.springframework.boot</groupId>\n    <artifactId>spring-boot-starter-web</artifactId>\n</dependency>\n```\n\n2. Spring Boot Starter Validation: It is used to validate the input. It includes the Hibernate Validator which is the reference implementation of the validation API.\n\n```xml\n<dependency>\n    <groupId>org.springframework.boot</groupId>\n    <artifactId>spring-boot-starter-validation</artifactId>\n</dependency>\n```\n\nPlease note that the validation annotations (`@Pattern` and `@Size`) will not work out of the box in a Spring Boot application. You need to add `@Validated` annotation on the class level to enable method parameter validation.\n\n```java\nimport org.springframework.validation.annotation.Validated;\n\n@Validated\n@RestController\n@RequestMapping(\"/hawk/api/jwt\")\npublic class JwtUserController {\n    //...\n}\n```\n\nThis will cause Spring to throw a `MethodArgumentNotValidException` when the validation fails. You can handle this exception to return a custom error response.\n\n#### Remediation 2\nHere is a simple Java console application that validates the \"text\" parameter using the provided regex pattern and length constraints. This example uses Java's built-in Pattern and Matcher classes for regex validation.\n\n```java\nimport java.util.regex.Matcher;\nimport java.util.regex.Pattern;\n\npublic class Main {\n    public static void main(String[] args) {\n        String text = \"test\"; // replace with user input\n        if (validateText(text)) {\n            System.out.println(\"Valid input\");\n        } else {\n            System.out.println(\"Invalid input\");\n        }\n    }\n\n    public static boolean validateText(String text) {\n        if (text.length() < 1 || text.length() > 255) {\n            return false;\n        }\n        Pattern pattern = Pattern.compile(\"^[a-zA-Z0-9\\\\s]*$\");\n        Matcher matcher = pattern.matcher(text);\n        return matcher.matches();\n    }\n}\n```\n\nThis application doesn't require any additional dependencies to run, as it uses only built-in Java classes. To run this application, you need to have Java installed on your machine. You can replace the \"test\" string with the user input you want to validate.\n\nPlease note that this is a simple console application and doesn't include the actual method \"hawk.api.jwt.JwtUserController.public ResponseEntity search(@PathVariable(\"text\") String text)\" mentioned in the question. The validation logic can be used in the mentioned method or in a custom validation service as per your application's architecture and requirements.\n\n___\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
               },
               "properties": {
                 "cwe": [],
@@ -423,7 +409,7 @@
               }
             },
             {
-              "id": "7637adb5-8381-3f60-95bb-bffc12d78a25",
+              "id": "b7a82088-bd5e-3fdd-a445-4bc81366f8da",
               "name": "Found Spring endpoint",
               "helpUri": "https://www.glog.ai/",
               "help": {
@@ -438,6 +424,34 @@
             },
             {
               "id": "f6a81377-dc72-37b4-8063-248b2e6d184b",
+              "name": "Found Spring endpoint",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
+              },
+              "properties": {
+                "cwe": [],
+                "severity": "LOW",
+                "kind": "FAIL"
+              }
+            },
+            {
+              "id": "7637adb5-8381-3f60-95bb-bffc12d78a25",
+              "name": "Found Spring endpoint",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
+              },
+              "properties": {
+                "cwe": [],
+                "severity": "LOW",
+                "kind": "FAIL"
+              }
+            },
+            {
+              "id": "346a775d-6fa0-3016-8317-f51a06186c61",
               "name": "Found Spring endpoint",
               "helpUri": "https://www.glog.ai/",
               "help": {
@@ -479,7 +493,7 @@
               }
             },
             {
-              "id": "72bea607-7af1-3225-9002-5306a33caef1",
+              "id": "c488398d-6373-300e-9674-8539eae45250",
               "name": "Found Spring endpoint",
               "helpUri": "https://www.glog.ai/",
               "help": {
@@ -493,7 +507,7 @@
               }
             },
             {
-              "id": "346a775d-6fa0-3016-8317-f51a06186c61",
+              "id": "72bea607-7af1-3225-9002-5306a33caef1",
               "name": "Found Spring endpoint",
               "helpUri": "https://www.glog.ai/",
               "help": {
@@ -521,20 +535,6 @@
               }
             },
             {
-              "id": "c488398d-6373-300e-9674-8539eae45250",
-              "name": "Found Spring endpoint",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "\nThis class is a Spring Controller. All methods annotated with `RequestMapping` (as well as its shortcut annotations `GetMapping`, `PostMapping`, `PutMapping`, `DeleteMapping`, and `PatchMapping`) are reachable remotely. This class should be analyzed to make sure that remotely exposed methods are safe to expose to potential attackers.\n\nPerform input validation to ensure only properly formed data is entering the workflow in an information system, preventing malformed data from persisting in the database and triggering malfunction of various downstream components. Input validation should happen as early as possible in the data flow, preferably as soon as the data is received from the external party.\n\nData from all potentially untrusted sources should be subject to input validation, including not only Internet-facing web clients but also backend feeds over extranets, from suppliers, partners, vendors or regulators, each of which may be compromised on their own and start sending malformed data.\n\n\n## Solution (Bean Validation)\n\n```java\npublic class ExampleDto implements Serializable {\n    @Pattern(regexp = \"white list regular expression\")\n    @Size(min = minimum field size, max = maximum field size)\n    private String fieldName;\n}\n```\n\n## Solution (Validation Service or Method)\n\n```java\npublic boolean validateData(string data, String whiteListRegex) {\n    Pattern p = Pattern.compile(whiteListRegex);\n    Matcher m = p.matcher(data);\n    return m.matches();\n}\n```\n\n\n\n## References\n- [OWASP: REST Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)\n- [OWASP: Input Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Input_Validation_Cheat_Sheet.html)\n- [OWASP: Bean Validation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)\n\n\n"
-              },
-              "properties": {
-                "cwe": [],
-                "severity": "LOW",
-                "kind": "FAIL"
-              }
-            },
-            {
               "id": "2ff77974-10f7-39fd-bb4d-2976ff215572",
               "name": "Found Spring endpoint",
               "helpUri": "https://www.glog.ai/",
@@ -549,7 +549,7 @@
               }
             },
             {
-              "id": "74a4a50f-e064-310c-b6a1-297fb3c6e945",
+              "id": "866102c1-8960-3baa-8720-83f1f7ece441",
               "name": "Found Spring endpoint",
               "helpUri": "https://www.glog.ai/",
               "help": {
@@ -563,7 +563,7 @@
               }
             },
             {
-              "id": "866102c1-8960-3baa-8720-83f1f7ece441",
+              "id": "74a4a50f-e064-310c-b6a1-297fb3c6e945",
               "name": "Found Spring endpoint",
               "helpUri": "https://www.glog.ai/",
               "help": {
@@ -683,6 +683,28 @@
               }
             },
             {
+              "id": "9d820ef7-1f08-3bc4-b42c-8a52d8c4919a",
+              "name": "Potential JDBC Injection",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "\nThe input values included in SQL queries need to be passed in safely. Bind variables in prepared statements can be used to easily mitigate the risk of SQL injection. Alternatively to prepare statements, each parameter can be escaped manually.\n\n**Solution (Prepared Statements):**\n\n```java\nString query = \"SELECT * FROM User WHERE id = ?\";\nPreparedStatement preparedStatement = connection.prepareStatement(query);\npreparedStatement.setString(1, inputId);\nResultSet resultSet = preparedStatement.executeQuery();\n```\n\n**Solution (Encoding):**\n\n```java\nimport org.owasp.esapi.Encoder;\ncreateQuery(\"select * from User where id = '\" + Encoder.encodeForSQL(inputId) + \"'\");\n```\n\n\n\n**References (SQL injection)**\n\n- [CAPEC-66: SQL Injection](https://capec.mitre.org/data/definitions/66.html)\n- [CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')](https://cwe.mitre.org/data/definitions/89.html)\n- [OWASP: Top 10 A03_2021-Injection](https://owasp.org/Top10/A03_2021-Injection/)\n- [OWASP: SQL Injection Prevention Cheat Sheet](https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet)\n- [OWASP: Query Parameterization Cheat Sheet](https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet)\n\n\n"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-89",
+                    "url": "https://cwe.mitre.org/data/definitions/89.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-89"
+                ]
+              }
+            },
+            {
               "id": "a3a14f30-d332-32a2-8bbc-e79e3ff8a6ea",
               "name": "Violation of Trust Boundary",
               "helpUri": "https://www.glog.ai/",
@@ -701,6 +723,50 @@
                 "kind": "FAIL",
                 "tags": [
                   "CWE-501"
+                ]
+              }
+            },
+            {
+              "id": "a7fa80da-cf50-3313-8a37-4cab21fad60c",
+              "name": "Nonconstant string passed to execute or addBatch method on an SQL statement",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "\nThe input values included in SQL queries need to be passed in safely. Bind variables in prepared statements can be used to easily mitigate the risk of SQL injection. Alternatively to prepare statements, each parameter can be escaped manually.\n\n**Solution (Prepared Statements):**\n\n```java\nString query = \"SELECT * FROM User WHERE id = ?\";\nPreparedStatement preparedStatement = connection.prepareStatement(query);\npreparedStatement.setString(1, inputId);\nResultSet resultSet = preparedStatement.executeQuery();\n```\n\n**Solution (Encoding):**\n\n```java\nimport org.owasp.esapi.Encoder;\ncreateQuery(\"select * from User where id = '\" + Encoder.encodeForSQL(inputId) + \"'\");\n```\n\n## In Context Remediation\n```\nVulnerable Query: \"select id, name, description from ITEM where description like '%\" + search.getSearchText() + \"%'\"\nRemediated Query: String query = \"SELECT id, name, description FROM ITEM WHERE description LIKE ?\";\nPreparedStatement statement = connection.prepareStatement(query);\nstatement.setString(1, \"%\" + search.getSearchText() + \"%\");\nResultSet resultSet = statement.executeQuery();\n```\n#### Remediation\nHere is an example of how you can prevent SQL Injection using Prepared Statements in Java:\n\n```java\nimport java.sql.Connection;\nimport java.sql.PreparedStatement;\nimport java.sql.ResultSet;\nimport java.sql.SQLException;\nimport java.util.ArrayList;\nimport java.util.List;\n\npublic class SearchService {\n    public List<Item> execute(Connection connection, String searchText) throws SQLException {\n        String query = \"SELECT id, name, description FROM ITEM WHERE description LIKE ?\";\n        PreparedStatement stmt = connection.prepareStatement(query);\n        stmt.setString(1, \"%\" + searchText + \"%\");\n        ResultSet rs = stmt.executeQuery();\n        List<Item> items = new ArrayList<>();\n        while (rs.next()) {\n            Item item = new Item(rs.getInt(\"id\"), rs.getString(\"name\"), rs.getString(\"description\"));\n            items.add(item);\n        }\n        return items;\n    }\n}\n```\n\nIn this example, we are using the `java.sql` package which is included in the JDK, so no additional libraries need to be added to the `pom.xml` file.\n\nHowever, if you were using a database-specific JDBC driver, you would need to include it in your `pom.xml` file. For example, if you were using MySQL, you would add:\n\n```xml\n<dependency>\n    <groupId>mysql</groupId>\n    <artifactId>mysql-connector-java</artifactId>\n    <version>8.0.23</version>\n</dependency>\n```\n\nAlternative JDBC providers include PostgreSQL's `org.postgresql:postgresql`, Oracle's `com.oracle.database.jdbc:ojdbc8`, and Microsoft's `com.microsoft.sqlserver:mssql-jdbc`.\n\nTo add these to your `pom.xml` file, you would replace the `groupId`, `artifactId`, and `version` in the above XML with the appropriate values for your chosen JDBC provider.\n\n___\n\n\n**References (SQL injection)**\n\n- [CAPEC-66: SQL Injection](https://capec.mitre.org/data/definitions/66.html)\n- [CWE-89: Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')](https://cwe.mitre.org/data/definitions/89.html)\n- [OWASP: Top 10 A03_2021-Injection](https://owasp.org/Top10/A03_2021-Injection/)\n- [OWASP: SQL Injection Prevention Cheat Sheet](https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet)\n- [OWASP: Query Parameterization Cheat Sheet](https://www.owasp.org/index.php/Query_Parameterization_Cheat_Sheet)\n\n\n"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-89",
+                    "url": "https://cwe.mitre.org/data/definitions/89.html"
+                  }
+                ],
+                "severity": "LOW",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-89"
+                ]
+              }
+            },
+            {
+              "id": "c715549b-a9b6-3a33-b131-6d91bbc2d851",
+              "name": "XSS Vulnerability from User-Controlled Data in HTML String",
+              "helpUri": "https://www.glog.ai/",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided code snippet, the application is vulnerable to XSS because it's directly using user-controlled data in an HTML string without proper sanitization or encoding.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, it's recommended to:\n\n- Use frameworks that automatically escape XSS by design, such as Ruby on Rails, React JS, etc.\n- Escape untrusted HTTP request data based on the context in the HTML output (body, attribute, JavaScript, CSS, or URL).\n- Apply context-sensitive encoding when modifying the browser document on the client side.\n- Validate, filter, or sanitize user-generated input to prevent malicious data from being executed as code in the browser.\n\n## Source Code Fix Recommendation\n\nIn the provided code snippet, you can use the `encodeURIComponent` function to encode user-controlled data:\n\n```javascript\nstr += `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`;\n```\n\nThis function encodes special characters. In addition, it encodes the following characters: `, / ? : @ & = + $ #`.\n\n## Library Dependencies\n\nThe provided code snippet does not require any additional library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+              },
+              "properties": {
+                "cwe": [
+                  {
+                    "id": "CWE-79",
+                    "url": "https://cwe.mitre.org/data/definitions/79.html"
+                  }
+                ],
+                "severity": "MEDIUM",
+                "kind": "FAIL",
+                "tags": [
+                  "CWE-79"
                 ]
               }
             },
@@ -727,12 +793,12 @@
               }
             },
             {
-              "id": "c715549b-a9b6-3a33-b131-6d91bbc2d851",
-              "name": "XSS Vulnerability from User-Controlled Data in HTML String",
+              "id": "4923fc7d-94f8-3cc9-89f2-91769612e757",
+              "name": "\"Potential XSS Vulnerability from User-Controlled Data in HTML String\"",
               "helpUri": "https://www.glog.ai/",
               "help": {
                 "text": "",
-                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided code snippet, the application is vulnerable to XSS because it's directly using user-controlled data in an HTML string without proper sanitization or encoding.\n\n## Mitigation Advice\n\nTo mitigate XSS vulnerabilities, it's recommended to:\n\n- Use frameworks that automatically escape XSS by design, such as Ruby on Rails, React JS, etc.\n- Escape untrusted HTTP request data based on the context in the HTML output (body, attribute, JavaScript, CSS, or URL).\n- Apply context-sensitive encoding when modifying the browser document on the client side.\n- Validate, filter, or sanitize user-generated input to prevent malicious data from being executed as code in the browser.\n\n## Source Code Fix Recommendation\n\nIn the provided code snippet, you can use the `encodeURIComponent` function to encode user-controlled data:\n\n```javascript\nstr += `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`;\n```\n\nThis function encodes special characters. In addition, it encodes the following characters: `, / ? : @ & = + $ #`.\n\n## Library Dependencies\n\nThe provided code snippet does not require any additional library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
+                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided JavaScript code, the potential XSS vulnerability arises from the use of template literals to include user-controlled data (`msg.requestHeader`, `msg.requestBody`, `msg.responseHeader`, `msg.responseBody`) in an HTML string without any form of sanitization or encoding.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always escape untrusted HTTP request data based on the HTML context (body, attribute, JavaScript, CSS, or URL) that the data will be placed into. \n\nIn JavaScript, you can use functions like `encodeURIComponent()`, `encodeURI()`, or `escape()` to encode user-controlled data. However, these are not sufficient to prevent all XSS attacks. It's recommended to use a trusted library that makes it easier to encode data safely.\n\n## Source Code Fix Recommendation\n\nHere is a simple fix using the `escape()` function:\n\n```javascript\nreturn `${escape(msg.requestHeader)}\\r\\n\\r\\n${escape(msg.requestBody)}\\r\\n---\\r\\n${escape(msg.responseHeader)}\\r\\n\\r\\n${escape(msg.responseBody)}`;\n```\n\n## Library Dependencies\n\nThe provided code does not require any additional library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
               },
               "properties": {
                 "cwe": [
@@ -769,28 +835,6 @@
                   "CWE-614"
                 ]
               }
-            },
-            {
-              "id": "4923fc7d-94f8-3cc9-89f2-91769612e757",
-              "name": "\"Potential XSS Vulnerability from User-Controlled Data in HTML String\"",
-              "helpUri": "https://www.glog.ai/",
-              "help": {
-                "text": "",
-                "markdown": "## Description\n\nCross-Site Scripting (XSS) vulnerabilities occur when an application includes untrusted data in a new web page without proper validation or escaping, or updates an existing web page with user-supplied data using a browser API that can create HTML or JavaScript. XSS allows attackers to execute scripts in the victim's browser which can hijack user sessions, deface web sites, or redirect the user to malicious sites.\n\nIn the provided JavaScript code, the potential XSS vulnerability arises from the use of template literals to include user-controlled data (`msg.requestHeader`, `msg.requestBody`, `msg.responseHeader`, `msg.responseBody`) in an HTML string without any form of sanitization or encoding.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should always escape untrusted HTTP request data based on the HTML context (body, attribute, JavaScript, CSS, or URL) that the data will be placed into. \n\nIn JavaScript, you can use functions like `encodeURIComponent()`, `encodeURI()`, or `escape()` to encode user-controlled data. However, these are not sufficient to prevent all XSS attacks. It's recommended to use a trusted library that makes it easier to encode data safely.\n\n## Source Code Fix Recommendation\n\nHere is a simple fix using the `escape()` function:\n\n```javascript\nreturn `${escape(msg.requestHeader)}\\r\\n\\r\\n${escape(msg.requestBody)}\\r\\n---\\r\\n${escape(msg.responseHeader)}\\r\\n\\r\\n${escape(msg.responseBody)}`;\n```\n\n## Library Dependencies\n\nThe provided code does not require any additional library dependencies to execute properly.\n\n## References\n\n- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)\n- [OWASP DOM based XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html)\n- [CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')](https://cwe.mitre.org/data/definitions/79.html)"
-              },
-              "properties": {
-                "cwe": [
-                  {
-                    "id": "CWE-79",
-                    "url": "https://cwe.mitre.org/data/definitions/79.html"
-                  }
-                ],
-                "severity": "MEDIUM",
-                "kind": "FAIL",
-                "tags": [
-                  "CWE-79"
-                ]
-              }
             }
           ],
           "language": "en-US",
@@ -803,6 +847,43 @@
       },
       "language": "en-US",
       "results": [
+        {
+          "ruleId": "0a84dd25-d52a-366d-8470-9d54d7141b9f",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "Exposed Asymmetric Private Key in Build Resources"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "build/resources/main/keyStore.pem",
+                  "uriBaseId": "ROOTPATH"
+                },
+                "region": {
+                  "startLine": 6,
+                  "startColumn": 1,
+                  "endLine": 31,
+                  "endColumn": 1,
+                  "snippet": {
+                    "text": "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ\n+JKBb4tcwJ1m5lTYccZbvsvCkCdQF0Ge0PhqYK8I9XyFTMPDv88h1Q+qDVlkqV5v\nVKFeR6v/REOH0AFJ4qC/mmhb9h3LnvyU6KtsZ4KWUfNfGhbpYxVTLU98CzqO9VTN\nxVCreXkTWCpbFTHGyb31sNG3xobL5PLgtNPECaDTJeiY0Z2ID/6fARWv4zn0luQS\ngDRLE2K73i2YjgD05OwdNRHklfnQKZLdkXX/TMVqzNT0Hg9a/thBQAIuozwK1SVs\nOfry/xFGWii19nDR4PaYjT0Xt/BQIt6tk4rg2Xt1XrTRxzrdzSIpHPQoO9g1nl9F\n/yoaq87VAgMBAAECggEBAK47UMfDmrxvu9E+lUJWdhWhQ6L47WPcmL22YaAFtIIA\n8EkpW9Ay4e56A06EgINdh7S4SqmqpxYRY3v90Vfli8MGB9yqPnXtJEKRo7ONHMHh\nHheP8cAWfiFSjDfC5HXDGpFNqpUjeMQCyzmixXaHQMFLkmAwI81hQ6JO6FvKrEz5\n2WCja/OyBwlAybpZgzKTkKGXSBY8NrcWfm8QEZHaJkDDw0aBhgANB2+He6dJCfyM\n1NqauTvbTjeYb5XXQffMhCbYmZM0+f/R4vF3N39lGkcaHMCh9r7c1+lsUKT4oT6p\nYRwvUP3uzBfKIUJJCqw4PD30JDcT+CxMnXn27KLu0cECgYEA3zKxAfOAySz7vVmV\nnIc8p7q09QGOYkx1m3+gAyCJqUAUX1ypPw+C3rk9zAThnZYsJL//5daxw8FMXCSm\nJkcMB2Sj0FKhiqIi+LEgu0tni4COVaTTCG27IXs9sgZTyPGQIwjoT3NhB1Bt3Ksi\nh7hnv8fHDPXzv7ptYpwfyRWDZpkCgYEAzed8S37GeZGbW5qqDyuKnWjG/UPPeTrw\n5DjCSyBVEF3kZrMSc+O2bgf87VFOHBTORzr5r0zNWy12r9w3Ky02z4cxeujulihz\n9ObY6aim6iRHwYpB0D5Eqs4R6mK189bKb9OD/F7USGy//tPP7hqfQC1JHJed4fwR\n0esIOFJ5250CgYAKwVCSPX+ZMhe3WhfBgSrFElQh8j9AMVsBcTbur6SyiSnyJm7p\nYP/3Z4m4yQtuIoxiAPZ9xsiuHCRn1ERFV+sWeB0Ertal7YYt4asoG0wUBs/VBKo+\nn7sCtAOXDoL/DdTaO1WmbnLgfVmt5nk1fQdS0HehAkEKnhsjQ06sy+KXEQKBgBuU\n9b57NgUU7zW/KyarE39wiK9mhQVdUuWPgN9lbl+p5C2psUAa8dYdddEoggka9GLw\nUIAeDqg3F94I5s7+2IfGOWeYilVNB/N3dPkf4XQd9grEBXrqzHIA9r9qB6upSybd\ns6F75n3pK3LsVr8zi7+iEVgmKz0Zch2nmUtKKQ61AoGAPHVizunifBjtKaQHFBdr\np5llidfBU6S0DsdRBG2PYxHB4TMc16gYpZicCIOsTavjS++ZBdtcL1VFiutavKop\nJhZbwH6PR76GJbdwUS3pl8s5+w21KtMxOwR8Oqoc/Sr+Bno37Yek/5CaVwnysEd0\nGWwVDi+xxRJnUIsVzdUBP+8="
+                  }
+                }
+              },
+              "message": {
+                "text": "build/resources/main/keyStore.pem"
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "044d96f69749663b3e288898f298f05c2023c362b63a0dbcd1f606b7997f7256",
+            "glog-pfp-ruleFileCode/v1": "539b675102218aa8a3367e1a8505d609fbac447e0848521d20cc45f6f3556dea"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "539b675102218aa8a3367e1a8505d609fbac447e0848521d20cc45f6f3556dea"
+          }
+        },
         {
           "ruleId": "78f0c135-fcd8-31c1-ab65-3ddd0ad600bd",
           "kind": "fail",
@@ -878,40 +959,43 @@
           }
         },
         {
-          "ruleId": "0a84dd25-d52a-366d-8470-9d54d7141b9f",
+          "ruleId": "4dcfa34f-0a4d-3635-a9fa-7cf9cfcccb3b",
           "kind": "fail",
-          "level": "error",
+          "level": "warning",
           "message": {
-            "text": "Exposed Asymmetric Private Key in Build Resources"
+            "text": "Fixed Password Vulnerability"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "build/resources/main/keyStore.pem",
-                  "uriBaseId": "ROOTPATH"
+                  "uri": "src/main/java/hawk/MultiHttpSecurityConfig.java"
                 },
                 "region": {
-                  "startLine": 6,
-                  "startColumn": 1,
-                  "endLine": 31,
-                  "endColumn": 1,
+                  "startLine": 167,
+                  "startColumn": 35,
+                  "endLine": 167,
+                  "endColumn": 44,
                   "snippet": {
-                    "text": "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCzhWraqN+mJQuJ\n+JKBb4tcwJ1m5lTYccZbvsvCkCdQF0Ge0PhqYK8I9XyFTMPDv88h1Q+qDVlkqV5v\nVKFeR6v/REOH0AFJ4qC/mmhb9h3LnvyU6KtsZ4KWUfNfGhbpYxVTLU98CzqO9VTN\nxVCreXkTWCpbFTHGyb31sNG3xobL5PLgtNPECaDTJeiY0Z2ID/6fARWv4zn0luQS\ngDRLE2K73i2YjgD05OwdNRHklfnQKZLdkXX/TMVqzNT0Hg9a/thBQAIuozwK1SVs\nOfry/xFGWii19nDR4PaYjT0Xt/BQIt6tk4rg2Xt1XrTRxzrdzSIpHPQoO9g1nl9F\n/yoaq87VAgMBAAECggEBAK47UMfDmrxvu9E+lUJWdhWhQ6L47WPcmL22YaAFtIIA\n8EkpW9Ay4e56A06EgINdh7S4SqmqpxYRY3v90Vfli8MGB9yqPnXtJEKRo7ONHMHh\nHheP8cAWfiFSjDfC5HXDGpFNqpUjeMQCyzmixXaHQMFLkmAwI81hQ6JO6FvKrEz5\n2WCja/OyBwlAybpZgzKTkKGXSBY8NrcWfm8QEZHaJkDDw0aBhgANB2+He6dJCfyM\n1NqauTvbTjeYb5XXQffMhCbYmZM0+f/R4vF3N39lGkcaHMCh9r7c1+lsUKT4oT6p\nYRwvUP3uzBfKIUJJCqw4PD30JDcT+CxMnXn27KLu0cECgYEA3zKxAfOAySz7vVmV\nnIc8p7q09QGOYkx1m3+gAyCJqUAUX1ypPw+C3rk9zAThnZYsJL//5daxw8FMXCSm\nJkcMB2Sj0FKhiqIi+LEgu0tni4COVaTTCG27IXs9sgZTyPGQIwjoT3NhB1Bt3Ksi\nh7hnv8fHDPXzv7ptYpwfyRWDZpkCgYEAzed8S37GeZGbW5qqDyuKnWjG/UPPeTrw\n5DjCSyBVEF3kZrMSc+O2bgf87VFOHBTORzr5r0zNWy12r9w3Ky02z4cxeujulihz\n9ObY6aim6iRHwYpB0D5Eqs4R6mK189bKb9OD/F7USGy//tPP7hqfQC1JHJed4fwR\n0esIOFJ5250CgYAKwVCSPX+ZMhe3WhfBgSrFElQh8j9AMVsBcTbur6SyiSnyJm7p\nYP/3Z4m4yQtuIoxiAPZ9xsiuHCRn1ERFV+sWeB0Ertal7YYt4asoG0wUBs/VBKo+\nn7sCtAOXDoL/DdTaO1WmbnLgfVmt5nk1fQdS0HehAkEKnhsjQ06sy+KXEQKBgBuU\n9b57NgUU7zW/KyarE39wiK9mhQVdUuWPgN9lbl+p5C2psUAa8dYdddEoggka9GLw\nUIAeDqg3F94I5s7+2IfGOWeYilVNB/N3dPkf4XQd9grEBXrqzHIA9r9qB6upSybd\ns6F75n3pK3LsVr8zi7+iEVgmKz0Zch2nmUtKKQ61AoGAPHVizunifBjtKaQHFBdr\np5llidfBU6S0DsdRBG2PYxHB4TMc16gYpZicCIOsTavjS++ZBdtcL1VFiutavKop\nJhZbwH6PR76GJbdwUS3pl8s5+w21KtMxOwR8Oqoc/Sr+Bno37Yek/5CaVwnysEd0\nGWwVDi+xxRJnUIsVzdUBP+8="
+                    "text": "\"password\""
                   }
                 }
               },
-              "message": {
-                "text": "build/resources/main/keyStore.pem"
-              }
+              "logicalLocations": [
+                {
+                  "name": "userDetailsService()",
+                  "fullyQualifiedName": "hawk.MultiHttpSecurityConfig.userDetailsService()",
+                  "kind": "function"
+                }
+              ]
             }
           ],
           "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "044d96f69749663b3e288898f298f05c2023c362b63a0dbcd1f606b7997f7256",
-            "glog-pfp-ruleFileCode/v1": "539b675102218aa8a3367e1a8505d609fbac447e0848521d20cc45f6f3556dea"
+            "glog-pfp-ruleFileLineCode/v1": "bd2e6f161e0b243b003d47635c9e14628085d49c3b8ef8db1eb8e425c1db14a9",
+            "glog-pfp-ruleFileCode/v1": "ac48f2b67183410c5c0bba2916bb6020e399e01e2e87d7a538b0d52d5b6218db"
           },
           "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "539b675102218aa8a3367e1a8505d609fbac447e0848521d20cc45f6f3556dea"
+            "glog-fp-ruleFileCode/v1": "ac48f2b67183410c5c0bba2916bb6020e399e01e2e87d7a538b0d52d5b6218db"
           }
         },
         {
@@ -1035,46 +1119,6 @@
           }
         },
         {
-          "ruleId": "4dcfa34f-0a4d-3635-a9fa-7cf9cfcccb3b",
-          "kind": "fail",
-          "level": "warning",
-          "message": {
-            "text": "Fixed Password Vulnerability"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/java/hawk/MultiHttpSecurityConfig.java"
-                },
-                "region": {
-                  "startLine": 167,
-                  "startColumn": 35,
-                  "endLine": 167,
-                  "endColumn": 44,
-                  "snippet": {
-                    "text": "\"password\""
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "name": "userDetailsService()",
-                  "fullyQualifiedName": "hawk.MultiHttpSecurityConfig.userDetailsService()",
-                  "kind": "function"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "bd2e6f161e0b243b003d47635c9e14628085d49c3b8ef8db1eb8e425c1db14a9",
-            "glog-pfp-ruleFileCode/v1": "ac48f2b67183410c5c0bba2916bb6020e399e01e2e87d7a538b0d52d5b6218db"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "ac48f2b67183410c5c0bba2916bb6020e399e01e2e87d7a538b0d52d5b6218db"
-          }
-        },
-        {
           "ruleId": "26802867-953d-3894-a91a-5ce43a52a634",
           "kind": "fail",
           "level": "warning",
@@ -1112,50 +1156,6 @@
           },
           "fingerprints": {
             "glog-fp-ruleFileCode/v1": "483b9790c99624acb309a9c505f0ab073dee23360e8fcff2915bdd0beee30861"
-          }
-        },
-        {
-          "ruleId": "be960123-c828-3652-8eee-5197c668c55d",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Found Spring endpoint",
-            "id": "default",
-            "arguments": [
-              "hawk.api.jwt.JwtItemController"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/java/hawk/api/jwt/JwtItemController.java"
-                },
-                "region": {
-                  "startLine": 42,
-                  "startColumn": 9,
-                  "endLine": 42,
-                  "endColumn": 100,
-                  "snippet": {
-                    "text": "SearchResult result = new SearchResult(search.getSearchText(), searchService.search(search))"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "name": "search(Search)",
-                  "fullyQualifiedName": "hawk.api.jwt.JwtItemController.search(Search)",
-                  "kind": "function"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "c6396451da64cfe367e8cc05f8950c0d539ede0bf0a9e4c1e5fb9196ff7fca9a",
-            "glog-pfp-ruleFileCode/v1": "76c095814449437855ebf103205f05af5c206b8fc6eef79c20133549490c6153"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "76c095814449437855ebf103205f05af5c206b8fc6eef79c20133549490c6153"
           }
         },
         {
@@ -1203,6 +1203,50 @@
           }
         },
         {
+          "ruleId": "be960123-c828-3652-8eee-5197c668c55d",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Found Spring endpoint",
+            "id": "default",
+            "arguments": [
+              "hawk.api.jwt.JwtItemController"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/api/jwt/JwtItemController.java"
+                },
+                "region": {
+                  "startLine": 42,
+                  "startColumn": 9,
+                  "endLine": 42,
+                  "endColumn": 100,
+                  "snippet": {
+                    "text": "SearchResult result = new SearchResult(search.getSearchText(), searchService.search(search))"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "search(Search)",
+                  "fullyQualifiedName": "hawk.api.jwt.JwtItemController.search(Search)",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "c6396451da64cfe367e8cc05f8950c0d539ede0bf0a9e4c1e5fb9196ff7fca9a",
+            "glog-pfp-ruleFileCode/v1": "76c095814449437855ebf103205f05af5c206b8fc6eef79c20133549490c6153"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "76c095814449437855ebf103205f05af5c206b8fc6eef79c20133549490c6153"
+          }
+        },
+        {
           "ruleId": "8017e8e9-4911-39ba-8592-070f7313345d",
           "kind": "fail",
           "level": "note",
@@ -1240,43 +1284,6 @@
           },
           "fingerprints": {
             "glog-fp-ruleFileCode/v1": "634f2f08a7bda2ef1e60bed3acc6ed055db5ec542223aac5b06409a28672ca87"
-          }
-        },
-        {
-          "ruleId": "19162a2c-7b93-3d4d-bad2-55b15367de4f",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Unreliable HTTP Headers Vulnerability"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/java/hawk/api/jwt/JwtLog4jController.java"
-                },
-                "region": {
-                  "startLine": 24,
-                  "snippet": {
-                    "text": "JwtLog4jController.logger.info(\"{} = {}\", it, request.getHeader(it))"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "name": "logRequest(String, HttpServletRequest)",
-                  "fullyQualifiedName": "hawk.api.jwt.JwtLog4jController.logRequest(String, HttpServletRequest)",
-                  "kind": "function"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "63c20839bb6ace9a6809a18be74d50f96fe6315d67c66c8415cdb10ef1e93fba",
-            "glog-pfp-ruleFileCode/v1": "0bc3d5d183d38801f3ea48489b48967cd7dd8bfad268368d5eb44adad8b1a98b"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "0bc3d5d183d38801f3ea48489b48967cd7dd8bfad268368d5eb44adad8b1a98b"
           }
         },
         {
@@ -1322,47 +1329,80 @@
           }
         },
         {
-          "ruleId": "40486eef-b7b1-333f-b81f-8dd2868526d2",
+          "ruleId": "19162a2c-7b93-3d4d-bad2-55b15367de4f",
           "kind": "fail",
           "level": "note",
           "message": {
-            "text": "Found Spring endpoint",
-            "id": "default",
-            "arguments": [
-              "hawk.api.jwt.JwtUserController"
-            ]
+            "text": "Unreliable HTTP Headers Vulnerability"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/main/java/hawk/api/jwt/JwtUserController.java"
+                  "uri": "src/main/java/hawk/api/jwt/JwtLog4jController.java"
                 },
                 "region": {
-                  "startLine": 38,
-                  "startColumn": 9,
-                  "endLine": 38,
-                  "endColumn": 40,
+                  "startLine": 24,
                   "snippet": {
-                    "text": "Search search = new Search(text)"
+                    "text": "JwtLog4jController.logger.info(\"{} = {}\", it, request.getHeader(it))"
                   }
                 }
               },
               "logicalLocations": [
                 {
-                  "name": "search(String)",
-                  "fullyQualifiedName": "hawk.api.jwt.JwtUserController.search(String)",
+                  "name": "logRequest(String, HttpServletRequest)",
+                  "fullyQualifiedName": "hawk.api.jwt.JwtLog4jController.logRequest(String, HttpServletRequest)",
                   "kind": "function"
                 }
               ]
             }
           ],
           "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "6251cda77c41af5fe746da0c4e8771d4b95688a183287624650201f20e3155c6",
-            "glog-pfp-ruleFileCode/v1": "d45aef1fbfacb2237ef09ff6e5ca062308c5da3cb3d2ad3814347553c4a05c4c"
+            "glog-pfp-ruleFileLineCode/v1": "63c20839bb6ace9a6809a18be74d50f96fe6315d67c66c8415cdb10ef1e93fba",
+            "glog-pfp-ruleFileCode/v1": "0bc3d5d183d38801f3ea48489b48967cd7dd8bfad268368d5eb44adad8b1a98b"
           },
           "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "d45aef1fbfacb2237ef09ff6e5ca062308c5da3cb3d2ad3814347553c4a05c4c"
+            "glog-fp-ruleFileCode/v1": "0bc3d5d183d38801f3ea48489b48967cd7dd8bfad268368d5eb44adad8b1a98b"
+          }
+        },
+        {
+          "ruleId": "6067bb0c-447a-31b2-b796-9a6252877b16",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Unreliable HTTP Headers Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/api/jwt/JwtTokenProvider.java"
+                },
+                "region": {
+                  "startLine": 67,
+                  "startColumn": 9,
+                  "endLine": 67,
+                  "endColumn": 59,
+                  "snippet": {
+                    "text": "String bearerToken = req.getHeader(\"Authorization\")"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "resolveToken(HttpServletRequest)",
+                  "fullyQualifiedName": "hawk.api.jwt.JwtTokenProvider.resolveToken(HttpServletRequest)",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "ad9bc0cf3e5d5feb25a10317625e6066b159f0a4ecd2b5cd762e21f30192041f",
+            "glog-pfp-ruleFileCode/v1": "fba48c97e9e1f011dff74c2c3559eab33b500a2cf79c49e0314d2f4903606d77"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "fba48c97e9e1f011dff74c2c3559eab33b500a2cf79c49e0314d2f4903606d77"
           }
         },
         {
@@ -1454,46 +1494,6 @@
           }
         },
         {
-          "ruleId": "6067bb0c-447a-31b2-b796-9a6252877b16",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Unreliable HTTP Headers Vulnerability"
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/java/hawk/api/jwt/JwtTokenProvider.java"
-                },
-                "region": {
-                  "startLine": 67,
-                  "startColumn": 9,
-                  "endLine": 67,
-                  "endColumn": 59,
-                  "snippet": {
-                    "text": "String bearerToken = req.getHeader(\"Authorization\")"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "name": "resolveToken(HttpServletRequest)",
-                  "fullyQualifiedName": "hawk.api.jwt.JwtTokenProvider.resolveToken(HttpServletRequest)",
-                  "kind": "function"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "ad9bc0cf3e5d5feb25a10317625e6066b159f0a4ecd2b5cd762e21f30192041f",
-            "glog-pfp-ruleFileCode/v1": "fba48c97e9e1f011dff74c2c3559eab33b500a2cf79c49e0314d2f4903606d77"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "fba48c97e9e1f011dff74c2c3559eab33b500a2cf79c49e0314d2f4903606d77"
-          }
-        },
-        {
           "ruleId": "19453c2b-f009-3b5e-a8b6-a1449264eb96",
           "kind": "fail",
           "level": "note",
@@ -1538,45 +1538,47 @@
           }
         },
         {
-          "ruleId": "b7a82088-bd5e-3fdd-a445-4bc81366f8da",
+          "ruleId": "40486eef-b7b1-333f-b81f-8dd2868526d2",
           "kind": "fail",
           "level": "note",
           "message": {
             "text": "Found Spring endpoint",
             "id": "default",
             "arguments": [
-              "hawk.controller.AdminController"
+              "hawk.api.jwt.JwtUserController"
             ]
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/main/java/hawk/controller/AdminController.java"
+                  "uri": "src/main/java/hawk/api/jwt/JwtUserController.java"
                 },
                 "region": {
-                  "startLine": 47,
-                  "endLine": 51,
+                  "startLine": 38,
+                  "startColumn": 9,
+                  "endLine": 38,
+                  "endColumn": 40,
                   "snippet": {
-                    "text": "List users = userSearchService.search(search)"
+                    "text": "Search search = new Search(text)"
                   }
                 }
               },
               "logicalLocations": [
                 {
-                  "name": "searchSubmit(Search, Model)",
-                  "fullyQualifiedName": "hawk.controller.AdminController.searchSubmit(Search, Model)",
+                  "name": "search(String)",
+                  "fullyQualifiedName": "hawk.api.jwt.JwtUserController.search(String)",
                   "kind": "function"
                 }
               ]
             }
           ],
           "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "91bfb8f46f4d2b2dbb2b1be8c6abf1d55289f49485dbcfe283b67538a848f7ef",
-            "glog-pfp-ruleFileCode/v1": "e5a325b8bc10786a198906c048ecafb3ed7fdfaf4302718d6c1f4f24d0dbb483"
+            "glog-pfp-ruleFileLineCode/v1": "6251cda77c41af5fe746da0c4e8771d4b95688a183287624650201f20e3155c6",
+            "glog-pfp-ruleFileCode/v1": "d45aef1fbfacb2237ef09ff6e5ca062308c5da3cb3d2ad3814347553c4a05c4c"
           },
           "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "e5a325b8bc10786a198906c048ecafb3ed7fdfaf4302718d6c1f4f24d0dbb483"
+            "glog-fp-ruleFileCode/v1": "d45aef1fbfacb2237ef09ff6e5ca062308c5da3cb3d2ad3814347553c4a05c4c"
           }
         },
         {
@@ -1712,6 +1714,48 @@
           }
         },
         {
+          "ruleId": "b7a82088-bd5e-3fdd-a445-4bc81366f8da",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Found Spring endpoint",
+            "id": "default",
+            "arguments": [
+              "hawk.controller.AdminController"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/controller/AdminController.java"
+                },
+                "region": {
+                  "startLine": 47,
+                  "endLine": 51,
+                  "snippet": {
+                    "text": "List users = userSearchService.search(search)"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "searchSubmit(Search, Model)",
+                  "fullyQualifiedName": "hawk.controller.AdminController.searchSubmit(Search, Model)",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "91bfb8f46f4d2b2dbb2b1be8c6abf1d55289f49485dbcfe283b67538a848f7ef",
+            "glog-pfp-ruleFileCode/v1": "e5a325b8bc10786a198906c048ecafb3ed7fdfaf4302718d6c1f4f24d0dbb483"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "e5a325b8bc10786a198906c048ecafb3ed7fdfaf4302718d6c1f4f24d0dbb483"
+          }
+        },
+        {
           "ruleId": "f6a81377-dc72-37b4-8063-248b2e6d184b",
           "kind": "fail",
           "level": "note",
@@ -1753,50 +1797,6 @@
           },
           "fingerprints": {
             "glog-fp-ruleFileCode/v1": "65ac28788b3fb68d6049823c0187988fcc5f03e6e387233a80cdc36711b1f4ff"
-          }
-        },
-        {
-          "ruleId": "fe9aa732-4c49-36cc-880e-0bc26fb47ec7",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Found Spring endpoint",
-            "id": "default",
-            "arguments": [
-              "hawk.controller.HiddenController"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/java/hawk/controller/HiddenController.java"
-                },
-                "region": {
-                  "startLine": 31,
-                  "startColumn": 15,
-                  "endLine": 31,
-                  "endColumn": 88,
-                  "snippet": {
-                    "text": "addAttribute(\"title\", \"Hidden Page, found and tested with selenium tests\")"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "name": "selenium(Model)",
-                  "fullyQualifiedName": "hawk.controller.HiddenController.selenium(Model)",
-                  "kind": "function"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "9ed2624372237e865eb78ef22d91078a6a8b45bb3e65981720d2436f086b5660",
-            "glog-pfp-ruleFileCode/v1": "34434b307f06a1101175f4c455b1c5d6508738d72191e4ed3dae92b0f6141f3c"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "34434b307f06a1101175f4c455b1c5d6508738d72191e4ed3dae92b0f6141f3c"
           }
         },
         {
@@ -1844,94 +1844,6 @@
           }
         },
         {
-          "ruleId": "de6afc69-2393-3eba-aeca-ced9207a260a",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Found Spring endpoint",
-            "id": "default",
-            "arguments": [
-              "hawk.controller.IndexController"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/java/hawk/controller/IndexController.java"
-                },
-                "region": {
-                  "startLine": 12,
-                  "startColumn": 15,
-                  "endLine": 12,
-                  "endColumn": 71,
-                  "snippet": {
-                    "text": "addAttribute(\"title\", \"StackHawk Java Vulny Application\")"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "name": "index(Model)",
-                  "fullyQualifiedName": "hawk.controller.IndexController.index(Model)",
-                  "kind": "function"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "b6204f2644c49a073f2803ef32094f2bf24cbb0667ddbd57f3977b5e12dcc25d",
-            "glog-pfp-ruleFileCode/v1": "45b851d7ba6cd8b56d5486d61391cbdd30525695953de9b49083812b87017146"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "45b851d7ba6cd8b56d5486d61391cbdd30525695953de9b49083812b87017146"
-          }
-        },
-        {
-          "ruleId": "72bea607-7af1-3225-9002-5306a33caef1",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Found Spring endpoint",
-            "id": "default",
-            "arguments": [
-              "hawk.controller.IndexController"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/java/hawk/controller/IndexController.java"
-                },
-                "region": {
-                  "startLine": 18,
-                  "startColumn": 15,
-                  "endLine": 18,
-                  "endColumn": 47,
-                  "snippet": {
-                    "text": "addAttribute(\"title\", \"JWT Auth\")"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "name": "jwtAuth(Model)",
-                  "fullyQualifiedName": "hawk.controller.IndexController.jwtAuth(Model)",
-                  "kind": "function"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "3fa8601fcf05b27a0ff2ceb5700d334ba5e9ece4a026f38b2884101aef422286",
-            "glog-pfp-ruleFileCode/v1": "cd4373ee22aec106056ad05d4096459c5150e7c62ce1df8adb5fb91dfdb24ba7"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "cd4373ee22aec106056ad05d4096459c5150e7c62ce1df8adb5fb91dfdb24ba7"
-          }
-        },
-        {
           "ruleId": "346a775d-6fa0-3016-8317-f51a06186c61",
           "kind": "fail",
           "level": "note",
@@ -1976,47 +1888,91 @@
           }
         },
         {
-          "ruleId": "0936592b-bc07-338f-b97f-b04cc765c590",
+          "ruleId": "fe9aa732-4c49-36cc-880e-0bc26fb47ec7",
           "kind": "fail",
           "level": "note",
           "message": {
             "text": "Found Spring endpoint",
             "id": "default",
             "arguments": [
-              "hawk.controller.LoginController"
+              "hawk.controller.HiddenController"
             ]
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/main/java/hawk/controller/LoginController.java"
+                  "uri": "src/main/java/hawk/controller/HiddenController.java"
                 },
                 "region": {
-                  "startLine": 46,
+                  "startLine": 31,
                   "startColumn": 15,
-                  "endLine": 46,
-                  "endColumn": 50,
+                  "endLine": 31,
+                  "endColumn": 88,
                   "snippet": {
-                    "text": "addAttribute(\"title\", \"Login title\")"
+                    "text": "addAttribute(\"title\", \"Hidden Page, found and tested with selenium tests\")"
                   }
                 }
               },
               "logicalLocations": [
                 {
-                  "name": "login(Model)",
-                  "fullyQualifiedName": "hawk.controller.LoginController.login(Model)",
+                  "name": "selenium(Model)",
+                  "fullyQualifiedName": "hawk.controller.HiddenController.selenium(Model)",
                   "kind": "function"
                 }
               ]
             }
           ],
           "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "7e40b83fcccd27ec7744eaee46cc355fb0baa14d0a5182cfe9543b990fe29d01",
-            "glog-pfp-ruleFileCode/v1": "964455e7ba76180440db48408d87fa2343ad0afb1f1b51a4e5c9df828c4f97f1"
+            "glog-pfp-ruleFileLineCode/v1": "9ed2624372237e865eb78ef22d91078a6a8b45bb3e65981720d2436f086b5660",
+            "glog-pfp-ruleFileCode/v1": "34434b307f06a1101175f4c455b1c5d6508738d72191e4ed3dae92b0f6141f3c"
           },
           "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "964455e7ba76180440db48408d87fa2343ad0afb1f1b51a4e5c9df828c4f97f1"
+            "glog-fp-ruleFileCode/v1": "34434b307f06a1101175f4c455b1c5d6508738d72191e4ed3dae92b0f6141f3c"
+          }
+        },
+        {
+          "ruleId": "de6afc69-2393-3eba-aeca-ced9207a260a",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Found Spring endpoint",
+            "id": "default",
+            "arguments": [
+              "hawk.controller.IndexController"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/controller/IndexController.java"
+                },
+                "region": {
+                  "startLine": 12,
+                  "startColumn": 15,
+                  "endLine": 12,
+                  "endColumn": 71,
+                  "snippet": {
+                    "text": "addAttribute(\"title\", \"StackHawk Java Vulny Application\")"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "index(Model)",
+                  "fullyQualifiedName": "hawk.controller.IndexController.index(Model)",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "b6204f2644c49a073f2803ef32094f2bf24cbb0667ddbd57f3977b5e12dcc25d",
+            "glog-pfp-ruleFileCode/v1": "45b851d7ba6cd8b56d5486d61391cbdd30525695953de9b49083812b87017146"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "45b851d7ba6cd8b56d5486d61391cbdd30525695953de9b49083812b87017146"
           }
         },
         {
@@ -2064,6 +2020,94 @@
           }
         },
         {
+          "ruleId": "72bea607-7af1-3225-9002-5306a33caef1",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Found Spring endpoint",
+            "id": "default",
+            "arguments": [
+              "hawk.controller.IndexController"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/controller/IndexController.java"
+                },
+                "region": {
+                  "startLine": 18,
+                  "startColumn": 15,
+                  "endLine": 18,
+                  "endColumn": 47,
+                  "snippet": {
+                    "text": "addAttribute(\"title\", \"JWT Auth\")"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "jwtAuth(Model)",
+                  "fullyQualifiedName": "hawk.controller.IndexController.jwtAuth(Model)",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "3fa8601fcf05b27a0ff2ceb5700d334ba5e9ece4a026f38b2884101aef422286",
+            "glog-pfp-ruleFileCode/v1": "cd4373ee22aec106056ad05d4096459c5150e7c62ce1df8adb5fb91dfdb24ba7"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "cd4373ee22aec106056ad05d4096459c5150e7c62ce1df8adb5fb91dfdb24ba7"
+          }
+        },
+        {
+          "ruleId": "0936592b-bc07-338f-b97f-b04cc765c590",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Found Spring endpoint",
+            "id": "default",
+            "arguments": [
+              "hawk.controller.LoginController"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/controller/LoginController.java"
+                },
+                "region": {
+                  "startLine": 46,
+                  "startColumn": 15,
+                  "endLine": 46,
+                  "endColumn": 50,
+                  "snippet": {
+                    "text": "addAttribute(\"title\", \"Login title\")"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "login(Model)",
+                  "fullyQualifiedName": "hawk.controller.LoginController.login(Model)",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "7e40b83fcccd27ec7744eaee46cc355fb0baa14d0a5182cfe9543b990fe29d01",
+            "glog-pfp-ruleFileCode/v1": "964455e7ba76180440db48408d87fa2343ad0afb1f1b51a4e5c9df828c4f97f1"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "964455e7ba76180440db48408d87fa2343ad0afb1f1b51a4e5c9df828c4f97f1"
+          }
+        },
+        {
           "ruleId": "2ff77974-10f7-39fd-bb4d-2976ff215572",
           "kind": "fail",
           "level": "note",
@@ -2108,50 +2152,6 @@
           }
         },
         {
-          "ruleId": "74a4a50f-e064-310c-b6a1-297fb3c6e945",
-          "kind": "fail",
-          "level": "note",
-          "message": {
-            "text": "Found Spring endpoint",
-            "id": "default",
-            "arguments": [
-              "hawk.controller.LoginController"
-            ]
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/main/java/hawk/controller/LoginController.java"
-                },
-                "region": {
-                  "startLine": 79,
-                  "startColumn": 13,
-                  "endLine": 79,
-                  "endColumn": 52,
-                  "snippet": {
-                    "text": "String sessId = req.getSession().getId()"
-                  }
-                }
-              },
-              "logicalLocations": [
-                {
-                  "name": "loginFormMulti(HttpServletRequest, HttpServletResponse, String, ExtraAuthenticationRequest)",
-                  "fullyQualifiedName": "hawk.controller.LoginController.loginFormMulti(HttpServletRequest, HttpServletResponse, String, ExtraAuthenticationRequest)",
-                  "kind": "function"
-                }
-              ]
-            }
-          ],
-          "partialFingerprints": {
-            "glog-pfp-ruleFileLineCode/v1": "187575a0ecec82121045c1a3e37233acc494dfc0c55a08bd307b861f7670399e",
-            "glog-pfp-ruleFileCode/v1": "e356d05eadb714d01a0dd393f686a5e8b28af5bb788013cce9ce76e278382fa4"
-          },
-          "fingerprints": {
-            "glog-fp-ruleFileCode/v1": "e356d05eadb714d01a0dd393f686a5e8b28af5bb788013cce9ce76e278382fa4"
-          }
-        },
-        {
           "ruleId": "866102c1-8960-3baa-8720-83f1f7ece441",
           "kind": "fail",
           "level": "note",
@@ -2193,6 +2193,50 @@
           },
           "fingerprints": {
             "glog-fp-ruleFileCode/v1": "1d4801a0af368cf83c694e1058c40eef29d60679a6bcd03b3ca9fdc6c5131aac"
+          }
+        },
+        {
+          "ruleId": "74a4a50f-e064-310c-b6a1-297fb3c6e945",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Found Spring endpoint",
+            "id": "default",
+            "arguments": [
+              "hawk.controller.LoginController"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/controller/LoginController.java"
+                },
+                "region": {
+                  "startLine": 79,
+                  "startColumn": 13,
+                  "endLine": 79,
+                  "endColumn": 52,
+                  "snippet": {
+                    "text": "String sessId = req.getSession().getId()"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "loginFormMulti(HttpServletRequest, HttpServletResponse, String, ExtraAuthenticationRequest)",
+                  "fullyQualifiedName": "hawk.controller.LoginController.loginFormMulti(HttpServletRequest, HttpServletResponse, String, ExtraAuthenticationRequest)",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "187575a0ecec82121045c1a3e37233acc494dfc0c55a08bd307b861f7670399e",
+            "glog-pfp-ruleFileCode/v1": "e356d05eadb714d01a0dd393f686a5e8b28af5bb788013cce9ce76e278382fa4"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "e356d05eadb714d01a0dd393f686a5e8b28af5bb788013cce9ce76e278382fa4"
           }
         },
         {
@@ -2496,6 +2540,50 @@
           }
         },
         {
+          "ruleId": "9d820ef7-1f08-3bc4-b42c-8a52d8c4919a",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Potential JDBC Injection",
+            "id": "default",
+            "arguments": [
+              "java/sql/Statement.executeQuery(Ljava/lang/String;)Ljava/sql/ResultSet;"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/service/UserSearchService.java"
+                },
+                "region": {
+                  "startLine": 36,
+                  "startColumn": 21,
+                  "endLine": 36,
+                  "endColumn": 41,
+                  "snippet": {
+                    "text": ".executeQuery(query);"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "lambda$search$0(Search, Connection)",
+                  "fullyQualifiedName": "hawk.service.UserSearchService.lambda$search$0(Search, Connection)",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "99302fc20a0794e1034dc7d2bd821a7a2f30d85b87ddc35fee6f614cc18de460",
+            "glog-pfp-ruleFileCode/v1": "da126405e27f8290a7eed076c4e747d67577770780ad1777860b128f80524096"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "da126405e27f8290a7eed076c4e747d67577770780ad1777860b128f80524096"
+          }
+        },
+        {
           "ruleId": "a3a14f30-d332-32a2-8bbc-e79e3ff8a6ea",
           "kind": "fail",
           "level": "note",
@@ -2533,6 +2621,50 @@
           },
           "fingerprints": {
             "glog-fp-ruleFileCode/v1": "c8e6bf94d1fa5e5c7ee1ded621f580cce0cf08b32e3df856bef088e85aceccfc"
+          }
+        },
+        {
+          "ruleId": "a7fa80da-cf50-3313-8a37-4cab21fad60c",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Potential JDBC Injection",
+            "id": "default",
+            "arguments": [
+              "java/sql/Statement.executeQuery(Ljava/lang/String;)Ljava/sql/ResultSet;"
+            ]
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/main/java/hawk/service/SearchService.java"
+                },
+                "region": {
+                  "startLine": 39,
+                  "startColumn": 25,
+                  "endLine": 39,
+                  "endColumn": 45,
+                  "snippet": {
+                    "text": ".executeQuery(query);"
+                  }
+                }
+              },
+              "logicalLocations": [
+                {
+                  "name": "execute(Connection)",
+                  "fullyQualifiedName": "hawk.service.SearchService$1.execute(Connection)",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "partialFingerprints": {
+            "glog-pfp-ruleFileLineCode/v1": "64dc5c180d1250e99f2ce9a85038b7a0439df19aacd489150a6975a2b9fd87ea",
+            "glog-pfp-ruleFileCode/v1": "563d0f5c6b9b3fb8a8e4743845467dec391c3e68e20dbeeb530c093196647d16"
+          },
+          "fingerprints": {
+            "glog-fp-ruleFileCode/v1": "563d0f5c6b9b3fb8a8e4743845467dec391c3e68e20dbeeb530c093196647d16"
           }
         },
         {
